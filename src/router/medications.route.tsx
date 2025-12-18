@@ -4,6 +4,6 @@ import { rootRoute } from "./rootRoute";
 
 export const medRoute = createRoute({
 	getParentRoute: () => rootRoute,
-	path: "/medication",
+	path: "/medications",
 	component: MedicationsPage
 });
