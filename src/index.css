@@ -1,49 +1,42 @@
-:root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playwrite+NZ+Guides&family=Vidaloka&display=swap");
+@import "tailwindcss";
 
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+/* foreground variables are for text */
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+@theme {
+	/* Base colors */
+	--color-background: #fafafa;
+	--color-background-secondary: #f6f8f9;
+	--color-foreground: #1d2a33;
+	--color-card: #ffffff;
+	--color-card-foreground: #5f6f7a;
+
+	/* Primary colors */
+	--color-primary: #6cbfe0;
+	--color-primary-light: #dcf1fa;
+	--color-primary-dark: #3b7fa3;
+
+	/* Secondary colors */
+	--color-secondary: #e1f2e7;
+	--color-secondary-hover: #8fbfa8;
+	--color-secondary-foreground: #1f3d2e;
+
+	/* Semantic colors */
+	--color-accent: #f2a08f;
+	--color-accent-foreground: #663026;
+
+	/* Destructive */
+	--color-destructive-light: #fcebe8;
+	--color-destructive-dark: #d64040;
+	--color-destructive-foreground: #612b20;
+
+	/* Borders and inputs */
+	--color-border: #dce6ee;
+
+	/* Gradients */
+	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 100%);
 }
 
-a {
-	font-weight: 500;
-	color: #646cff;
-	text-decoration: inherit;
-}
-a:hover {
-	color: #535bf2;
-}
-
-body {
-	margin: 0;
-	display: flex;
-	place-items: center;
-	min-width: 320px;
-	min-height: 100vh;
-}
-
-h1 {
-	font-size: 3.2em;
-	line-height: 1.1;
-}
-
-@media (prefers-color-scheme: light) {
-	:root {
-		color: #213547;
-		background-color: #ffffff;
-	}
-	a:hover {
-		color: #747bff;
-	}
-	button {
-		background-color: #f9f9f9;
-	}
+button[component="SignInButton"] {
+	cursor: pointer;
 }
