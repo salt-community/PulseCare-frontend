@@ -34,3 +34,7 @@
 	/* Gradients */
 	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 100%);
 }
+
+button[component="SignInButton"] {
+	cursor: pointer;
+}
