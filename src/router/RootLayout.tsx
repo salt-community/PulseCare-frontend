@@ -1,6 +1,5 @@
 import { Outlet } from "@tanstack/react-router";
 import { Sidebar } from "../components/ui/Sidebar";
-import React from "react";
 import { Header } from "../components/shared/Header";
 
 const RootLayout = () => {
