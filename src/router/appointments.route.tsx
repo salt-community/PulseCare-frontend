@@ -4,6 +4,6 @@ import AppointmentsPage from "../features/patient/appointments/AppointmentsPage"
 
 export const appointRoute = createRoute({
 	getParentRoute: () => rootRoute,
-	path: "/appointment",
+	path: "/appointments",
 	component: AppointmentsPage
 });
