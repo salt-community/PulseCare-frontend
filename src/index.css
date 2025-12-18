@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playwrite+NZ+Guides&family=Vidaloka&display=swap");
 @import "tailwindcss";
 
+/* foreground variables are for text */
+
 @theme {
 	/* Base colors */
 	--color-background: #fafafa;
