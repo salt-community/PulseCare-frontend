@@ -34,7 +34,7 @@
 	--color-border: #dce6ee;
 
 	/* Gradients */
-	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 100%);
+	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 60%);
 }
 
 button[component="SignInButton"] {
