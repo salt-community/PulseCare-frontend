@@ -10,8 +10,8 @@ export const NavLink = ({ to, label, children }: NavLinkProps) => {
 	return (
 		<Link
 			to={to}
-			activeProps={{ className: "bg-primary-light" }}
-			className={`flex items-center gap-2 px-4 py-2 hover:bg-primary-light rounded `}
+			activeProps={{ className: "bg-primary-light text-primary-dark shadow-xs" }}
+			className={`flex items-center gap-2 px-4 py-3 hover:bg-primary-light rounded-xl text-foreground`}
 		>
 			{children}
 			{label}
