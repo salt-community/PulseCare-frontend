@@ -2,41 +2,35 @@
 @import "tailwindcss";
 
 @theme {
+	/* Base colors */
+	--color-background: #fafafa;
+	--color-background-secondary: #f6f8f9;
+	--color-foreground: #1d2a33;
+	--color-card: #ffffff;
+	--color-card-foreground: #5f6f7a;
+
 	/* Primary colors */
-	--color-primary: #5faed6;
-	--color-primary-foreground: #ffffff;
-	--color-primary-light: #cde9f5;
+	--color-primary: #6cbfe0;
+	--color-primary-light: #dcf1fa;
 	--color-primary-dark: #3b7fa3;
 
 	/* Secondary colors */
-	--color-secondary: #8fbfa8;
+	--color-secondary: #e1f2e7;
+	--color-secondary-hover: #8fbfa8;
 	--color-secondary-foreground: #1f3d2e;
 
 	/* Semantic colors */
 	--color-accent: #f2a08f;
 	--color-accent-foreground: #663026;
 
-	/* Neutral colors */
-	--color-muted: #eef3f6;
-	--color-muted-foreground: #5f6f7a;
-
 	/* Destructive */
-	--color-destructive: #d9534f;
-	--color-destructive-foreground: #ffffff;
+	--color-destructive-light: #fcebe8;
+	--color-destructive-dark: #d64040;
+	--color-destructive-foreground: #612b20;
 
 	/* Borders and inputs */
 	--color-border: #dce6ee;
-	--color-input: #dce6ee;
-	--color-ring: #5faed6;
 
 	/* Gradients */
 	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 100%);
-	--gradient-hero: linear-gradient(180deg, #f7fafc 0%, #eff6fa 100%);
-	--gradient-card: linear-gradient(145deg, #ffffff 0%, #f7fafc 100%);
-
-	/* Shadows */
-	--shadow-sm: 0 1px 2px 0 rgba(29, 42, 51, 0.04);
-	--shadow-md: 0 4px 12px -2px rgba(29, 42, 51, 0.08);
-	--shadow-lg: 0 12px 32px -4px rgba(29, 42, 51, 0.12);
-	--shadow-glow: 0 0 24px rgba(95, 174, 214, 0.25);
 }
