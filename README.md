@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# PulseCare Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Detta repository innehåller frontend-koden för **PulseCare**.
 
-Currently, two official plugins are available:
+All dokumentation kring UI, UX, designprinciper, tillgänglighet och komponenter finns samlad i projektets **wiki** och ska betraktas som **single source of truth** för hur användargränssnittet ska utformas och implementeras.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 📘 Styleguide & UI-dokumentation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+➡️ **PulseCare Frontend Wiki**  
+https://github.com/salt-community/PulseCare-frontend/wiki
 
-## Expanding the ESLint configuration
+Wikin innehåller bland annat:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Översikt och introduktion
+- Användarroller (vårdpersonal och patienter)
+- Designprinciper
+- Visuellt system
+- UI-komponenter
+- Tillgänglighet (WCAG)
+- Decision Log
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Arbetsprincip
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Nya UI-komponenter ska dokumenteras i wikin
+- Designbeslut ska kunna härledas till wikin
+- Avsteg från styleguiden ska dokumenteras i _Decision Log_
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Om något saknas i wikin ska det **inte lösas lokalt**, utan först diskuteras och dokumenteras.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Sammanfattning
+
+📌 **Kod här – riktlinjer i wikin**  
+Frontendutveckling i PulseCare ska alltid följa dokumentationen i projektets wiki.
