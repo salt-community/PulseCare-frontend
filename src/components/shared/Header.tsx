@@ -1,27 +1,25 @@
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+import type { ReactElement } from "react";
 
-export function Header() {
+export function Header(): ReactElement {
 	const { user } = useUser();
 
 	return (
-		<NavigationMenu.Root>
-			<NavigationMenu.List>
-				<NavigationMenu.Item>
-					<SignedOut>
-						<SignInButton />
-					</SignedOut>
-					<SignedIn>
-						<div className="flex items-center gap-2 justify-end py-2 px-4 bg-background">
-							<UserButton />
-							<div className="flex flex-col">
-								<span className="text-sm font-medium">{user?.fullName}</span>
-								<p className="text-xs text-gray-500">Patient</p>
-							</div>
+		<header className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-md bg-background/80">
+			<div className="flex justify-end py-2 px-6">
+				<SignedOut>
+					<SignInButton />
+				</SignedOut>
+				<SignedIn>
+					<div className="flex items-center gap-2 rounded-lg px-3 py-2 cursor-pointer transition-colors hover:bg-primary-light">
+						<UserButton />
+						<div className="flex flex-col">
+							<span className="text-sm font-medium text-foreground">{user?.fullName}</span>
+							<p className="text-xs text-card-foreground">Patient</p>
 						</div>
-					</SignedIn>
-				</NavigationMenu.Item>
-			</NavigationMenu.List>
-		</NavigationMenu.Root>
+					</div>
+				</SignedIn>
+			</div>
+		</header>
 	);
 }
