@@ -8,7 +8,9 @@ export function Header(): ReactElement {
 		<header className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-md bg-background/80">
 			<div className="flex justify-end py-2 px-6">
 				<SignedOut>
-					<SignInButton />
+					<div className="rounded-lg px-3 py-2 cursor-pointer transition-colors hover:bg-primary-light">
+						<SignInButton />
+					</div>
 				</SignedOut>
 				<SignedIn>
 					<div className="flex items-center gap-2 rounded-lg px-3 py-2 cursor-pointer transition-colors hover:bg-primary-light">
