@@ -1,5 +1,121 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-	margin: 0;
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playwrite+NZ+Guides&family=Vidaloka&display=swap");
+
+@layer base {
+	:root {
+		--background: 200 20% 98%;
+		--foreground: 210 25% 15%;
+
+		--card: 0 0% 100%;
+		--card-foreground: 210 25% 15%;
+
+		--popover: 0 0% 100%;
+		--popover-foreground: 210 25% 15%;
+
+		/* Calm pastel blue - primary brand */
+		--primary: 197 65% 65%;
+		--primary-foreground: 0 0% 100%;
+		--primary-light: 197 70% 85%;
+		--primary-dark: 197 55% 45%;
+
+		/* Soft sage green - health/success */
+		--secondary: 145 35% 70%;
+		--secondary-foreground: 145 40% 20%;
+
+		/* Warm coral - alerts/reminders */
+		--accent: 10 70% 75%;
+		--accent-foreground: 10 50% 25%;
+
+		--muted: 200 15% 94%;
+		--muted-foreground: 210 15% 45%;
+
+		--destructive: 0 65% 55%;
+		--destructive-foreground: 0 0% 100%;
+
+		--border: 200 20% 88%;
+		--input: 200 20% 88%;
+		--ring: 197 65% 65%;
+
+		--radius: 0.75rem;
+
+		/* Sidebar */
+		--sidebar-background: 200 25% 97%;
+		--sidebar-foreground: 210 25% 25%;
+		--sidebar-primary: 197 65% 65%;
+		--sidebar-primary-foreground: 0 0% 100%;
+		--sidebar-accent: 197 70% 92%;
+		--sidebar-accent-foreground: 197 55% 35%;
+		--sidebar-border: 200 20% 90%;
+		--sidebar-ring: 197 65% 65%;
+
+		/* Custom healthcare tokens */
+		--health-positive: 145 45% 55%;
+		--health-warning: 38 85% 60%;
+		--health-critical: 0 65% 55%;
+		--health-neutral: 200 15% 60%;
+
+		/* Gradients */
+		--gradient-primary: linear-gradient(135deg, hsl(197 70% 85%) 0%, hsl(197 65% 65%) 100%);
+		--gradient-hero: linear-gradient(180deg, hsl(200 20% 98%) 0%, hsl(197 30% 95%) 100%);
+		--gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(200 20% 98%) 100%);
+
+		/* Shadows */
+		--shadow-sm: 0 1px 2px 0 hsl(210 25% 15% / 0.04);
+		--shadow-md: 0 4px 12px -2px hsl(210 25% 15% / 0.08);
+		--shadow-lg: 0 12px 32px -4px hsl(210 25% 15% / 0.12);
+		--shadow-glow: 0 0 24px hsl(197 65% 65% / 0.25);
+	}
+
+	.dark {
+		--background: 210 25% 10%;
+		--foreground: 200 20% 95%;
+
+		--card: 210 25% 13%;
+		--card-foreground: 200 20% 95%;
+
+		--popover: 210 25% 13%;
+		--popover-foreground: 200 20% 95%;
+
+		--primary: 197 60% 55%;
+		--primary-foreground: 0 0% 100%;
+		--primary-light: 197 50% 40%;
+		--primary-dark: 197 65% 70%;
+
+		--secondary: 145 30% 40%;
+		--secondary-foreground: 145 20% 95%;
+
+		--accent: 10 55% 50%;
+		--accent-foreground: 10 20% 95%;
+
+		--muted: 210 20% 18%;
+		--muted-foreground: 200 15% 60%;
+
+		--destructive: 0 55% 45%;
+		--destructive-foreground: 0 0% 100%;
+
+		--border: 210 20% 20%;
+		--input: 210 20% 20%;
+		--ring: 197 60% 55%;
+
+		--sidebar-background: 210 25% 12%;
+		--sidebar-foreground: 200 20% 90%;
+		--sidebar-primary: 197 60% 55%;
+		--sidebar-primary-foreground: 0 0% 100%;
+		--sidebar-accent: 197 40% 25%;
+		--sidebar-accent-foreground: 197 50% 80%;
+		--sidebar-border: 210 20% 18%;
+		--sidebar-ring: 197 60% 55%;
+
+		--health-positive: 145 40% 45%;
+		--health-warning: 38 70% 50%;
+		--health-critical: 0 55% 45%;
+		--health-neutral: 200 15% 50%;
+
+		--gradient-primary: linear-gradient(135deg, hsl(197 50% 40%) 0%, hsl(197 60% 55%) 100%);
+		--gradient-hero: linear-gradient(180deg, hsl(210 25% 10%) 0%, hsl(210 25% 13%) 100%);
+		--gradient-card: linear-gradient(145deg, hsl(210 25% 15%) 0%, hsl(210 25% 12%) 100%);
+	}
 }
