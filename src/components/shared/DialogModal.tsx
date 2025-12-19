@@ -1,0 +1,35 @@
+import * as Dialog from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
+
+type DialogModalProps = {
+	children: React.ReactNode;
+	title: string;
+	description?: string;
+	buttonText: string;
+};
+
+export function DialogModal({ children, title, description, buttonText }: DialogModalProps) {
+	return (
+		<Dialog.Root>
+			<Dialog.Trigger asChild>
+				<button type="button">{buttonText}</button>
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay className="fixed inset-0 bg-primary-dark/40" />
+				<Dialog.Content className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-[min(95%,32rem)] max-h-[90vh] overflow-auto bg-background-secondary rounded-2xl p-4 outline-none">
+					<Dialog.Title className="text-foreground font-semibold text-2xl text-center">{title}</Dialog.Title>
+					<Dialog.Description className="text-foreground">{description}</Dialog.Description>
+					{children}
+					<Dialog.Close asChild>
+						<button
+							type="button"
+							className="absolute text-foreground/60 top-3 right-3 hover:text-foreground rounded-sm cursor-pointer"
+						>
+							<X className="size-5 m-1" />
+						</button>
+					</Dialog.Close>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
+	);
+}
