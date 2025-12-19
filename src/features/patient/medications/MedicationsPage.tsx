@@ -3,6 +3,7 @@ import { mockMedications } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { Calendar, Pill as PillIcon, InfoIcon, Clock } from "lucide-react";
 import PageHeader from "../../../components/shared/PageHeader";
+import { Icon } from "../../../components/shared/Icon";
 
 export default function MedicationsPage() {
 	const data = mockMedications;
@@ -13,7 +14,9 @@ export default function MedicationsPage() {
 				{data.map(medication => (
 					<Card key={medication.id}>
 						<CardHeader className="flex flex-row gap-4">
-							<PillIcon className="w-6 h-8 shrink-0 text-primary" />
+							<Icon>
+								<PillIcon />
+							</Icon>
 							<div className="flex-1">
 								<div className="flex justify-between items-center gap-2">
 									<CardTitle className="text-lg">{medication.name}</CardTitle>
