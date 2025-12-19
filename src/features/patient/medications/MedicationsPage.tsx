@@ -7,8 +7,8 @@ export default function MedicationsPage() {
 	const data = mockMedications;
 	return (
 		<>
-			<h1>Medications</h1>
-			<p>Your current prescriptions and medication schedule</p>
+			<h1 className="font-bold text-3xl">Medications</h1>
+			<p className="text-foreground/50">Your current prescriptions and medication schedule</p>
 			<div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-2">
 				{data.map(medication => (
 					<Card key={medication.id}>
