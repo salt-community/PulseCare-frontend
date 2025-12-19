@@ -11,8 +11,8 @@ export function Header(): ReactElement {
 	const role = isAdmin ? "Admin" : "Patient";
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-md bg-background/80 shrink-0">
-			<div className="flex justify-between items-center py-3 px-6">
+		<header className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-md bg-background/80 shrink-0 min-h-19.25">
+			<div className="flex justify-between items-center py-3 px-6 h-full">
 				<Link to={path} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
 					<PulseCareLogo size="sm" showText={false} />
 					<span className="font-bold text-xl text-foreground">PulseCare</span>
