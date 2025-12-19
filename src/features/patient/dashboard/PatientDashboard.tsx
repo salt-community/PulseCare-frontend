@@ -15,7 +15,7 @@ export default function PatientDashboard() {
 			<div>Welcome back {exampleUser.fullName}</div>
 			<Card className="mt-4 p-4">
 				<CardTitle className="flex items-center gap-2 text-foreground p-3">
-					<Calendar />
+					<Calendar className="text-primary"/>
 					Upcoming Appointments
 					<button className="ml-auto text-sm hover:bg-primary-light p-2 hover:text-primary-dark rounded-md p-1 text-primary font-medium">
 						View All <MoveRight className="inline size-4 mb-0.5" />
@@ -30,7 +30,7 @@ export default function PatientDashboard() {
 										<span className="">{d.type}</span>
 									</Pill>
 									<div className="flex flex-col gap-4 mr-2">
-										<span className="font-bold">
+										<span className="font-medium">
 											<Stethoscope className="inline size-4 mr-1.5 mb-1" />
 											{d.doctorName}
 										</span>
