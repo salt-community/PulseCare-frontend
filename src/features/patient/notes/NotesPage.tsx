@@ -1,3 +1,4 @@
+import { Icon } from "../../../components/shared/Icon";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { mockNotes } from "../../../lib/api/mockData";
@@ -13,11 +14,9 @@ export default function NotesPage() {
 				{data.map(d => (
 					<Card key={d.id} className="p-2">
 						<CardContent className="flex flex-col gap-2 py-4 px-2 md:grid grid-cols-[4rem_auto_5.5rem] justify-stretch">
-							<div>
-								<span className="inline-flex items-center justify-center bg-secondary w-10 h-10 rounded-xl">
-									<Stethoscope className="w-4 h-4" strokeWidth={1.5} />
-								</span>
-							</div>
+							<Icon>
+								<Stethoscope />
+							</Icon>
 							<div>
 								<div className="text-xl font-bold">{d.title}</div>
 								<div className="text-primary mb-2">{d.doctorName}</div>
