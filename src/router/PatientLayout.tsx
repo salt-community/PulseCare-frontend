@@ -1,14 +1,14 @@
 import { Outlet } from "@tanstack/react-router";
-import { Sidebar } from "../components/ui/Sidebar";
+import { PatientSidebar } from "../components/ui/PatientSidebar";
 import { Header } from "../components/shared/Header";
 
-const RootLayout = () => {
+const PatientLayout = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col ">
 			<Header />
 			<div className="flex flex-1 overflow-hidden">
 				<aside className="shrink-0">
-					<Sidebar />
+					<PatientSidebar />
 				</aside>
 				<main className="flex-1 overflow-y-auto p-6 bg-background">
 					<Outlet />
@@ -18,4 +18,4 @@ const RootLayout = () => {
 	);
 };
 
-export default RootLayout;
+export default PatientLayout;
