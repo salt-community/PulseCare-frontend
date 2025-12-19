@@ -34,11 +34,7 @@ export default function MedicationsPage() {
 									<Calendar strokeWidth={2} height={15} />
 									<span>Started {medication.startDate}</span>
 								</div>
-								{/* <div className="flex items-center gap-2">
-									<InfoIcon strokeWidth={2} height={15} />
-									<span>{medication.instructions}</span>
-									</div> */}
-								<div className="w-full border-t-0 border-gray-700"></div>
+								<div className="w-full border-t"></div>
 							</div>
 						</CardContent>
 						<CardFooter>
