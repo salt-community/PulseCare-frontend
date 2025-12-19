@@ -1,3 +1,4 @@
+import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { mockNotes } from "../../../lib/api/mockData";
 import { Calendar, Stethoscope } from "lucide-react";
@@ -7,8 +8,7 @@ export default function NotesPage() {
 
 	return (
 		<>
-			<h1 className="text-2xl font-bold">Appointment Notes</h1>
-			<p>Notes from your healthcare providers after appointments</p>
+			<PageHeader title={"Appointment Notes"} description="Notes from your healthcare providers after appointments" />
 			<div className="flex flex-col gap-3 mt-2">
 				{data.map(d => (
 					<Card key={d.id} className="p-2">
@@ -20,12 +20,12 @@ export default function NotesPage() {
 							</div>
 							<div>
 								<div className="text-xl font-bold">{d.title}</div>
-								<div className="text-primary">{d.doctorName}</div>
+								<div className="text-primary mb-2">{d.doctorName}</div>
 								<div>
 									<span className="font-bold">Note: </span>
 									{d.content}
 								</div>
-								<div>
+								<div className="mb-2">
 									<span className="font-bold">Diagnosis: </span>
 									{d.diagnosis}
 								</div>
