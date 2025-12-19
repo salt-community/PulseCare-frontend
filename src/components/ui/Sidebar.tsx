@@ -4,7 +4,7 @@ import { HouseHeart, Activity, Pill, Calendar, MessageCircleMore, NotepadText } 
 export const Sidebar = () => {
 	return (
 		<div className="flex flex-col gap-1 h-full w-60 border-r border-border bg-background-secondary p-4">
-			<NavLink label="Dashboard" to="/dashboard">
+			<NavLink label="Dashboard" to="/">
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
 			<NavLink label="Health Stats" to="/stats">
