@@ -30,6 +30,12 @@
 	--color-destructive-dark: #d64040;
 	--color-destructive-foreground: #612b20;
 
+	/* Warning */
+	--color-warning: #f0b043;
+
+	/* Success */
+	--color-success: #58bf83;
+
 	/* Borders and inputs */
 	--color-border: #dce6ee;
 
