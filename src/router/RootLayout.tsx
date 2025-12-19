@@ -4,12 +4,14 @@ import { useEffect } from "react";
 
 export const RootLayout = () => {
 	const navigate = useNavigate();
-	const { isSignedIn, sessionClaims, isLoaded } = useAuth();
+	const { isSignedIn, isLoaded } = useAuth();
 	const { location } = useRouterState();
 	const { user } = useUser();
 
 	useEffect(() => {
-		if (!isLoaded && !isSignedIn && location.pathname !== "/") {
+		if (!isLoaded) return;
+		if (isSignedIn) return;
+		if (location.pathname !== "/") {
 			navigate({ to: "/" });
 		}
 	}, [isLoaded, isSignedIn, location.pathname, navigate]);
@@ -18,6 +20,9 @@ export const RootLayout = () => {
 		if (!isLoaded) return;
 		if (!isSignedIn) return;
 
+		const isAuthPage = location.pathname === "/";
+		if (!isAuthPage) return;
+
 		const isAdmin = user?.publicMetadata.role === "admin";
 
 		if (isAdmin) {
@@ -25,7 +30,7 @@ export const RootLayout = () => {
 		} else {
 			navigate({ to: "/patient/dashboard" });
 		}
-	}, [isSignedIn, sessionClaims, isLoaded, navigate, user]);
+	}, [isLoaded, isSignedIn, navigate, location.pathname, user?.publicMetadata.role]);
 
 	return <Outlet />;
 };
