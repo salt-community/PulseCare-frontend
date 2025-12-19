@@ -30,11 +30,17 @@
 	--color-destructive-dark: #d64040;
 	--color-destructive-foreground: #612b20;
 
+	/* Warning */
+	--color-warning: #f0b043;
+
+	/* Success */
+	--color-success: #58bf83;
+
 	/* Borders and inputs */
 	--color-border: #dce6ee;
 
 	/* Gradients */
-	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 100%);
+	--gradient-primary: linear-gradient(135deg, #cde9f5 0%, #5faed6 60%);
 }
 
 button[component="SignInButton"] {
