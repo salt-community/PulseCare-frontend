@@ -26,7 +26,7 @@ export default function MedicationsPage() {
 						</CardHeader>
 						<CardContent className="flex flex-row gap-4">
 							<div className="w-6 shrink-0" />
-							<div className="flex-1 space-y-2 text-sm text-secondary-foreground">
+							<div className="flex-1 space-y-2 text-sm">
 								<div className="flex items-center gap-2">
 									<Clock strokeWidth={2} className="size-4 text-card-foreground" />
 									<span>
@@ -44,7 +44,7 @@ export default function MedicationsPage() {
 							<div className="w-10 shrink-0" />
 							<div className="flex items-center gap-2 text-sm">
 								<InfoIcon strokeWidth={2} className="size-4 text-card-foreground" />
-								<span className="text-foreground">{medication.instructions}</span>
+								<span>{medication.instructions}</span>
 							</div>
 						</CardFooter>
 					</Card>
