@@ -25,8 +25,8 @@ export default function MedicationsPage() {
 							<div className="w-6 shrink-0" />
 							<div className="flex-1 space-y-2 text-sm text-secondary-foreground">
 								<div className="flex items-center gap-2">
-									<Clock strokeWidth={2} height={14} color="grey" />
-									<span className="text-foreground/60">
+									<Clock strokeWidth={2} className="size-4 text-card-foreground" />
+									<span className="text-foreground">
 										x{medication.timesPerDay} {medication.frequency}
 									</span>
 								</div>
