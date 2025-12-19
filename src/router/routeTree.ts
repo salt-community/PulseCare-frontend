@@ -9,6 +9,10 @@ import { messRoute } from "./messages.route";
 import { notesRoute } from "./notes.route";
 import { patientRoute } from "./patient.route";
 import { adminRoute } from "./admin.route";
+import { adminCalendarRoute } from "./adminCalendar.route";
+import { adminDashRoute } from "./adminDashboard.route";
+import { adminMessageRoute } from "./adminMessages.route";
+import { adminPatientsRoute } from "./adminPatients.route";
 
 // Root children
 rootRoute.addChildren([indexRoute, patientRoute, adminRoute]);
@@ -17,9 +21,7 @@ rootRoute.addChildren([indexRoute, patientRoute, adminRoute]);
 patientRoute.addChildren([dashRoute, medRoute, appointRoute, statsRoute, messRoute, notesRoute]);
 
 // Admin routes (children of adminRoute)
-adminRoute.addChildren([
-	/* add admin routes here */
-]);
+adminRoute.addChildren([adminCalendarRoute, adminDashRoute, adminMessageRoute, adminPatientsRoute]);
 
 export const router = createRouter({
 	routeTree: rootRoute
