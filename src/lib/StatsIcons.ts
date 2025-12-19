@@ -1,10 +1,15 @@
-import { Droplet, Gauge, HeartPulse, Scale } from "lucide-react";
-import { Activity } from "react";
+import {
+  HeartPulse,
+  Droplet,
+  Activity,
+  Gauge,
+  Scale
+} from "lucide-react";
 
-export const StatIcons = {
-    blood_pressure:Gauge,
-    glucose:Droplet,
-    cholesterol:Activity,
-    heart_rate:HeartPulse,
-    weight:Scale
-}
+export const statIcons: Record<string, React.ElementType> = {
+  blood_pressure: Gauge,
+  glucose: Droplet,
+  cholesterol: Activity,
+  heart_rate: HeartPulse,
+  weight: Scale,
+};
