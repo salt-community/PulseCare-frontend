@@ -25,7 +25,7 @@ export const RootLayout = () => {
 		} else {
 			navigate({ to: "/patient/dashboard" });
 		}
-	}, [isSignedIn, sessionClaims, isLoaded, navigate]);
+	}, [isSignedIn, sessionClaims, isLoaded, navigate, user]);
 
 	return <Outlet />;
 };
