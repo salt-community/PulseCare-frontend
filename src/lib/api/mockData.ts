@@ -85,6 +85,8 @@ export interface Note {
 	title: string;
 	content: string;
 	date: string;
+	diagnosis: string;
+	appointmentDetails: string;
 }
 
 export interface HealthTip {
@@ -406,7 +408,9 @@ export const mockNotes: Note[] = [
 		title: "Quarterly Checkup Summary",
 		content:
 			"Patient is managing diabetes well. Blood sugar levels have stabilized. Continue current medication. Recommend increasing daily walks to 45 minutes.",
-		date: "2024-12-15"
+		diagnosis: "Diabetes",
+		date: "2024-12-15",
+		appointmentDetails: "From Checkup appointment on 2024-12-14"
 	},
 	{
 		id: "note-2",
@@ -416,7 +420,9 @@ export const mockNotes: Note[] = [
 		title: "Diabetes Management Review",
 		content:
 			"HbA1c levels improved from last visit. Blood pressure slightly elevated - monitor closely. Consider dietary sodium reduction.",
-		date: "2024-12-10"
+		date: "2024-12-10",
+		diagnosis: "Unknown",
+		appointmentDetails: "From Checkup appointment on 2024-12-14"
 	},
 	{
 		id: "note-3",
@@ -426,7 +432,9 @@ export const mockNotes: Note[] = [
 		title: "Previous Follow-up Notes",
 		content:
 			"Discussed lifestyle modifications. Patient committed to reducing processed food intake. Scheduled lab work for cholesterol panel.",
-		date: "2024-11-20"
+		date: "2024-11-20",
+		diagnosis: "Healthy",
+		appointmentDetails: "From Checkup appointment on 2024-12-14"
 	}
 ];
 
