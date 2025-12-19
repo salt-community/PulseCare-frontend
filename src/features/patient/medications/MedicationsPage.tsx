@@ -13,7 +13,7 @@ export default function MedicationsPage() {
 				{data.map(medication => (
 					<Card key={medication.id}>
 						<CardHeader className="flex flex-row gap-4">
-							<PillIcon className="w-6 h-8 shrink-0 text-primary bg-background-secondary" />
+							<PillIcon className="w-6 h-8 shrink-0 text-primary" />
 							<div className="flex-1">
 								<div className="flex justify-between items-center gap-2">
 									<CardTitle className="text-lg">{medication.name}</CardTitle>
