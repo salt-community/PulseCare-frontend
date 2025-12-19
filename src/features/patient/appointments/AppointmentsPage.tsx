@@ -1,21 +1,28 @@
 import { Card, CardContent } from "../../../components/ui/Card";
 import { mockAppointments } from "../../../lib/api/mockData";
-import { Clock4 } from "lucide-react";
+import { CalendarOff, Clock4, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
+import { useState } from "react";
 
 export default function AppointmentsPage() {
+	const [dialogOpen, setDialogOpen] = useState<Boolean>(false);
 	const data = mockAppointments;
+
+	function handleOnClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
+		setDialogOpen(true);
+	}
 
 	return (
 		<>
-			<h1>Appointments</h1>
-			<p>View and manage your upcoming appointments</p>
+			<h1 className="font-bold text-3xl">Appointments</h1>
+			<p className="text-foreground/50">View and manage your upcoming appointments</p>
 			<div className="flex flex-col gap-3 mt-2">
 				{data.map(d => (
-					<Card key={d.id} className="p-3">
-						<CardContent className="flex flex-col md:flex-row">
-							<div className="flex gap-4">
+					<Card key={d.id} className="relative flex flex-row p-3 align-middle" onClick={handleOnClick}>
+						<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
+						<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center md:align-middle md:justify-center lg:p-6">
+							<div className="flex gap-4 items-center">
 								<div className="flex flex-col bg-(image:--gradient-primary) text-white py-3 p-6 rounded-md">
 									<span className="text-2xl font-bold">{format(new Date(d.date), "dd")}</span>
 									<span>{format(new Date(d.date), "MMM")}</span>
@@ -28,20 +35,21 @@ export default function AppointmentsPage() {
 									</span>
 								</div>
 							</div>
-							<div className="flex flex-row gap-4 m-2">
-								<Pill className="h-5" variant="secondary">
+							<div className="flex flex-row md:flex-col gap-2">
+								<Pill className="" variant="secondary">
 									<span className="">{d.type}</span>
 								</Pill>
 								<Pill>
 									<span className="">{d.status}</span>
 								</Pill>
 							</div>
-							<div>
-								<span>{d.doctorName}</span>
+							<div className="flex flex-row md:flex-col gap-4 m-2">
+								<span className="font-bold">
+									<Stethoscope className="inline size-4 mr-1.5 mb-1" />
+									{d.doctorName}
+								</span>
 								<span>{d.notes}</span>
 							</div>
-							{/* <br /> */}
-							{/* <br /> */}
 						</CardContent>
 					</Card>
 				))}
