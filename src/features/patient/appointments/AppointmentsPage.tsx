@@ -3,16 +3,9 @@ import { mockAppointments } from "../../../lib/api/mockData";
 import { CalendarOff, Clock4, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
-import { useState } from "react";
 
 export default function AppointmentsPage() {
-	const [dialogOpen, setDialogOpen] = useState<Boolean>(false);
 	const data = mockAppointments;
-
-
-	function handleOnClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
-		setDialogOpen(true);
-	}
 
 	return (
 		<>
@@ -24,7 +17,7 @@ export default function AppointmentsPage() {
 			) : (
 				<div className="flex flex-col gap-3 mt-2">
 					{data.map(d => (
-						<Card key={d.id} className="relative flex flex-row p-3 align-middle" onClick={handleOnClick}>
+						<Card key={d.id} className="relative flex flex-row p-3 align-middle">
 							<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
 							<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center md:align-middle md:justify-center lg:p-6">
 								<div className="flex gap-4 items-center">
