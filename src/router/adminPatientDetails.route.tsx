@@ -1,9 +1,9 @@
 import { createRoute } from "@tanstack/react-router";
-import { adminPatientsRoute } from "./adminPatients.route"
+import { adminRoute} from "./admin.route"
 import { PatientDetailsPage } from "../features/admin/patients/PatientDetailsPage";
 
 export const adminPatientDetailsRoute = createRoute({
-  getParentRoute: () => adminPatientsRoute, 
-  path: "/:patientId", 
+  getParentRoute: () => adminRoute, 
+  path: "/patients/$patientId", 
   component: PatientDetailsPage,
 });
