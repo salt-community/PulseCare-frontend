@@ -19,9 +19,10 @@ export default function MedicationsPage() {
 					>
 						<CardContent className="p-5">
 							<div className="flex items-start gap-4">
-								<div className="p-3 rounded-xl bg-accent/20">
+								<Icon variant="red">
 									<PillIcon className="h-6 w-6 text-accent-foreground" />
-								</div>
+								</Icon>
+
 								<div className="flex-1">
 									<div className="flex items-start justify-between gap-2 mb-2">
 										<h3 className="font-semibold text-lg text-foreground">{medication.name}</h3>
