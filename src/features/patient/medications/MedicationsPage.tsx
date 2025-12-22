@@ -1,4 +1,4 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../components/ui/Card";
+import { Card, CardContent } from "../../../components/ui/Card";
 import { mockMedications } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { Calendar, Pill as PillIcon, InfoIcon, Clock } from "lucide-react";
@@ -12,11 +12,7 @@ export default function MedicationsPage() {
 			<PageHeader title={"Medications"} description="Your current prescriptions and medication schedule" />
 			<div className="grid gap-4 md:grid-cols-2">
 				{data.map((medication, index) => (
-					<Card
-						key={medication.id}
-						className="shadow-card hover:shadow-lg transition-shadow animate-slide-up"
-						style={{ animationDelay: `${index * 0.1}s` }}
-					>
+					<Card key={medication.id} className="transition-shadow animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
 						<CardContent className="p-5">
 							<div className="flex items-start gap-4">
 								<Icon variant="red">
