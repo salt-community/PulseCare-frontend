@@ -1,4 +1,5 @@
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+import { useRef } from "react";
 import type { ReactElement } from "react";
 import PulseCareLogo from "./PulseCareLogo";
 import { Link } from "@tanstack/react-router";
@@ -11,11 +12,17 @@ interface HeaderProps {
 
 export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): ReactElement {
 	const { user } = useUser();
+	const userButtonRef = useRef<HTMLDivElement>(null);
 
 	const isAdmin = user?.publicMetadata.role === "admin";
 	const path = isAdmin ? "/admin/dashboard" : "/patient/dashboard";
 	const role = isAdmin ? "Admin" : "Patient";
 
+	const handleAuthClick = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		const button = userButtonRef.current?.querySelector("button");
+		button?.click();
+	};
 	return (
 		<header className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-md bg-background/80 shrink-0 min-h-19.25">
 			<div className="flex justify-between items-center py-3 px-6 h-full">
@@ -46,8 +53,12 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 						</div>
 					</SignedOut>
 					<SignedIn>
-						<div className="flex items-center gap-2 rounded-lg px-3 py-2 cursor-pointer transition-colors hover:bg-primary-light">
-							<UserButton />
+						<div
+							ref={userButtonRef}
+							onClick={handleAuthClick}
+							className="flex items-center gap-2 rounded-lg px-3 py-2 cursor-pointer transition-colors hover:bg-primary-light"
+						>
+							<UserButton className="" />
 							<div className="flex flex-col">
 								<span className="text-sm font-medium text-foreground">{user?.fullName}</span>
 								<p className="text-xs text-card-foreground">{role}</p>

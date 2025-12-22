@@ -1,19 +1,31 @@
 import { Outlet } from "@tanstack/react-router";
 import { Header } from "../components/shared/Header";
 import { AdminSidebar } from "../components/ui/AdminSidebar";
+import { useState } from "react";
 
 const AdminLayout = () => {
+	const [sidebarOpen, setSidebarOpen] = useState(false);
 	return (
-		<div className="h-screen w-screen flex flex-col">
-			<Header />
+		<div className="h-screen w-screen flex flex-col ">
+			<Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
 			<div className="flex flex-1 overflow-hidden">
-				<aside className="shrink-0">
+				<aside className="hidden md:flex md:shrink-0">
 					<AdminSidebar />
 				</aside>
-				<main className="flex-1 overflow-y-auto p-6">
+				<main className="flex-1 overflow-y-auto p-6 bg-background">
 					<Outlet />
 				</main>
 			</div>
+			{sidebarOpen && (
+				<>
+					<div className="fixed inset-0 bg-black/50 z-30 mt-[4.8125rem] ml-64 md:hidden" onClick={() => setSidebarOpen(false)} />
+					<div className="fixed inset-y-0 left-0 z-40 md:hidden" onClick={e => e.stopPropagation()}>
+						<div className="flex flex-col h-full pt-[4.8125rem] p-4 relative">
+							<AdminSidebar />
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };
