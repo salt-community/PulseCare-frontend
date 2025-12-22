@@ -6,6 +6,7 @@ import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { DialogModal } from "../../../components/shared/DialogModal";
+import { DialogInput } from "../../../components/ui/DialogInput";
 
 export default function AdminMessagesPage() {
 	const data = mockMessages;
@@ -15,7 +16,10 @@ export default function AdminMessagesPage() {
 			<div className="flex items-center justify-between">
 				<PageHeader title="Messages" description="send message to your health care" />
 				<DialogModal title="New Message" description="Create a new message to your health care provider" buttonText="+ New Message">
-					<Button> + New Message</Button>
+				<DialogInput type="text" label="Subject" placeholder="Subject"/>
+				<DialogInput type="textarea" label="Message" placeholder="Type your message here..." />				
+				
+					<Button> Send</Button>
 				</DialogModal>
 			</div>
 			{data.length === 0 ? (
