@@ -13,6 +13,7 @@ import { adminCalendarRoute } from "./adminCalendar.route";
 import { adminDashRoute } from "./adminDashboard.route";
 import { adminMessageRoute } from "./adminMessages.route";
 import { adminPatientsRoute } from "./adminPatients.route";
+import { adminPatientDetailsRoute } from "./adminPatientDetails.route";
 
 // Root children
 rootRoute.addChildren([indexRoute, patientRoute, adminRoute]);
@@ -21,7 +22,7 @@ rootRoute.addChildren([indexRoute, patientRoute, adminRoute]);
 patientRoute.addChildren([dashRoute, medRoute, appointRoute, statsRoute, messRoute, notesRoute]);
 
 // Admin routes (children of adminRoute)
-adminRoute.addChildren([adminCalendarRoute, adminDashRoute, adminMessageRoute, adminPatientsRoute]);
+adminRoute.addChildren([adminCalendarRoute, adminDashRoute, adminMessageRoute, adminPatientDetailsRoute, adminPatientsRoute]);
 
 export const router = createRouter({
 	routeTree: rootRoute
