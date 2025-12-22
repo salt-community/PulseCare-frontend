@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'; 
 import { Card, CardContent } from "./Card";
-import { Badge } from "./Badge";
 import { User, Mail, Phone, ChevronRight } from "lucide-react";
+import { Pill } from "./Pill"; 
 import type { Patient } from "../../lib/api/mockData";
 
 interface PatientInfoCardProps {
@@ -14,7 +14,7 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => 
       to={`/admin/patients/${patient.id}`} 
       className="block transition-all"
     >
-      <Card className="shadow-card border border-blue-200 hover:border-blue-400 transition-all">
+      <Card className="transition-all">
         <CardContent className="p-6">
           <div className="flex items-center gap-5">
             <div className="p-4 rounded-xl bg-primary/10">
@@ -26,14 +26,14 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => 
                 <h3 className="font-bold text-lg md:text-xl text-foreground">{patient.name}</h3>
                 <div className="flex items-center gap-2">
                   {patient.conditions.slice(0, 2).map((condition) => (
-                    <Badge key={condition} variant="secondary" className="text-sm md:text-base">
+                    <Pill key={condition} variant="secondary" className="text-sm md:text-base">
                       {condition}
-                    </Badge>
+                    </Pill>
                   ))}
                   {patient.conditions.length > 2 && (
-                    <Badge variant="secondary" className="text-sm md:text-base">
+                    <Pill variant="secondary" className="text-sm md:text-base">
                       +{patient.conditions.length - 2}
-                    </Badge>
+                    </Pill>
                   )}
                 </div>
               </div>

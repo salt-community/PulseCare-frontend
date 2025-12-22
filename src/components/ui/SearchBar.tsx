@@ -15,7 +15,7 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
         placeholder="Search patients..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-md border border-blue-100 px-10 py-2 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 outline-none"
+        className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
       />
     </div>
   );
