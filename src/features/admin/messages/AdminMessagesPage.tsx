@@ -5,6 +5,7 @@ import { Pill } from "../../../components/ui/Pill";
 import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 import { Button } from "../../../components/ui/PrimaryButton";
+import { DialogModal } from "../../../components/shared/DialogModal";
 
 export default function AdminMessagesPage() {
 	const data = mockMessages;
@@ -13,7 +14,9 @@ export default function AdminMessagesPage() {
 		<div>
 			<div className="flex items-center justify-between">
 				<PageHeader title="Messages" description="send message to your health care" />
-				<Button> + New Message</Button>
+				<DialogModal title="New Message" description="Create a new message to your health care provider" buttonText="+ New Message">
+					<Button> + New Message</Button>
+				</DialogModal>
 			</div>
 			{data.length === 0 ? (
 				<Card className="mb-4">
