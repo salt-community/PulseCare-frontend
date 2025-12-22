@@ -29,7 +29,7 @@ export default function AppointmentsPage() {
 				onOpenChange={setDialogOpen}
 				title={selected ? `Appointment with ${selected.doctorName}` : "Appointment"}
 				description={selected ? selected.notes : undefined}
-				showTrigger={true}
+				showTrigger={false}
 			>
 				{selected && (
 					<div className="mt-4 space-y-2">
