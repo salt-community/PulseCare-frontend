@@ -67,7 +67,7 @@ export function PatientDetailsPage() {
 		<div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
 			<button
 				onClick={() => navigate({ to: "/admin/patients" })}
-				className="text-card-foreground hover:underline text-lg font-semibold"
+				className="text-card-foreground hover:underline hover:text-primary text-lg font-semibold"
 			>
 				← Back
 			</button>
