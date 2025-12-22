@@ -14,10 +14,6 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		if (!note.trim()) {
-			//error hantering när inputen är tom, kanske i själva modalen eller input
-			return;
-		}
 		const noteRequest = {
 			appointmentId,
 			note
@@ -36,12 +32,20 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 			>
 				<Plus className="w-4 h-4" /> Add Note
 			</button>
-			<DialogModal title="Add Notes" onOpenChange={setOpen} open={open}>
+			<DialogModal title="Add note to appointment" onOpenChange={setOpen} open={open}>
 				<form onSubmit={handleSubmit}>
-					<DialogInput type="textarea" label="Notes" rows={3} value={note} onChange={setNotes} />
+					<DialogInput
+						className="w-full"
+						type="textarea"
+						label="Notes"
+						rows={3}
+						value={note}
+						onChange={setNotes}
+						required={true}
+					/>
 
 					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-						Save
+						Add
 					</button>
 				</form>
 			</DialogModal>
