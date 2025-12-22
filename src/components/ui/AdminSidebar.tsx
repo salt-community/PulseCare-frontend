@@ -7,6 +7,15 @@ export const AdminSidebar = () => {
 			<NavLink label="Dashboard" to="/admin/dashboard">
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
+			<NavLink label="Patients" to="/admin/patients">
+				<HouseHeart strokeWidth={1.5} />
+			</NavLink>
+			<NavLink label="Calendar" to="/admin/calendar">
+				<HouseHeart strokeWidth={1.5} />
+			</NavLink>
+			<NavLink label="Messages" to="/admin/messages">
+				<HouseHeart strokeWidth={1.5} />
+			</NavLink>
 		</div>
 	);
 };
