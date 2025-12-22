@@ -18,6 +18,7 @@ import {
 	CalendarOff,
 	Clock4
 } from "lucide-react";
+import { AddNotesForm } from "./AddNotesForm";
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
@@ -244,6 +245,7 @@ export function PatientDetailsPage() {
 														<span className="text-sm text-muted-foreground">{apt.notes}</span>
 													</div>
 												</div>
+												<AddNotesForm />
 											</CardContent>
 										</Card>
 									))}
