@@ -1,11 +1,28 @@
 {
-  "useTabs": true,
-  "tabWidth": 4,
-  "semi": true,
-  "singleQuote": false,
-  "printWidth": 140,
-  "trailingComma": "none",
-  "quoteProps": "consistent",
-  "arrowParens": "avoid",
-  "bracketSpacing": true
+	"useTabs": true,
+	"tabWidth": 4,
+	"semi": true,
+	"singleQuote": false,
+	"printWidth": 140,
+	"trailingComma": "none",
+	"quoteProps": "consistent",
+	"arrowParens": "avoid",
+	"bracketSpacing": true,
+
+	"overrides": [
+		{
+			"files": ["*.yml", "*.yaml"],
+			"options": {
+				"useTabs": false,
+				"tabWidth": 2
+			}
+		},
+		{
+			"files": ["Dockerfile", "Dockerfile.*"],
+			"options": {
+				"useTabs": false,
+				"tabWidth": 2
+			}
+		}
+	]
 }
