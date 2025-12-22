@@ -4,13 +4,75 @@ import { Card, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
+import { DialogModal } from "../../../components/shared/DialogModal";
+import { DialogInput } from "../../../components/ui/DialogInput";
+import { Button } from "../../../components/ui/PrimaryButton";
+import { useState } from "react";
 
 export default function MessagesPage() {
 	const data = mockMessages;
+	const [isOpen, setIsOpen] = useState(false);
+	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+	const [selected, setSelected] = useState<(typeof mockMessages)[0] | null>(null);
+
+	function handleCardClick(message: (typeof mockMessages)[0]) {
+		setSelected(message);
+		setDialogOpen(true);
+	}
+
 	console.log("mock data---", data);
 	return (
 		<div>
-			<PageHeader title="Messages" description="Send messages to your healthcare providers" />
+			<div className="flex items-center justify-between">
+				<PageHeader title="Messages" description="Send messages to your healthcare providers" />
+
+				<DialogModal
+					open={dialogOpen}
+					onOpenChange={setDialogOpen}
+					title={selected ? `Reply to ${selected.doctorName}` : "Message"}
+					showTrigger={false}
+				>
+					<p>reply to message with id.....</p>
+					{/* <DialogInput type="text" label="Subject" placeholder="Subject" /> */}
+					{/* <DialogInput type="textarea" label="Message" placeholder="Type your message here..." /> */}
+					<textarea
+						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
+						placeholder="This is a text area for typing message..."
+						id=""
+					></textarea>
+					<Button>Send</Button>
+				</DialogModal>
+
+				<DialogModal
+					open={isOpen}
+					onOpenChange={setIsOpen}
+					title="New Message"
+					description="Create a new message to your health care provider"
+					buttonText="+ New Message"
+					showTrigger={true}
+				>
+					{/* <DialogInput type="text" label="Subject" placeholder="Subject" /> */}
+					<input
+						type="textarea"
+						placeholder="To: add doctor name here..."
+						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
+					/>
+
+					{/* <DialogInput type="textarea" label="Message" placeholder="Type your message here..." /> */}
+					<input
+						type="text"
+						placeholder="This is the subject"
+						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
+					/>
+					<textarea
+						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
+						placeholder="This is a text area for typing message..."
+						id=""
+					></textarea>
+
+					<Button>Send</Button>
+				</DialogModal>
+			</div>
 
 			{data.length === 0 ? (
 				<Card className="mb-4">
@@ -20,7 +82,7 @@ export default function MessagesPage() {
 				</Card>
 			) : (
 				data.map(d => (
-					<Card key={d.id} className="mb-4">
+					<Card key={d.id} className="mb-4" onClick={() => handleCardClick(d)}>
 						<CardContent className="p-5 ">
 							<div className="flex justify-between pb-3">
 								<div className="flex flex-row gap-3 ">
