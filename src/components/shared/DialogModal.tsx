@@ -1,5 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { Button } from "../ui/PrimaryButton";
 
 type DialogModalProps = {
 	open: boolean;
@@ -28,7 +29,7 @@ export function DialogModal({
 
 	return (
 		<Dialog.Root open={open} onOpenChange={onOpenChange}>
-			{shouldRenderTrigger && <Dialog.Trigger asChild>{trigger ?? <button type="button">{buttonText}</button>}</Dialog.Trigger>}
+			{shouldRenderTrigger && <Dialog.Trigger asChild>{trigger ?? <Button type="button">{buttonText}</Button>}</Dialog.Trigger>}
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-primary-dark/40" />
 				<Dialog.Content className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-[min(95%,32rem)] max-h-[90vh] overflow-auto bg-background-secondary rounded-2xl p-4 outline-none">

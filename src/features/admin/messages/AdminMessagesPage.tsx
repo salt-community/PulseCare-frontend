@@ -1,4 +1,5 @@
 import { User } from "lucide-react";
+import { useState } from "react";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
@@ -9,16 +10,24 @@ import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 
 export default function AdminMessagesPage() {
+	const [isOpen, setIsOpen] = useState(false);
 	const data = mockMessages;
 	console.log("mock data---", data);
 	return (
 		<div>
 			<div className="flex items-center justify-between">
-				<PageHeader title="Messages" description="send message to your health care" />
-				<DialogModal title="New Message" description="Create a new message to your health care provider" buttonText="+ New Message">
-				<DialogInput type="text" label="Subject" placeholder="Subject"/>
-				<DialogInput type="textarea" label="Message" placeholder="Type your message here..." />				
-				
+				<PageHeader title="Messages" description="Send messages to your healthcare providers" />
+				<DialogModal
+					open={isOpen}
+					onOpenChange={setIsOpen}
+					title="New Message"
+					description="Create a new message to your health care provider"
+					buttonText="+ New Message"
+					showTrigger={true}
+				>
+					<DialogInput type="text" label="Subject" placeholder="Subject" />
+					<DialogInput type="textarea" label="Message" placeholder="Type your message here..." />
+
 					<Button> Send</Button>
 				</DialogModal>
 			</div>
