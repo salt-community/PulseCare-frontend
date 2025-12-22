@@ -3,8 +3,21 @@ import { useMemo, useState } from "react";
 import { mockPatients, mockAppointments, mockMedications } from "../../../lib/api/mockData";
 import type { Patient, Appointment, Medication } from "../../../lib/api/mockData";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
-import { Badge } from "../../../components/ui/Badge";
-import { FaUser, FaCalendarAlt, FaPills, FaHeartbeat, FaExclamationTriangle, FaCapsules, FaPlus, FaTrash } from "react-icons/fa";
+import { format } from "date-fns";
+import { Pill } from "../../../components/ui/Pill";
+import {
+	User,
+	Calendar,
+	Pill as LucidePill,
+	HeartPulse,
+	AlertTriangle,
+	CircleAlert,
+	Plus,
+	Trash,
+	Stethoscope,
+	CalendarOff,
+	Clock4
+} from "lucide-react";
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
@@ -45,9 +58,9 @@ export function PatientDetailsPage() {
 	};
 
 	const tabs = [
-		{ id: "overview", label: "Overview", icon: <FaUser /> },
-		{ id: "appointments", label: "Appointments", icon: <FaCalendarAlt /> },
-		{ id: "prescriptions", label: "Prescriptions", icon: <FaPills /> }
+		{ id: "overview", label: "Overview", icon: <User /> },
+		{ id: "appointments", label: "Appointments", icon: <Calendar /> },
+		{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> }
 	] as const;
 
 	return (
@@ -99,10 +112,10 @@ export function PatientDetailsPage() {
 						<li key={tab.id} className="mr-2">
 							<button
 								onClick={() => setActiveTab(tab.id)}
-								className={`flex items-center gap-2 px-5 py-2 rounded-t-xl font-medium transition text-base ${
+								className={`flex items-center gap-2 px-5 py-2 rounded-t-xl font-medium transition text-base cursor-pointer ${
 									activeTab === tab.id
 										? "bg-primary-light text-foreground border-b-2 border-primary"
-										: "text-card-foreground hover:text-primary hover:border-b-2 hover:border-primary-light"
+										: "text-card-foreground hover:text-primary hover:border-b-2 hover:border-primary-light transition-all ease-in-out duration-200"
 								}`}
 							>
 								{tab.icon}
@@ -119,7 +132,7 @@ export function PatientDetailsPage() {
 						<Card className="shadow-sm rounded-xl flex-1 flex flex-col justify-center">
 							<CardHeader>
 								<CardTitle className="text-lg md:text-xl flex items-center gap-2">
-									<FaUser /> Contact Info
+									<User className="text-primary" /> Contact Info
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-2 text-base flex flex-col justify-center">
@@ -138,7 +151,7 @@ export function PatientDetailsPage() {
 						<Card className="shadow-sm rounded-xl flex-1 flex flex-col justify-center">
 							<CardHeader>
 								<CardTitle className="text-lg md:text-xl flex items-center gap-2">
-									<FaHeartbeat /> Health Info
+									<HeartPulse className="text-primary" /> Health Info
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-3 text-base flex flex-col justify-center">
@@ -147,28 +160,28 @@ export function PatientDetailsPage() {
 								</p>
 								<div>
 									<p className="font-medium mb-1 flex items-center gap-2">
-										<FaExclamationTriangle /> Conditions:
+										<AlertTriangle /> Conditions:
 									</p>
 									<div className="flex flex-wrap gap-2">
 										{patient.conditions.map(c => (
-											<Badge key={c} className="bg-primary-light text-primary">
+											<Pill key={c} variant="secondary" className="text-sm md:text-base hover:bg-secondary/80">
 												{c}
-											</Badge>
+											</Pill>
 										))}
 									</div>
 								</div>
 								<div>
 									<p className="font-medium mb-1 flex items-center gap-2">
-										<FaCapsules /> Allergies:
+										<CircleAlert /> Allergies:
 									</p>
 									{patient.allergies.length === 0 ? (
 										<p>No known allergies</p>
 									) : (
 										<div className="flex flex-wrap gap-2">
 											{patient.allergies.map(a => (
-												<Badge key={a} className="bg-red-100 text-red-700">
+												<Pill key={a} className="bg-red-100 text-red-400 hover:bg-red-200 text-sm md:text-base">
 													{a}
-												</Badge>
+												</Pill>
 											))}
 										</div>
 									)}
@@ -182,58 +195,59 @@ export function PatientDetailsPage() {
 					<Card className="shadow-sm rounded-xl">
 						<CardHeader className="flex justify-between items-center">
 							<CardTitle className="text-xl flex items-center gap-2">
-								<FaCalendarAlt /> Appointments
+								<Calendar className="w-5 h-5" /> Appointments
 							</CardTitle>
 							<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
-								<FaPlus /> New Appointment
+								<Plus className="w-4 h-4" /> New Appointment
 							</button>
 						</CardHeader>
-						<CardContent className="text-base space-y-3">
+						<CardContent className="space-y-4">
 							{appointments.length === 0 ? (
-								<p className="text-card-foreground">No appointments scheduled</p>
+								<p className="text-center text-muted-foreground">No appointments scheduled</p>
 							) : (
-								<ul className="space-y-4">
+								<div className="flex flex-col gap-3 mt-2">
 									{appointments.map((apt: Appointment) => (
-										<li
-											key={apt.id}
-											className="relative flex flex-col border-b py-4 px-3 md:px-4 hover:bg-background-secondary rounded-lg transition"
-										>
-											<div className="flex items-center gap-4">
-												<div className="flex items-center gap-2 bg-secondary-light text-secondary-foreground font-medium px-3 py-2 rounded-lg text-lg">
-													<FaCalendarAlt className="w-5 h-5" /> <span>{apt.date}</span>
-												</div>
-												<div className="flex items-center gap-2 text-card-foreground text-lg">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														className="w-5 h-5 text-gray-500"
-														fill="none"
-														viewBox="0 0 24 24"
-														stroke="currentColor"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															strokeWidth={2}
-															d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-														/>
-													</svg>
-													{apt.time}
-												</div>
-											</div>
+										<Card key={apt.id} className="relative flex flex-row p-3 align-middle shadow-md rounded-xl">
+											<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
 
-											<div className="flex items-center gap-4 mt-2 ml-2">
-												<Badge className="bg-primary-light text-primary">{apt.type}</Badge>
-												<span className="flex items-center gap-1 text-card-foreground text-sm">
-													<FaUser className="text-gray-500" /> {apt.doctorName}
-												</span>
-											</div>
+											<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center md:justify-between lg:p-6">
+												<div className="flex gap-4 items-center">
+													<div className="flex flex-col bg-(image:--gradient-primary) text-white py-3 p-6 rounded-md">
+														<span className="text-2xl font-bold">{format(new Date(apt.date), "dd")}</span>
+														<span className="text-sm">{format(new Date(apt.date), "MMM")}</span>
+													</div>
+													<div className="flex flex-col pt-2">
+														<span className="font-semibold text-foreground">
+															{format(new Date(apt.date), "EEEE")}
+														</span>
+														<span className="text-sm text-muted-foreground">
+															<Clock4 className="inline size-4 mr-1 mb-1" />
+															{apt.time}
+														</span>
+													</div>
+												</div>
 
-											<button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition">
-												<FaTrash />
-											</button>
-										</li>
+												<div>
+													<div className="flex flex-row gap-2">
+														<Pill variant="secondary" className="text-sm">
+															<span>{apt.type}</span>
+														</Pill>
+														<Pill variant="default" className="text-sm">
+															<span>{apt.status}</span>
+														</Pill>
+													</div>
+													<div className="flex flex-col md:flex-col gap-4 m-2">
+														<span className="font-bold text-lg text-foreground">
+															<Stethoscope className="inline size-4 mr-1.5 mb-1" />
+															{apt.doctorName}
+														</span>
+														<span className="text-sm text-muted-foreground">{apt.notes}</span>
+													</div>
+												</div>
+											</CardContent>
+										</Card>
 									))}
-								</ul>
+								</div>
 							)}
 						</CardContent>
 					</Card>
@@ -243,10 +257,10 @@ export function PatientDetailsPage() {
 					<Card className="shadow-sm rounded-xl">
 						<CardHeader className="flex justify-between items-center">
 							<CardTitle className="text-xl flex items-center gap-2">
-								<FaPills /> Prescriptions
+								<LucidePill /> Prescriptions
 							</CardTitle>
 							<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
-								<FaPlus /> New Prescription
+								<Plus /> New Prescription
 							</button>
 						</CardHeader>
 						<CardContent className="text-base">
@@ -260,7 +274,7 @@ export function PatientDetailsPage() {
 											className="flex flex-col md:flex-row md:justify-between md:items-center border-b py-2"
 										>
 											<div className="flex items-center gap-2">
-												<FaPills className="text-primary w-5 h-5" />
+												<LucidePill className="text-primary w-5 h-5" />
 												<div>
 													<strong>{med.name}</strong> – {med.dosage}, {med.timesPerDay} times/day
 													{med.instructions && (
@@ -269,7 +283,7 @@ export function PatientDetailsPage() {
 												</div>
 											</div>
 											<button className="mt-2 md:mt-0 text-gray-500 hover:text-gray-700 transition">
-												<FaTrash />
+												<Trash />
 											</button>
 										</li>
 									))}
