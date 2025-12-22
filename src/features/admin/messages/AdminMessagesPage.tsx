@@ -69,7 +69,7 @@ export default function AdminMessagesPage() {
 						id=""
 					></textarea>
 
-					<Button> Send</Button>
+					<Button>Send</Button>
 				</DialogModal>
 			</div>
 			{data.length === 0 ? (

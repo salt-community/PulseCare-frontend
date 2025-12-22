@@ -70,7 +70,7 @@ export default function MessagesPage() {
 						id=""
 					></textarea>
 
-					<Button> Send</Button>
+					<Button>Send</Button>
 				</DialogModal>
 			</div>
 
