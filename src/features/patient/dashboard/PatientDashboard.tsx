@@ -3,6 +3,7 @@ import { mockAppointments } from "../../../lib/api/mockData";
 import { Calendar, Clock4, MoveRight, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
+import PageHeader from "../../../components/shared/PageHeader";
 
 export default function PatientDashboard() {
 	const data = mockAppointments;
@@ -12,18 +13,18 @@ export default function PatientDashboard() {
 
 	return (
 		<>
-			<div>Welcome back {exampleUser.fullName}</div>
-			<Card className="mt-4 p-4">
+			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
+			<Card className="mt-4 p-4 hover:shadow-none">
 				<CardTitle className="flex items-center gap-2 text-foreground p-3">
-					<Calendar className="text-primary"/>
+					<Calendar className="text-primary" />
 					Upcoming Appointments
-					<button className="ml-auto text-sm hover:bg-primary-light p-2 hover:text-primary-dark rounded-md p-1 text-primary font-medium">
-						View All <MoveRight className="inline size-4 mb-0.5" />
+					<button className="ml-auto text-sm hover:bg-primary-light p-2 hover:text-primary-dark rounded-md text-primary font-medium">
+						View all <MoveRight className="inline size-4 mb-0.5" />
 					</button>
 				</CardTitle>
 				<div className="flex flex-col gap-3 mt-2">
 					{data.map(d => (
-						<Card key={d.id} className="p-3 bg-background-secondary">
+						<Card key={d.id} className="p-3 bg-background-secondary hover:shadow-none">
 							<CardContent className="flex flex-col">
 								<div className="flex flex-col gap-4 mr-2">
 									<Pill className="h-5" variant="secondary">

@@ -1,53 +1,57 @@
 import { Card, CardContent } from "../../../components/ui/Card";
 import { mockAppointments } from "../../../lib/api/mockData";
-import { CalendarOff, Clock4, Stethoscope } from "lucide-react";
+import { Calendar, Clock, User } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
+import PageHeader from "../../../components/shared/PageHeader";
 
 export default function AppointmentsPage() {
 	const data = mockAppointments;
 
 	return (
 		<>
-			<h1 className="font-bold text-3xl">Appointments</h1>
-			<p className="text-foreground/50">View and manage your upcoming appointments</p>
+			<PageHeader title="Appointments" description="View and manage your upcoming appointments" />
 
 			{data.length === 0 ? (
-				<p className="mt-4 text-center text-muted-foreground">No appointments available</p>
+				<Card className="shadow-card">
+					<CardContent className="flex flex-col items-center justify-center py-12">
+						<Calendar className="h-12 w-12 text-card-foreground mb-4" />
+						<p className="text-lg font-medium text-foreground mb-2">No appointments scheduled</p>
+						<p className="text-card-foreground">Your upcoming appointments will appear here</p>
+					</CardContent>
+				</Card>
 			) : (
-				<div className="flex flex-col gap-3 mt-2">
-					{data.map(d => (
-						<Card key={d.id} className="relative flex flex-row p-3 align-middle">
-							<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
-							<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center md:align-middle md:justify-center lg:p-6">
-								<div className="flex gap-4 items-center">
-									<div className="flex flex-col bg-(image:--gradient-primary) text-white py-3 p-6 rounded-md">
-										<span className="text-2xl font-bold">{format(new Date(d.date), "dd")}</span>
-										<span>{format(new Date(d.date), "MMM")}</span>
+				<div className="space-y-4">
+					{data.map((d, index) => (
+						<Card key={d.id} className="transition-all animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+							<CardContent className="p-5">
+								<div className="flex flex-col md:flex-row md:items-center gap-4">
+									{/* Date Block */}
+									<div className="flex items-center gap-4 md:w-48">
+										<div className="p-4 rounded-xl bg-(image:--gradient-primary) text-white text-center min-w-17.5">
+											<p className="text-2xl font-bold text-white">{format(new Date(d.date), "d")}</p>
+											<p className="text-xs text-white/80 uppercase">{format(new Date(d.date), "MMM")}</p>
+										</div>
+										<div>
+											<p className="font-medium text-foreground">{format(new Date(d.date), "EEEE")}</p>
+											<div className="flex items-center gap-1 text-sm text-card-foreground">
+												<Clock className="h-4 w-4" />
+												<span>{d.time}</span>
+											</div>
+										</div>
 									</div>
-									<div className="flex flex-col pt-2">
-										<span className="font-semibold">{format(new Date(d.date), "EEEE")}</span>
-										<span>
-											<Clock4 className="inline size-4 mr-1 mb-1" />
-											{d.time}
-										</span>
-									</div>
-								</div>
-								<div>
-									<div className="flex flex-row gap-2">
-										<Pill className="" variant="secondary">
-											<span className="">{d.type}</span>
-										</Pill>
-										<Pill>
-											<span className="">{d.status}</span>
-										</Pill>
-									</div>
-									<div className="flex flex-col md:flex-col gap-4 m-2">
-										<span className="font-bold">
-											<Stethoscope className="inline size-4 mr-1.5 mb-1" />
-											{d.doctorName}
-										</span>
-										<span>{d.notes}</span>
+
+									{/* Details */}
+									<div className="flex-1">
+										<div className="flex items-center gap-2 mb-2">
+											<Pill variant="secondary">{d.type}</Pill>
+											<Pill>{d.status}</Pill>
+										</div>
+										<div className="flex items-center gap-2 text-foreground mb-1">
+											<User className="h-4 w-4 text-card-foreground" />
+											<span className="font-medium">{d.doctorName}</span>
+										</div>
+										{d.notes && <p className="text-sm text-card-foreground mt-2">{d.notes}</p>}
 									</div>
 								</div>
 							</CardContent>
