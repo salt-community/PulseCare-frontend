@@ -32,7 +32,7 @@ export default function HealthStatsPage() {
 											<Icon variant="red">{StatIcon && <StatIcon />} </Icon>
 										</span>
 										<span>
-											<Pill variant="secondary">{d.status}</Pill>
+											<Pill variant="warning">{d.status}</Pill>
 										</span>
 									</div>
 									<div className="flex flex-col">
