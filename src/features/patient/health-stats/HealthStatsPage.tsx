@@ -68,7 +68,7 @@ export default function HealthStatsPage() {
 													<span className="font-medium capitalize text-foreground">
 														{d.type.replace("_", " ")}
 													</span>
-													<span className="text-sm text-foreground-secondary">
+													<span className="text-sm">
 														Last updated: {format(new Date(d.date), "MMM dd, yyyy")}
 													</span>
 												</div>
