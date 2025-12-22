@@ -23,11 +23,7 @@ export default function AppointmentsPage() {
 			) : (
 				<div className="space-y-4">
 					{data.map((d, index) => (
-						<Card
-							key={d.id}
-							className="shadow-card hover:shadow-lg transition-all animate-slide-up"
-							style={{ animationDelay: `${index * 0.1}s` }}
-						>
+						<Card key={d.id} className=" transition-all animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
 							<CardContent className="p-5">
 								<div className="flex flex-col md:flex-row md:items-center gap-4">
 									{/* Date Block */}
