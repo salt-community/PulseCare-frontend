@@ -60,7 +60,7 @@ export default function HealthStatsPage() {
 							{orderedData.map(d => {
 								const StatIcon = statIcons[d.type];
 								return (
-									<Card key={d.id} className="bg-background-secondary">
+									<Card key={d.id} className="bg-background-secondary hover:shadow-none">
 										<CardContent className="flex flex-row items-center justify-between">
 											<div className="flex flex-row items-center gap-4">
 												<Icon variant="red">{StatIcon && <StatIcon />}</Icon>
