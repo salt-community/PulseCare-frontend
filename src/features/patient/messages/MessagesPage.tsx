@@ -6,16 +6,16 @@ import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 
 export default function MessagesPage() {
-	const data = mockMessages
+	const data = mockMessages;
 	console.log("mock data---", data);
 	return (
 		<div>
-			<PageHeader title="Messages" description="send message to your health care" />
-			 <button>new Message</button> {/*add the model anf from */}
+			<PageHeader title="Messages" description="Send messages to your healthcare providers" />
+
 			{data.length === 0 ? (
 				<Card className="mb-4">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						 <p className="text-lg font-medium text-foreground mb-2">No messages yet</p>
+						<p className="text-lg font-medium text-foreground mb-2">No messages yet</p>
 					</CardContent>
 				</Card>
 			) : (
@@ -32,7 +32,13 @@ export default function MessagesPage() {
 										<span className="text-xs">{format(new Date(d.date), "MMM dd, yyyy  •  HH:mm a")}</span>
 									</div>
 								</div>
-								<div>{!d.read && <Pill className="bg-primary/10 text-primary" variant="secondary">sent</Pill>}</div>
+								<div>
+									{!d.read && (
+										<Pill className="bg-primary/10 text-primary" variant="secondary">
+											sent
+										</Pill>
+									)}
+								</div>
 							</div>
 							<div className="text-m font-semibold text-foreground mb-2">{d.subject}</div>
 							<div className="text-sm">{d.content}</div>
