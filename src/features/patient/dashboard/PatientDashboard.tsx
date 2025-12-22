@@ -4,6 +4,7 @@ import { Calendar, Clock4, MoveRight, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
+import { Button } from "../../../components/ui/PrimaryButton";
 
 export default function PatientDashboard() {
 	const data = mockAppointments;
@@ -18,9 +19,9 @@ export default function PatientDashboard() {
 				<CardTitle className="flex items-center gap-2 text-foreground p-3">
 					<Calendar className="text-primary" />
 					Upcoming Appointments
-					<button className="ml-auto text-sm hover:bg-primary-light p-2 hover:text-primary-dark rounded-md text-primary font-medium">
-						View all <MoveRight className="inline size-4 mb-0.5" />
-					</button>
+					<Button variant="outline" size="default" className="ml-auto">
+						View all <MoveRight />
+					</Button>
 				</CardTitle>
 				<div className="flex flex-col gap-3 mt-2">
 					{data.map(d => (
@@ -31,22 +32,22 @@ export default function PatientDashboard() {
 										<span className="">{d.type}</span>
 									</Pill>
 									<div className="flex flex-col gap-4 mr-2">
-										<span className="font-medium">
-											<Stethoscope className="inline size-4 mr-1.5 mb-1" />
+										<span className="text-foreground text-sm font-semibold">
+											<Stethoscope className="text-card-foreground inline size-4 mr-1.5 mb-1" />
 											{d.doctorName}
 										</span>
 									</div>
 								</div>
-								<div className=" border-b border-foreground/20 mt-2 pb-2 ">
-									<Calendar className="inline size-4 mr-1 mb-1" />
+								<div className="border-b border-foreground/20 mt-2 pb-2 flex flex-row items-center">
+									<Calendar className="inline size-4 mr-1" />
 									<span className="mr-1 text-sm">{format(new Date(d.date), "dd MMM")}</span>
 									<span className="mr-4 text-sm">{format(new Date(d.date), "EEEE")}</span>
-									<span>
-										<Clock4 className="inline size-4 mx-1 mb-1" />
+									<span className="flex flex-row text-sm items-center">
+										<Clock4 className="inline size-4 mx-1" />
 										{d.time}
 									</span>
 								</div>
-								<div className="flex flex-col md:flex-col gap-4 mt-2">
+								<div className="flex flex-col md:flex-col gap-4 mt-2 text-xs">
 									<span>{d.notes}</span>
 								</div>
 							</CardContent>
