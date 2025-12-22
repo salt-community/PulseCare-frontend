@@ -4,6 +4,7 @@ import { Calendar, Clock4, MoveRight, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
+import { Button } from "../../../components/ui/PrimaryButton";
 
 export default function PatientDashboard() {
 	const data = mockAppointments;
@@ -18,9 +19,9 @@ export default function PatientDashboard() {
 				<CardTitle className="flex items-center gap-2 text-foreground p-3">
 					<Calendar className="text-primary" />
 					Upcoming Appointments
-					<button className="ml-auto text-sm hover:bg-primary-light p-2 hover:text-primary-dark rounded-md text-primary font-medium">
-						View all <MoveRight className="inline size-4 mb-0.5" />
-					</button>
+					<Button variant="outline" size="default" className="ml-auto">
+						View all <MoveRight />
+					</Button>
 				</CardTitle>
 				<div className="flex flex-col gap-3 mt-2">
 					{data.map(d => (
