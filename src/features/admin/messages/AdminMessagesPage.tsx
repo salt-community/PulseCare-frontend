@@ -39,7 +39,7 @@ export default function AdminMessagesPage() {
 						placeholder="This is a text area for typing message..."
 						id=""
 					></textarea>
-					<Button> Send</Button>
+					<Button>Send</Button>
 				</DialogModal>
 
 				<DialogModal
