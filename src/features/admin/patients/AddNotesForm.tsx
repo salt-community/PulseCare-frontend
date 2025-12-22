@@ -4,12 +4,11 @@ import { DialogInput } from "../../../components/ui/DialogInput";
 import { Plus } from "lucide-react";
 
 //TODO: hantera notes, utkommenterade är tänkt som bas när api är implementerade
-// type AddNotesProps = {
-// 	appointmentId: string;
-// };
+type AddNotesProps = {
+	appointmentId: string;
+};
 
-// export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
-export const AddNotesForm = () => {
+export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 	const [note, setNotes] = useState("");
 	const [open, setOpen] = useState(false);
 
@@ -19,11 +18,11 @@ export const AddNotesForm = () => {
 			//error hantering när inputen är tom, kanske i själva modalen eller input
 			return;
 		}
-		console.log(note);
-		// const noteRequest = {
-		// 	appointmentId,
-		// 	note
-		// };
+		const noteRequest = {
+			appointmentId,
+			note
+		};
+		console.log(noteRequest);
 		//await noteApi.addNotes(noteRequest)
 		setNotes("");
 		setOpen(false);

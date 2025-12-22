@@ -245,7 +245,7 @@ export function PatientDetailsPage() {
 														<span className="text-sm text-muted-foreground">{apt.notes}</span>
 													</div>
 												</div>
-												<AddNotesForm />
+												<AddNotesForm appointmentId={apt.id} />
 											</CardContent>
 										</Card>
 									))}
