@@ -4,11 +4,14 @@ type InputProps = {
 	label: string;
 	rows?: number;
 	className?: string;
+	value: string;
+	onChange: (value: string) => void;
+	required: boolean;
 };
 
-export const DialogInput = ({ type, label, placeholder, rows = 4, className = "" }: InputProps) => {
+export const DialogInput = ({ type, label, placeholder, rows = 4, className = "", value, onChange, required }: InputProps) => {
 	const baseClass =
-		"focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1" +
+		"focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 " +
 		className;
 	const labelStyling = "block p-1 text-md font-semibold";
 
@@ -16,7 +19,14 @@ export const DialogInput = ({ type, label, placeholder, rows = 4, className = ""
 		return (
 			<div className="p-1 m-1">
 				<label className={labelStyling}>{label}</label>
-				<textarea className={baseClass} placeholder={placeholder} rows={rows} />
+				<textarea
+					className={baseClass}
+					placeholder={placeholder}
+					rows={rows}
+					value={value}
+					onChange={e => onChange(e.target.value)}
+					required={required}
+				/>
 			</div>
 		);
 	}
@@ -24,7 +34,7 @@ export const DialogInput = ({ type, label, placeholder, rows = 4, className = ""
 	return (
 		<div className="p-1 m-1">
 			<label className={labelStyling}>{label}</label>
-			<input className={baseClass} type={type} placeholder={placeholder} />
+			<input className={baseClass} type={type} placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)} />
 		</div>
 	);
 };
