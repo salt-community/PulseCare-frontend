@@ -6,11 +6,13 @@ import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
-import { Button } from "../../../components/ui/PrimaryButton";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 export default function MessagesPage() {
 	const data = mockMessages;
+	const [doctorInput, setDoctorInput] = useState("");
+	const [subject, setSubject] = useState("");
+	const [message, setMessage] = useState("");
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 	const [selected, setSelected] = useState<(typeof mockMessages)[0] | null>(null);
@@ -20,7 +22,21 @@ export default function MessagesPage() {
 		setDialogOpen(true);
 	}
 
-	console.log("mock data---", data);
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		const messageRequest = {
+			doctorInput,
+			subject,
+			message
+		};
+		console.log(messageRequest);
+		//await messageApi.addMessage(messageRequest)
+		setDoctorInput("");
+		setSubject("");
+		setMessage("");
+		setIsOpen(false);
+	};
+
 	return (
 		<div>
 			<div className="flex items-center justify-between">
@@ -32,15 +48,21 @@ export default function MessagesPage() {
 					title={selected ? `Reply to ${selected.doctorName}` : "Message"}
 					showTrigger={false}
 				>
-					<p>reply to message with id.....</p>
-					{/* <DialogInput type="text" label="Subject" placeholder="Subject" /> */}
-					{/* <DialogInput type="textarea" label="Message" placeholder="Type your message here..." /> */}
-					<textarea
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-						placeholder="This is a text area for typing message..."
-						id=""
-					></textarea>
-					<Button>Send</Button>
+					<form onSubmit={handleSubmit}>
+						<DialogInput
+							type="textarea"
+							label="Message"
+							placeholder="Type your message here..."
+							value={message}
+							onChange={setMessage}
+							required={true}
+						/>
+						{/* Fix an option for type submit to this button <Button>Send</Button> */}
+						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
+							Add
+						</button>
+						{/* <Button>Send</Button> */}
+					</form>
 				</DialogModal>
 
 				<DialogModal
@@ -51,26 +73,30 @@ export default function MessagesPage() {
 					buttonText="+ New Message"
 					showTrigger={true}
 				>
-					{/* <DialogInput type="text" label="Subject" placeholder="Subject" /> */}
-					<input
-						type="textarea"
-						placeholder="To: add doctor name here..."
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-					/>
+					<form onSubmit={handleSubmit}>
+						<DialogInput
+							type="text"
+							label="Doctor"
+							placeholder="To: add doctor name here..."
+							value={doctorInput}
+							onChange={setDoctorInput}
+							required
+						/>
+						<DialogInput type="text" label="Subject" placeholder="Subject" value={subject} onChange={setSubject} required />
+						<DialogInput
+							type="textarea"
+							label="Message"
+							placeholder="Type your message here..."
+							value={message}
+							onChange={setMessage}
+							required
+						/>
 
-					{/* <DialogInput type="textarea" label="Message" placeholder="Type your message here..." /> */}
-					<input
-						type="text"
-						placeholder="This is the subject"
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-					/>
-					<textarea
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-						placeholder="This is a text area for typing message..."
-						id=""
-					></textarea>
-
-					<Button>Send</Button>
+						{/* Fix an option for type submit to this button <Button>Send</Button> */}
+						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
+							Add
+						</button>
+					</form>
 				</DialogModal>
 			</div>
 
