@@ -1,11 +1,10 @@
 import { User } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
-import { Button } from "../../../components/ui/PrimaryButton";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 
@@ -13,13 +12,34 @@ export default function AdminMessagesPage() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 	const [selected, setSelected] = useState<(typeof mockMessages)[0] | null>(null);
+	const [doctorInput, setDoctorInput] = useState("");
+	const [patientInput, setPatientInput] = useState("");
+	const [subject, setSubject] = useState("");
+	const [message, setMessage] = useState("");
+
 	function handleCardClick(message: (typeof mockMessages)[0]) {
 		setSelected(message);
 		setDialogOpen(true);
 	}
 
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		const messageRequest = {
+			doctorInput,
+			patientInput,
+			subject,
+			message
+		};
+		console.log(messageRequest);
+		//await messageApi.addMessage(messageRequest)
+		setDoctorInput("");
+		setSubject("");
+		setMessage("");
+		setPatientInput("");
+		setIsOpen(false);
+	};
+
 	const data = mockMessages;
-	console.log("mock data---", data);
 	return (
 		<div>
 			<div className="flex items-center justify-between">
@@ -28,48 +48,58 @@ export default function AdminMessagesPage() {
 				<DialogModal
 					open={dialogOpen}
 					onOpenChange={setDialogOpen}
-					title={selected ? `Reply to ${selected.doctorName}` : "Message"}
+					title={selected ? `Reply to {Patient Name}` : "Message"}
 					showTrigger={false}
 				>
-					<p>reply to message with id.....</p>
-					{/* <DialogInput type="text" label="Subject" placeholder="Subject" /> */}
-					{/* <DialogInput type="textarea" label="Message" placeholder="Type your message here..." /> */}
-					<textarea
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-						placeholder="This is a text area for typing message..."
-						id=""
-					></textarea>
-					<Button>Send</Button>
+					<form onSubmit={handleSubmit}>
+						<DialogInput
+							type="textarea"
+							label="Message"
+							placeholder="Type your message here..."
+							value={message}
+							onChange={setMessage}
+							required={true}
+						/>
+						{/* Fix an option for type submit to this button <Button>Send</Button> */}
+						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
+							Add
+						</button>
+						{/* <Button>Send</Button> */}
+					</form>
 				</DialogModal>
 
 				<DialogModal
 					open={isOpen}
 					onOpenChange={setIsOpen}
 					title="New Message"
-					description="Create a new message to your health care provider"
+					description="Create a new message to a patient"
 					buttonText="+ New Message"
 					showTrigger={true}
 				>
-					{/* <DialogInput type="text" label="Subject" placeholder="Subject" /> */}
-					<input
-						type="textarea"
-						placeholder="To: add doctor name here..."
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-					/>
+					<form onSubmit={handleSubmit}>
+						<DialogInput
+							type="text"
+							label="Patient"
+							placeholder="add patient name..."
+							value={patientInput}
+							onChange={setPatientInput}
+							required
+						/>
+						<DialogInput type="text" label="Subject" placeholder="Subject" value={subject} onChange={setSubject} required />
+						<DialogInput
+							type="textarea"
+							label="Message"
+							placeholder="Type your message here..."
+							value={message}
+							onChange={setMessage}
+							required
+						/>
 
-					{/* <DialogInput type="textarea" label="Message" placeholder="Type your message here..." /> */}
-					<input
-						type="text"
-						placeholder="This is the subject"
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-					/>
-					<textarea
-						className="w-full rounded-md px-10 py-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md"
-						placeholder="This is a text area for typing message..."
-						id=""
-					></textarea>
-
-					<Button>Send</Button>
+						{/* Fix an option for type submit to this button <Button>Send</Button> */}
+						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
+							Add
+						</button>
+					</form>
 				</DialogModal>
 			</div>
 			{data.length === 0 ? (
