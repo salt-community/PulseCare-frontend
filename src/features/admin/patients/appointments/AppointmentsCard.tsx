@@ -10,10 +10,12 @@ type AppointmentsCardProps = {
 	isUpcoming: boolean;
 };
 
-export const AppointmentsCard = ({ appointments, isUpcoming: upcomingApts }: AppointmentsCardProps) => {
+export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardProps) => {
+	const cardHeader = isUpcoming ? "Upcoming Appointments" : "Previous Appointments";
+
 	return (
 		<Card className="shadow-sm rounded-xl flex-1 flex flex-col">
-			<CardHeader className="font-semibold text-xl p-0 pt-4 ps-4">Upcoming Appointments</CardHeader>
+			<CardHeader className="font-semibold text-xl p-0 pt-4 ps-4">{cardHeader}</CardHeader>
 			<CardContent className="flex-1 space-y-4 overflow-auto">
 				{appointments.length === 0 ? (
 					<div className="flex h-full items-center justify-center">
@@ -23,7 +25,7 @@ export const AppointmentsCard = ({ appointments, isUpcoming: upcomingApts }: App
 					<div className="flex flex-col gap-3 mt-2">
 						{appointments.map((apt: Appointment) => (
 							<Card key={apt.id} className="relative flex flex-row p-3 align-middle shadow-md rounded-xl">
-								{upcomingApts ? (
+								{isUpcoming ? (
 									<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
 								) : (
 									<></>
