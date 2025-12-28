@@ -1,14 +1,16 @@
-import { Calendar, Plus } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { CardHeader, CardTitle } from "../../../../components/ui/Card";
-import type { Appointment } from "../../../../lib/api/mockData";
+import type { Appointment, Patient } from "../../../../lib/api/mockData";
 import { parse, startOfDay } from "date-fns";
 import { AppointmentsCard } from "./AppointmentsCard";
+import { AddAppointmentForm } from "./AddAppointmentForm";
 
 type AppointmentProps = {
 	appointments: Appointment[];
+	patient: Patient;
 };
 
-export const AppointmentsTab = ({ appointments }: AppointmentProps) => {
+export const AppointmentsTab = ({ appointments, patient }: AppointmentProps) => {
 	//TODO: komma överrens hur ett datum ska se ut
 	const today = startOfDay(new Date());
 	const upcomingApts = appointments.filter(a => parse(a.date, "yyyy-MM-dd", today) >= today);
@@ -22,9 +24,7 @@ export const AppointmentsTab = ({ appointments }: AppointmentProps) => {
 						<Calendar className="w-5 h-5" /> Appointments
 					</CardTitle>
 				</CardHeader>
-				<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
-					<Plus className="w-4 h-4" /> New Appointment
-				</button>
+				<AddAppointmentForm patient={patient} />
 			</div>
 			<div className="flex flex-col md:flex-row gap-6">
 				<AppointmentsCard appointments={upcomingApts} isUpcoming={true} />

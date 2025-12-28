@@ -179,7 +179,7 @@ export function PatientDetailsPage() {
 					</div>
 				)}
 
-				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} />}
+				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
 
 				{activeTab === "prescriptions" && (
 					<Card className="shadow-sm rounded-xl">
