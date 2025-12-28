@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { mockPatients, mockAppointments, mockMedications } from "../../../lib/api/mockData";
-import type { Patient, Medication } from "../../../lib/api/mockData";
+import type { Patient } from "../../../lib/api/mockData";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
-import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert, Plus, Trash } from "lucide-react";
+import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert } from "lucide-react";
 import { AppointmentsTab } from "./appointments/AppointmentsTab";
+import { PrescriptionsTab } from "./prescriptions/PrescriptionsTab";
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
@@ -181,45 +182,7 @@ export function PatientDetailsPage() {
 
 				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
 
-				{activeTab === "prescriptions" && (
-					<Card className="shadow-sm rounded-xl">
-						<CardHeader className="flex justify-between items-center">
-							<CardTitle className="text-xl flex items-center gap-2">
-								<LucidePill /> Prescriptions
-							</CardTitle>
-							<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
-								<Plus /> New Prescription
-							</button>
-						</CardHeader>
-						<CardContent className="text-base">
-							{medications.length === 0 ? (
-								<p>No medications</p>
-							) : (
-								<ul className="space-y-2">
-									{medications.map((med: Medication) => (
-										<li
-											key={med.id}
-											className="flex flex-col md:flex-row md:justify-between md:items-center border-b py-2"
-										>
-											<div className="flex items-center gap-2">
-												<LucidePill className="text-primary w-5 h-5" />
-												<div>
-													<strong>{med.name}</strong> – {med.dosage}, {med.timesPerDay} times/day
-													{med.instructions && (
-														<div className="text-card-foreground text-sm">Instructions: {med.instructions}</div>
-													)}
-												</div>
-											</div>
-											<button className="mt-2 md:mt-0 text-gray-500 hover:text-gray-700 transition">
-												<Trash />
-											</button>
-										</li>
-									))}
-								</ul>
-							)}
-						</CardContent>
-					</Card>
-				)}
+				{activeTab === "prescriptions" && <PrescriptionsTab medications={medications} />}
 			</div>
 		</div>
 	);
