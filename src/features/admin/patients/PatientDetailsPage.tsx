@@ -5,8 +5,7 @@ import type { Patient, Medication } from "../../../lib/api/mockData";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert, Plus, Trash } from "lucide-react";
-import { UpcomingAppointments } from "./appointments/UpcomingAppointments";
-import { PreviousAppointments } from "./appointments/PreviousAppointments";
+import { AppointmentsTab } from "./appointments/AppointmentsTab";
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
@@ -118,7 +117,7 @@ export function PatientDetailsPage() {
 			<div className="space-y-6">
 				{activeTab === "overview" && (
 					<div className="flex flex-col md:flex-row gap-6">
-						<Card className="shadow-sm rounded-xl flex-1 flex flex-col justify-center">
+						<Card className="shadow-sm rounded-xl flex-1 flex flex-col">
 							<CardHeader>
 								<CardTitle className="text-lg md:text-xl flex items-center gap-2">
 									<User className="text-primary" /> Contact Info
@@ -180,24 +179,7 @@ export function PatientDetailsPage() {
 					</div>
 				)}
 
-				{activeTab === "appointments" && (
-					<>
-						<div className="flex justify-between items-center">
-							<CardHeader>
-								<CardTitle className="text-xl flex items-center gap-2">
-									<Calendar className="w-5 h-5" /> Appointments
-								</CardTitle>
-							</CardHeader>
-							<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
-								<Plus className="w-4 h-4" /> New Appointment
-							</button>
-						</div>
-						<div className="flex flex-col md:flex-row gap-6">
-							<UpcomingAppointments appointments={appointments} />
-							<PreviousAppointments appointments={appointments} />
-						</div>
-					</>
-				)}
+				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} />}
 
 				{activeTab === "prescriptions" && (
 					<Card className="shadow-sm rounded-xl">
