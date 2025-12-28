@@ -69,7 +69,7 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 											<div className="flex justify-between">
 												<span className="flex gap-2 font-semibold text-foreground">
 													<FileText className="size-4 mt-0.5" />
-													Notes
+													<span className="font-semibold text-foreground/70">Notes</span>
 												</span>
 												<span className="flex gap-2 font-semibold text-foreground hover:bg-primary hover:text-white rounded-sm p-0.5">
 													<AddNotesForm appointmentId={apt.id} />
