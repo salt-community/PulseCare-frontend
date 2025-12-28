@@ -46,7 +46,7 @@ export interface Appointment {
 	type: "checkup" | "follow-up" | "consultation" | "lab";
 	status: "scheduled" | "completed" | "cancelled";
 	reason?: string;
-	notes?: Note[];
+	notes: Note[];
 }
 
 export interface HealthStat {
@@ -270,7 +270,8 @@ export const mockAppointments: Appointment[] = [
 		time: "14:30",
 		type: "follow-up",
 		status: "scheduled",
-		reason: "Follow-up on asthma medication"
+		reason: "Follow-up on asthma medication",
+		notes: []
 	},
 	{
 		id: "apt-3",
@@ -281,7 +282,8 @@ export const mockAppointments: Appointment[] = [
 		time: "10:00",
 		type: "lab",
 		status: "scheduled",
-		reason: "Cholesterol panel"
+		reason: "Cholesterol panel",
+		notes: []
 	},
 	{
 		id: "apt-4",
@@ -292,7 +294,8 @@ export const mockAppointments: Appointment[] = [
 		time: "11:30",
 		type: "consultation",
 		status: "scheduled",
-		reason: "Migraine treatment options"
+		reason: "Migraine treatment options",
+		notes: []
 	},
 	{
 		id: "apt-5",
