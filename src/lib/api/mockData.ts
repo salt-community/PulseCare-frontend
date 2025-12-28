@@ -45,7 +45,8 @@ export interface Appointment {
 	time: string;
 	type: "checkup" | "follow-up" | "consultation" | "lab";
 	status: "scheduled" | "completed" | "cancelled";
-	notes?: string;
+	reason?: string;
+	notes?: Note[];
 }
 
 export interface HealthStat {
@@ -232,7 +233,33 @@ export const mockAppointments: Appointment[] = [
 		time: "09:00",
 		type: "checkup",
 		status: "scheduled",
-		notes: "Regular quarterly checkup"
+		reason: "Regular quarterly checkup",
+		notes: [
+			{
+				id: "note-1",
+				appointmentId: "apt-1",
+				patientId: "patient-1",
+				doctorName: "Dr. Sarah Johnson",
+				title: "Quarterly Checkup Summary",
+				content:
+					"Patient is managing diabetes well. Blood sugar levels have stabilized. Continue current medication. Recommend increasing daily walks to 45 minutes.",
+				diagnosis: "Diabetes",
+				date: "2024-12-15",
+				appointmentDetails: "From Checkup appointment on 2024-12-14"
+			},
+			{
+				id: "note-3",
+				appointmentId: "apt-1",
+				patientId: "patient-1",
+				doctorName: "Dr. Sarah Johnson",
+				title: "Previous Follow-up Notes",
+				content:
+					"Discussed lifestyle modifications. Patient committed to reducing processed food intake. Scheduled lab work for cholesterol panel.",
+				date: "2024-11-20",
+				diagnosis: "Healthy",
+				appointmentDetails: "From Checkup appointment on 2024-12-14"
+			}
+		]
 	},
 	{
 		id: "apt-2",
@@ -243,7 +270,7 @@ export const mockAppointments: Appointment[] = [
 		time: "14:30",
 		type: "follow-up",
 		status: "scheduled",
-		notes: "Follow-up on asthma medication"
+		reason: "Follow-up on asthma medication"
 	},
 	{
 		id: "apt-3",
@@ -254,7 +281,7 @@ export const mockAppointments: Appointment[] = [
 		time: "10:00",
 		type: "lab",
 		status: "scheduled",
-		notes: "Cholesterol panel"
+		reason: "Cholesterol panel"
 	},
 	{
 		id: "apt-4",
@@ -265,7 +292,7 @@ export const mockAppointments: Appointment[] = [
 		time: "11:30",
 		type: "consultation",
 		status: "scheduled",
-		notes: "Migraine treatment options"
+		reason: "Migraine treatment options"
 	},
 	{
 		id: "apt-5",
@@ -276,7 +303,21 @@ export const mockAppointments: Appointment[] = [
 		time: "15:00",
 		type: "follow-up",
 		status: "scheduled",
-		notes: "Diabetes management review"
+		reason: "Diabetes management review",
+		notes: [
+			{
+				id: "note-2",
+				appointmentId: "apt-5",
+				patientId: "patient-1",
+				doctorName: "Dr. Michael Chen",
+				title: "Diabetes Management Review",
+				content:
+					"HbA1c levels improved from last visit. Blood pressure slightly elevated - monitor closely. Consider dietary sodium reduction.",
+				date: "2024-12-10",
+				diagnosis: "Unknown",
+				appointmentDetails: "From Checkup appointment on 2024-12-14"
+			}
+		]
 	}
 ];
 
