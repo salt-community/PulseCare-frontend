@@ -1,5 +1,5 @@
 import { LucidePill, Trash } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/Card";
+import { Card, CardContent } from "../../../../components/ui/Card";
 import type { Medication, Patient } from "../../../../lib/api/mockData";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
 
@@ -11,12 +11,7 @@ type MedicationProps = {
 export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 	return (
 		<>
-			<div className="flex justify-between items-center">
-				<CardHeader>
-					<CardTitle className="text-xl flex items-center gap-2">
-						<LucidePill className="w-5 h-5" /> Prescriptions
-					</CardTitle>
-				</CardHeader>
+			<div className="flex justify-start items-center ps-4">
 				<AddPrescriptionForm patient={patient} />
 			</div>
 			<Card className="shadow-sm rounded-xl">
