@@ -182,7 +182,7 @@ export function PatientDetailsPage() {
 
 				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
 
-				{activeTab === "prescriptions" && <PrescriptionsTab medications={medications} />}
+				{activeTab === "prescriptions" && <PrescriptionsTab medications={medications} patient={patient} />}
 			</div>
 		</div>
 	);
