@@ -1,5 +1,3 @@
-import { Calendar } from "lucide-react";
-import { CardHeader, CardTitle } from "../../../../components/ui/Card";
 import type { Appointment, Patient } from "../../../../lib/api/mockData";
 import { parse, startOfDay } from "date-fns";
 import { AppointmentsCard } from "./AppointmentsCard";
@@ -18,12 +16,7 @@ export const AppointmentsTab = ({ appointments, patient }: AppointmentProps) => 
 
 	return (
 		<>
-			<div className="flex justify-between items-center">
-				<CardHeader>
-					<CardTitle className="text-xl flex items-center gap-2">
-						<Calendar className="w-5 h-5" /> Appointments
-					</CardTitle>
-				</CardHeader>
+			<div className="flex justify-between items-center ps-4">
 				<AddAppointmentForm patient={patient} />
 			</div>
 			<div className="flex flex-col md:flex-row gap-6">
