@@ -47,10 +47,10 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 
 									<div className="w-full">
 										<div className="flex flex-row gap-2">
-											<Pill variant="secondary" className="text-sm">
+											<Pill variant="secondary">
 												<span>{apt.type}</span>
 											</Pill>
-											<Pill variant="default" className="text-sm">
+											<Pill variant="default">
 												<span>{apt.status}</span>
 											</Pill>
 										</div>

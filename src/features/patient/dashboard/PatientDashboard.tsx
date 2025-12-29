@@ -28,7 +28,7 @@ export default function PatientDashboard() {
 						<Card key={d.id} className="p-3 bg-background-secondary hover:shadow-none">
 							<CardContent className="flex flex-col">
 								<div className="flex flex-col gap-4 mr-2">
-									<Pill className="h-5" variant="secondary">
+									<Pill variant="secondary">
 										<span className="">{d.type}</span>
 									</Pill>
 									<div className="flex flex-col gap-4 mr-2">
