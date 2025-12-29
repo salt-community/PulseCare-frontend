@@ -1,3 +1,5 @@
+import { DatePicker } from "../../../components/ui/DatePicker";
+
 export const AdminCalendarPage = () => {
-	return <div>AdminCalendarPage</div>;
+	return <DatePicker />;
 };
