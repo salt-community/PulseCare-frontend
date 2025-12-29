@@ -45,99 +45,85 @@ export default function PatientDashboard() {
 					);
 				})}
 			</div>
-			<Card className="p-4 hover:shadow-none">
-				<CardTitle className="flex items-center gap-2 text-foreground p-3">
-					<PillIcon className="text-primary" />
-					Medications
-					<Button variant="outline" size="default" className="ml-auto">
-						View all <MoveRight />
-					</Button>
-				</CardTitle>
-				<div className="grid gap-4">
-					{medicationData.map((medication, index) => (
-						<Card
-							key={medication.id}
-							className="transition-shadow animate-slide-up"
-							style={{ animationDelay: `${index * 0.1}s` }}
-						>
-							<CardContent className="p-5">
-								<div className="flex items-start gap-4">
-									<Icon variant="red">
-										<PillIcon className="h-6 w-6 text-accent-foreground" />
-									</Icon>
-
-									<div className="flex-1">
-										<div className="flex items-start justify-between gap-2 mb-2">
-											<h3 className="font-semibold text-lg text-foreground">{medication.name}</h3>
-											<Pill>{medication.dosage}</Pill>
+			<div className="grid gap-4 md:grid-cols-2">
+				<Card className="p-4 hover:shadow-none">
+					<CardTitle className="flex items-center gap-2 text-foreground p-3">
+						<PillIcon className="text-primary" />
+						Medications
+						<Button variant="outline" size="default" className="ml-auto">
+							View all <MoveRight />
+						</Button>
+					</CardTitle>
+					<div className="grid gap-4">
+						{medicationData.map((medication, index) => (
+							<Card
+								key={medication.id}
+								className="transition-shadow animate-slide-up"
+								style={{ animationDelay: `${index * 0.1}s` }}
+							>
+								<CardContent className="p-5">
+									<div className="flex items-start gap-4">
+										<Icon variant="red">
+											<PillIcon className="h-6 w-6 text-accent-foreground" />
+										</Icon>
+										<div className="flex-1 min-w-0">
+											<p className="font-medium text-sm text-foreground">{medication.name}</p>
+											<p className="text-xs text-muted-foreground">
+												{medication.dosage} • {medication.timesPerDay}x daily
+											</p>
 										</div>
-
-										<div className="space-y-2 text-sm">
-											<div className="flex items-center gap-2 text-muted-foreground">
-												<Clock className="h-4 w-4" />
-												<span>
-													{medication.timesPerDay}x daily ({medication.frequency})
-												</span>
-											</div>
-											<div className="flex items-center gap-2 text-muted-foreground">
-												<Calendar className="h-4 w-4" />
-												<span>Started {medication.startDate}</span>
-											</div>
-											{medication.instructions && (
-												<div className="flex items-start gap-2 text-muted-foreground mt-3 pt-3 border-t border-border">
-													<InfoIcon className="h-4 w-4 mt-0.5 shrink-0" />
-													<span>{medication.instructions}</span>
-												</div>
-											)}
+										<div className="flex items-center gap-1 pt-3 text-xs text-muted-foreground">
+											<Clock className="h-3.5 w-3.5" />
+											<span>{medication.frequency}</span>
 										</div>
 									</div>
-								</div>
-							</CardContent>
-						</Card>
-					))}
-				</div>
-			</Card>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</Card>
 
-			<Card className="mt-4 p-4 hover:shadow-none">
-				<CardTitle className="flex items-center gap-2 text-foreground p-3">
-					<Calendar className="text-primary" />
-					Upcoming Appointments
-					<Button variant="outline" size="default" className="ml-auto">
-						View all <MoveRight />
-					</Button>
-				</CardTitle>
-				<div className="flex flex-col gap-3 mt-2">
-					{data.map(d => (
-						<Card key={d.id} className="p-3 bg-background-secondary hover:shadow-none">
-							<CardContent className="flex flex-col">
-								<div className="flex flex-col gap-4 mr-2">
-									<Pill variant="secondary">
-										<span className="">{d.type}</span>
-									</Pill>
+				<Card className=" p-4 hover:shadow-none">
+					<CardTitle className="flex items-center gap-2 text-foreground p-3">
+						<Calendar className="text-primary" />
+						Upcoming Appointments
+						<Button variant="outline" size="default" className="ml-auto">
+							View all <MoveRight />
+						</Button>
+					</CardTitle>
+					<div className="flex flex-col gap-3 mt-2">
+						{data.map(d => (
+							<Card key={d.id} className="p-3 bg-background-secondary hover:shadow-none">
+								<CardContent className="flex flex-col">
 									<div className="flex flex-col gap-4 mr-2">
-										<span className="text-foreground text-sm font-semibold">
-											<Stethoscope className="text-card-foreground inline size-4 mr-1.5 mb-1" />
-											{d.doctorName}
+										<Pill variant="secondary">
+											<span className="">{d.type}</span>
+										</Pill>
+										<div className="flex flex-col gap-4 mr-2">
+											<span className="text-foreground text-sm font-semibold">
+												<Stethoscope className="text-card-foreground inline size-4 mr-1.5 mb-1" />
+												{d.doctorName}
+											</span>
+										</div>
+									</div>
+									<div className="border-b border-foreground/20 mt-2 pb-2 flex flex-row items-center">
+										<Calendar className="inline size-4 mr-1" />
+										<span className="mr-1 text-sm">{format(new Date(d.date), "dd MMM")}</span>
+										<span className="mr-4 text-sm">{format(new Date(d.date), "EEEE")}</span>
+										<span className="flex flex-row text-sm items-center">
+											<Clock4 className="inline size-4 mx-1" />
+											{d.time}
 										</span>
 									</div>
-								</div>
-								<div className="border-b border-foreground/20 mt-2 pb-2 flex flex-row items-center">
-									<Calendar className="inline size-4 mr-1" />
-									<span className="mr-1 text-sm">{format(new Date(d.date), "dd MMM")}</span>
-									<span className="mr-4 text-sm">{format(new Date(d.date), "EEEE")}</span>
-									<span className="flex flex-row text-sm items-center">
-										<Clock4 className="inline size-4 mx-1" />
-										{d.time}
-									</span>
-								</div>
-								<div className="flex flex-col md:flex-col gap-4 mt-2 text-xs">
-									<span>{d.reason}</span>
-								</div>
-							</CardContent>
-						</Card>
-					))}
-				</div>
-			</Card>
+									<div className="flex flex-col md:flex-col gap-4 mt-2 text-xs">
+										<span>{d.reason}</span>
+									</div>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</Card>
+			</div>
 		</>
 	);
 }
