@@ -11,7 +11,7 @@ type InputProps = {
 
 export const DialogInput = ({ type, label, placeholder, rows = 4, className = "", value, onChange, required }: InputProps) => {
 	const baseClass =
-		"focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 " +
+		"focus-visible:ring-2 w-full focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 " +
 		className;
 	const labelStyling = "block p-1 text-md font-semibold";
 

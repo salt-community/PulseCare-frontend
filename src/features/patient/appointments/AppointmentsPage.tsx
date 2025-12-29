@@ -27,7 +27,7 @@ export default function AppointmentsPage() {
 				open={dialogOpen}
 				onOpenChange={setDialogOpen}
 				title={selected ? `Appointment with ${selected.doctorName}` : "Appointment"}
-				description={selected ? selected.notes : undefined}
+				description={selected ? selected.reason : undefined}
 				showTrigger={false}
 			>
 				{selected && (
@@ -92,7 +92,7 @@ export default function AppointmentsPage() {
 											<User className="h-4 w-4 text-card-foreground" />
 											<span className="font-medium">{d.doctorName}</span>
 										</div>
-										{d.notes && <p className="text-sm text-card-foreground mt-2">{d.notes}</p>}
+										{d.reason && <p className="text-sm text-card-foreground mt-2">{d.reason}</p>}
 									</div>
 								</div>
 							</CardContent>
