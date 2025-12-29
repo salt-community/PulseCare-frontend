@@ -7,6 +7,7 @@ import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
+import { Button } from "../../../components/ui/PrimaryButton";
 
 export default function AdminMessagesPage() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -60,11 +61,7 @@ export default function AdminMessagesPage() {
 							onChange={setMessage}
 							required={true}
 						/>
-						{/* Fix an option for type submit to this button <Button>Send</Button> */}
-						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-							Add
-						</button>
-						{/* <Button>Send</Button> */}
+						<Button variant="submit">Send</Button>
 					</form>
 				</DialogModal>
 
@@ -94,11 +91,7 @@ export default function AdminMessagesPage() {
 							onChange={setMessage}
 							required
 						/>
-
-						{/* Fix an option for type submit to this button <Button>Send</Button> */}
-						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-							Add
-						</button>
+						<Button variant="submit">Send</Button>
 					</form>
 				</DialogModal>
 			</div>
