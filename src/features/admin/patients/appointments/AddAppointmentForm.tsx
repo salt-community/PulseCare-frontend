@@ -66,8 +66,8 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 
 				<form onSubmit={handleSubmit}>
 					<div className="flex gap-2">
-						<DialogInput type="date" label="Date" value={date} onChange={setDate} required className="w-full" />
-						<DialogInput type="time" label="Time" value={time} onChange={setTime} required className="w-full" />
+						<DialogInput type="date" label="Date" value={date} onChange={setDate} required />
+						<DialogInput type="time" label="Time" value={time} onChange={setTime} required />
 					</div>
 
 					<div className="p-1 m-1">
@@ -92,7 +92,6 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 						value={reason}
 						onChange={setReason}
 						required={false}
-						className="w-full"
 						rows={3}
 						placeholder="Short reason for the visit"
 					/>
