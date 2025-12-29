@@ -51,7 +51,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 
 	return (
 		<>
-			<Button onClick={() => setOpen(true)} variant={"outline"}>
+			<Button onClick={() => setOpen(true)} className="bg-primary text-white">
 				<Plus className="w-4 h-4" /> New Appointment
 			</Button>
 
