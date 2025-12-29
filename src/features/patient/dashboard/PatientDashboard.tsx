@@ -1,20 +1,50 @@
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
-import { mockAppointments } from "../../../lib/api/mockData";
+import { mockAppointments, mockHealthStats } from "../../../lib/api/mockData";
 import { Calendar, Clock4, MoveRight, Stethoscope } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Button } from "../../../components/ui/PrimaryButton";
+import { Icon } from "../../../components/shared/Icon";
+import { statIcons } from "../../../lib/StatsIcons";
 
 export default function PatientDashboard() {
 	const data = mockAppointments;
 	const exampleUser = {
 		fullName: "John Doe"
 	};
+	const healthData = mockHealthStats;
+	const orderedHealthData = healthData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 	return (
 		<>
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+				{orderedHealthData.map(d => {
+					const StatIcon = statIcons[d.type];
+					return (
+						<Card className="max-w-70" key={d.id}>
+							<CardContent className="flex flex-row justify-between align-middle p-3 max-h-28">
+								<div className="flex flex-col">
+									<span className="text-sm capitalize">{d.type.replace("_", " ")}</span>
+									<span>
+										<span className="text-3xl font-semibold text-foreground mr-2">{d.value}</span>
+										{d.unit}
+									</span>
+									<span className="text-xs pt-2">Last updated: {format(new Date(d.date), "MMM dd, yyyy")}</span>
+								</div>
+								<div className="flex flex-row display justify-end pb-4">
+									<span>
+										<Icon variant="red">{StatIcon && <StatIcon />} </Icon>
+									</span>
+								</div>
+							</CardContent>
+						</Card>
+					);
+				})}
+			</div>
+
 			<Card className="mt-4 p-4 hover:shadow-none">
 				<CardTitle className="flex items-center gap-2 text-foreground p-3">
 					<Calendar className="text-primary" />
