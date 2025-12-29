@@ -9,14 +9,16 @@ type MedicationProps = {
 export const PrescriptionsTab = ({ medications }: MedicationProps) => {
 	return (
 		<Card className="shadow-sm rounded-xl">
-			<CardHeader className="flex justify-between items-center">
-				<CardTitle className="text-xl flex items-center gap-2">
-					<LucidePill /> Prescriptions
-				</CardTitle>
-				<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
-					<Plus /> New Prescription
-				</button>
-			</CardHeader>
+			<div className="flex justify-between items-center">
+				<CardHeader>
+					<CardTitle className="text-xl flex items-center gap-2">
+						<LucidePill className="w-5 h-5" /> Prescriptions
+					</CardTitle>
+					<button className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm">
+						<Plus /> New Prescription
+					</button>
+				</CardHeader>
+			</div>
 			<CardContent className="text-base">
 				{medications.length === 0 ? (
 					<p>No medications</p>
