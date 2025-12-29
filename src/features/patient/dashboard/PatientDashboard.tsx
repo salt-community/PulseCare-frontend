@@ -148,7 +148,7 @@ export default function PatientDashboard() {
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
 								<CardContent className="p-4">
-									<div className="flex items-start gap-1 mb-1">
+									<div className="flex items-start gap-4 mb-1">
 										<Icon>
 											<Stethoscope className="h-5 w-5 text-primary" />
 										</Icon>
