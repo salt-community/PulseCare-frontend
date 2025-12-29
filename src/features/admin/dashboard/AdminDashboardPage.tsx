@@ -19,7 +19,7 @@ export default function AdminDashboardPage() {
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of today's activities" />
 
 			{/* Stats Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
 				{/* Total Patients */}
 				<Card className="shadow-none hover:shadow-none">
 					<CardContent className="flex items-center justify-between gap-3">
@@ -60,8 +60,8 @@ export default function AdminDashboardPage() {
 				</Card>
 			</div>
 
-			<div className="flex gap-6">
-				<Card className="flex-1 mt-6 p-4 shadow-none hover:shadow-none">
+			<div className="flex flex-col lg:flex-row gap-6">
+				<Card className="flex-1 p-4 shadow-none hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
 						<Users className="text-primary shrink-0" size={20} />
 						Recent Patients
@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
 						))}
 					</div>
 				</Card>
-				<Card className="flex-1 mt-6 p-4 shadow-none hover:shadow-none">
+				<Card className="flex-1 p-4 shadow-none hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
