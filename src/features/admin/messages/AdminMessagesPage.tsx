@@ -7,6 +7,7 @@ import { mockMessages } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
+import { Button } from "../../../components/ui/PrimaryButton";
 
 export default function AdminMessagesPage() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -60,11 +61,7 @@ export default function AdminMessagesPage() {
 							onChange={setMessage}
 							required={true}
 						/>
-						{/* Fix an option for type submit to this button <Button>Send</Button> */}
-						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-							Add
-						</button>
-						{/* <Button>Send</Button> */}
+						<Button variant="submit">Send</Button>
 					</form>
 				</DialogModal>
 
@@ -94,11 +91,7 @@ export default function AdminMessagesPage() {
 							onChange={setMessage}
 							required
 						/>
-
-						{/* Fix an option for type submit to this button <Button>Send</Button> */}
-						<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-							Add
-						</button>
+						<Button variant="submit">Send</Button>
 					</form>
 				</DialogModal>
 			</div>
@@ -122,13 +115,7 @@ export default function AdminMessagesPage() {
 										<span className="text-xs">{format(new Date(d.date), "MMM dd, yyyy  •  HH:mm a")}</span>
 									</div>
 								</div>
-								<div>
-									{!d.read && (
-										<Pill className="bg-primary/10 text-primary" variant="secondary">
-											sent
-										</Pill>
-									)}
-								</div>
+								<div>{!d.read && <Pill variant="secondary">sent</Pill>}</div>
 							</div>
 							<div className="text-m font-semibold text-foreground mb-2">{d.subject}</div>
 							<div className="text-sm">{d.content}</div>

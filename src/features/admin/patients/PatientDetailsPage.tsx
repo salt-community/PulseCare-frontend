@@ -153,7 +153,7 @@ export function PatientDetailsPage() {
 									</p>
 									<div className="flex flex-wrap gap-2">
 										{patient.conditions.map(c => (
-											<Pill key={c} variant="secondary" className="text-sm md:text-base hover:bg-secondary/80">
+											<Pill key={c} variant="secondary">
 												{c}
 											</Pill>
 										))}
@@ -168,9 +168,7 @@ export function PatientDetailsPage() {
 									) : (
 										<div className="flex flex-wrap gap-2">
 											{patient.allergies.map(a => (
-												<Pill key={a} className="bg-red-100 text-red-400 hover:bg-red-200 text-sm md:text-base">
-													{a}
-												</Pill>
+												<Pill key={a}>{a}</Pill>
 											))}
 										</div>
 									)}

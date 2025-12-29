@@ -35,15 +35,7 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 			</button>
 			<DialogModal title="Add note to appointment" onOpenChange={setOpen} open={open}>
 				<form onSubmit={handleSubmit}>
-					<DialogInput
-						className="w-full"
-						type="textarea"
-						label="Notes"
-						rows={3}
-						value={note}
-						onChange={setNotes}
-						required={true}
-					/>
+					<DialogInput type="textarea" label="Notes" rows={3} value={note} onChange={setNotes} required={true} />
 
 					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
 						Add
