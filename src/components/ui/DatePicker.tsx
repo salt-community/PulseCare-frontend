@@ -1,55 +1,67 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
-import { sv } from "date-fns/locale"; // Svensk lokalisation
-import "react-day-picker/dist/style.css"; // Bas-CSS
+import { format, addMonths } from "date-fns";
+import { enGB, sv } from "date-fns/locale";
+import "react-day-picker/dist/style.css";
+import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
 
-export function DatePicker() {
-	const [selected, setSelected] = useState<Date>();
+type DatePickerProps = {
+	selected: Date | undefined;
+	onSelect: (date: Date | undefined) => void;
+};
+
+export function DatePicker({ selected, onSelect }: DatePickerProps) {
+	const [month, setMonth] = useState<Date>(new Date(2025, 11, 1));
+
+	const handlePrev = () => setMonth(m => addMonths(m, -1));
+	const handleNext = () => setMonth(m => addMonths(m, 1));
 
 	return (
-		<div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-lg border">
-			<h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">Välj datum</h2>
+		<div className="p-4 sm:p-6 w-full max-w-sm mx-auto bg-white border-0.5">
+			<div className="flex items-center justify-between mb-3 px-1 sm:px-2">
+				<button type="button" onClick={handlePrev} className="p-2 sm:p-3 hover:text-primary cursor-pointer transition-colors">
+					<CircleChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" />
+				</button>
 
-			<DayPicker
-				mode="single"
-				selected={selected}
-				onSelect={setSelected}
-				locale={sv}
-				className="rounded-lg shadow-md"
-				components={
-					{
-						//   IconLeft: () => (
-						//     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						//       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-						//     </svg>
-						//   ),
-						//   IconRight: () => (
-						//     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						//       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-						//     </svg>
-						//   ),
-					}
-				}
-				modifiersClassNames={{
-					selected: "bg-blue-500 text-white rounded-full",
-					today: "bg-blue-100 text-blue-900 border-2 border-blue-200",
-					range_middle: "bg-blue-200 text-blue-900",
-					range_end: "bg-blue-500 text-white rounded-r-full"
-				}}
-				modifiers={
-					{
-						//   weekend: [0, 6], // Söndag och lördag
-					}
-				}
-			/>
+				<span className="text-base sm:text-lg font-medium">{format(month, "MMMM yyyy", { locale: enGB })}</span>
 
-			{selected && (
-				<div className="mt-6 p-4 bg-gray-50 rounded-lg">
-					<p className="text-sm text-gray-600">Valt datum:</p>
-					<p className="text-xl font-semibold text-gray-900">{format(selected, "EEEE dd MMMM yyyy", { locale: sv })}</p>
-				</div>
-			)}
+				<button type="button" onClick={handleNext} className="p-2 sm:p-3 hover:text-primary cursor-pointer transition-colors">
+					<CircleChevronRight className="w-6 h-6 sm:w-7 sm:h-7" />
+				</button>
+			</div>
+
+			<div
+				className="
+          origin-top w-full overflow-hidden
+          [@media(max-width:360px)]:scale-[0.90]
+          [@media(max-width:340px)]:scale-[0.85]
+          [@media(max-width:320px)]:scale-[0.80]
+        "
+			>
+				<DayPicker
+					mode="single"
+					selected={selected}
+					onSelect={onSelect}
+					locale={enGB}
+					month={month}
+					onMonthChange={setMonth}
+					classNames={{
+						caption: "hidden",
+						caption_label: "hidden",
+						table: "w-full text-xs sm:text-sm",
+						head_cell: "text-gray-500 font-medium",
+						cell: "h-8 w-8 sm:h-10 sm:w-10",
+						day: "rounded-full hover:bg-primary-light transition-colors"
+					}}
+					components={{
+						Nav: () => <div />
+					}}
+					modifiersClassNames={{
+						selected: "!bg-primary text-white rounded-full",
+						today: "bg-primary-light rounded-sm"
+					}}
+				/>
+			</div>
 		</div>
 	);
 }
