@@ -48,7 +48,7 @@ export default function PatientDashboard() {
 									</span>
 								</div>
 								<div className="flex flex-col md:flex-col gap-4 mt-2 text-xs">
-									<span>{d.notes}</span>
+									<span>{d.reason}</span>
 								</div>
 							</CardContent>
 						</Card>
