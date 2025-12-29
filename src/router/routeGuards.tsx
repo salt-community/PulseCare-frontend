@@ -11,6 +11,7 @@ const decodeToken = (token: string) => {
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const adminRouteGuard = async ({ context }: any) => {
 	const { auth } = context || {};
 
@@ -32,6 +33,7 @@ export const adminRouteGuard = async ({ context }: any) => {
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const patientRouteGuard = async ({ context }: any) => {
 	const { auth } = context || {};
 

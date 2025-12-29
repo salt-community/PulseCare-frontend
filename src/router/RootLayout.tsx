@@ -11,6 +11,7 @@ export const RootLayout = () => {
 	const router = useRouter();
 
 	useEffect(() => {
+		// eslint-disable-next-line react-hooks/immutability
 		router.options.context = { auth };
 	}, [auth, router]);
 
