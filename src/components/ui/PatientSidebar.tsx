@@ -5,8 +5,9 @@ import { HouseHeart, Activity, Pill, Calendar, MessageCircleMore, NotepadText } 
 
 interface PatientSidebarProps {
 	className?: string;
+	onClose?: () => void;
 }
-export const PatientSidebar = ({ className = "" }: PatientSidebarProps) => {
+export const PatientSidebar = ({ className = "", onClose }: PatientSidebarProps) => {
 	const userButtonRef = useRef<HTMLDivElement>(null);
 	const { user } = useUser();
 	const isAdmin = user?.publicMetadata.role === "admin";
@@ -15,26 +16,29 @@ export const PatientSidebar = ({ className = "" }: PatientSidebarProps) => {
 	const handleAuthClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		const button = userButtonRef.current?.querySelector("button");
+		if (button && button.contains(e.target as Node)) {
+			return;
+		}
 		button?.click();
 	};
 	return (
 		<div className={`flex flex-col gap-1 h-full ${className} w-60 border-r border-border bg-background-secondary p-4`}>
-			<NavLink label="Dashboard" to="/patient/dashboard">
+			<NavLink label="Dashboard" to="/patient/dashboard" onClick={onClose}>
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Health Stats" to="/patient/stats">
+			<NavLink label="Health Stats" to="/patient/stats" onClick={onClose}>
 				<Activity strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Medications" to="/patient/medications">
+			<NavLink label="Medications" to="/patient/medications" onClick={onClose}>
 				<Pill strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Appointments" to="/patient/appointments">
+			<NavLink label="Appointments" to="/patient/appointments" onClick={onClose}>
 				<Calendar strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Messages" to="/patient/messages">
+			<NavLink label="Messages" to="/patient/messages" onClick={onClose}>
 				<MessageCircleMore strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Notes" to="/patient/notes">
+			<NavLink label="Notes" to="/patient/notes" onClick={onClose}>
 				<NotepadText strokeWidth={1.5} />
 			</NavLink>
 			<div className="flex md:hidden mt-8 pt-4 border-t border-border">

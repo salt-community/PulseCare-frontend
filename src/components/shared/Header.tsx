@@ -13,6 +13,11 @@ interface HeaderProps {
 export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): ReactElement {
 	const { user } = useUser();
 	const userButtonRef = useRef<HTMLDivElement>(null);
+	const closeMenu = () => {
+		if (sidebarOpen) {
+			onMenuToggle?.();
+		}
+	};
 
 	const isAdmin = user?.publicMetadata.role === "admin";
 	const path = isAdmin ? "/admin/dashboard" : "/patient/dashboard";
@@ -44,7 +49,11 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 					/>
 				</button>
 				<div className="flex-1 md:flex-none mx-auto md:mx-0">
-					<Link to={path} className="flex items-center justify-center md:justify-start gap-3 hover:opacity-90 transition-opacity">
+					<Link
+						to={path}
+						className="flex items-center justify-center md:justify-start gap-3 hover:opacity-90 transition-opacity"
+						onClick={closeMenu}
+					>
 						<PulseCareLogo size="sm" showText={false} />
 						<span className="font-bold text-xl text-foreground">PulseCare</span>
 					</Link>

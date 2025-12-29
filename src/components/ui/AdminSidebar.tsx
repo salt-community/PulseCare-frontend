@@ -5,8 +5,9 @@ import { HouseHeart } from "lucide-react";
 
 interface PatientSidebarProps {
 	className?: string;
+	onClose?: () => void;
 }
-export const AdminSidebar = ({ className = "" }: PatientSidebarProps) => {
+export const AdminSidebar = ({ className = "", onClose }: PatientSidebarProps) => {
 	const userButtonRef = useRef<HTMLDivElement>(null);
 	const { user } = useUser();
 	const isAdmin = user?.publicMetadata.role === "admin";
@@ -15,21 +16,24 @@ export const AdminSidebar = ({ className = "" }: PatientSidebarProps) => {
 	const handleAuthClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		const button = userButtonRef.current?.querySelector("button");
+		if (button && button.contains(e.target as Node)) {
+			return;
+		}
 		button?.click();
 	};
 
 	return (
 		<div className={`flex flex-col gap-1 h-full ${className} w-60 border-r border-border bg-background-secondary p-4`}>
-			<NavLink label="Dashboard" to="/admin/dashboard">
+			<NavLink label="Dashboard" to="/admin/dashboard" onClick={onClose}>
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Patients" to="/admin/patients">
+			<NavLink label="Patients" to="/admin/patients" onClick={onClose}>
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Calendar" to="/admin/calendar">
+			<NavLink label="Calendar" to="/admin/calendar" onClick={onClose}>
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
-			<NavLink label="Messages" to="/admin/messages">
+			<NavLink label="Messages" to="/admin/messages" onClick={onClose}>
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
 			<div className="flex md:hidden mt-8 pt-4 border-t border-border">

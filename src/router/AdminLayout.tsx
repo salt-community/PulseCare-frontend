@@ -5,6 +5,7 @@ import { useState } from "react";
 
 const AdminLayout = () => {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const closeSidebar = () => setSidebarOpen(false);
 	return (
 		<div className="h-screen w-screen flex flex-col ">
 			<Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
@@ -18,10 +19,10 @@ const AdminLayout = () => {
 			</div>
 			{sidebarOpen && (
 				<>
-					<div className="fixed inset-0 bg-black/50 z-30 mt-[4.8125rem] ml-64 md:hidden" onClick={() => setSidebarOpen(false)} />
+					<div className="fixed inset-0 bg-black/50 z-30 mt-[4.8125rem] ml-64 md:hidden" onClick={closeSidebar} />
 					<div className="fixed inset-y-0 left-0 z-40 md:hidden" onClick={e => e.stopPropagation()}>
 						<div className="flex flex-col h-full pt-[4.8125rem] p-4 relative">
-							<AdminSidebar />
+							<AdminSidebar onClose={closeSidebar} />
 						</div>
 					</div>
 				</>
