@@ -50,6 +50,8 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 		const newPrescription = {
 			patientId: patient.id,
 			doctorId: user?.id,
+			date: date,
+			expireDate: expireDate,
 			medicine: medicine,
 			dosage: dosage,
 			instructions: instructions
