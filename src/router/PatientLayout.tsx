@@ -19,9 +19,9 @@ const PatientLayout = () => {
 			</div>
 			{sidebarOpen && (
 				<>
-					<div className="fixed inset-0 bg-black/50 z-30 mt-[4.8125rem] ml-64 md:hidden" onClick={closeSidebar} />
+					<div className="fixed inset-0 bg-black/50 z-30 mt-[4.8125rem] md:hidden" onClick={closeSidebar} />
 					<div className="fixed inset-y-0 left-0 z-40 md:hidden" onClick={e => e.stopPropagation()}>
-						<div className="flex flex-col h-full pt-[4.8125rem] p-4 relative">
+						<div className="flex flex-col h-full pt-[4.8125rem] relative">
 							<PatientSidebar onClose={closeSidebar} />
 						</div>
 					</div>

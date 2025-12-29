@@ -22,7 +22,7 @@ export const PatientSidebar = ({ className = "", onClose }: PatientSidebarProps)
 		button?.click();
 	};
 	return (
-		<div className={`flex flex-col gap-1 h-full ${className} w-60 border-r border-border bg-background-secondary p-4`}>
+		<div className={`flex flex-col gap-1 h-full ${className} w-60 border-r border-border bg-background-secondary mt-2`}>
 			<NavLink label="Dashboard" to="/patient/dashboard" onClick={onClose}>
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
