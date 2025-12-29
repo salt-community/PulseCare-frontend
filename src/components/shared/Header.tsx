@@ -32,7 +32,7 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 		button?.click();
 	};
 	return (
-		<header className="sticky top-0 z-50 w-full border-b border-border backdrop-blur-md bg-background/80 shrink-0 min-h-19.25">
+		<header className="sticky top-0 z-60 w-full border-b border-border backdrop-blur-md bg-background/80 shrink-0 min-h-19.25">
 			<div className="flex justify-between items-center py-3 px-6 h-full">
 				<button
 					className="md:hidden p-1.5 rounded-lg hover:bg-muted transition-all mr-4"
