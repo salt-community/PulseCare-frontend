@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
-import { DialogModal } from "../../../components/shared/DialogModal";
-import { DialogInput } from "../../../components/ui/DialogInput";
+import { DialogModal } from "../../../../components/shared/DialogModal";
+import { DialogInput } from "../../../../components/ui/DialogInput";
 import { Plus } from "lucide-react";
+import { Button } from "../../../../components/ui/PrimaryButton";
 
 //TODO: hantera notes, utkommenterade är tänkt som bas när api är implementerade
 type AddNotesProps = {
@@ -26,23 +27,13 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 
 	return (
 		<>
-			<button
-				className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm"
-				onClick={() => setOpen(true)}
-			>
-				<Plus className="w-4 h-4" /> Add Note
-			</button>
+			<Button className="flex items-center gap-1 h-auto p-0.5" variant={"outline"} size={"sm"} onClick={() => setOpen(true)}>
+				Add
+				<Plus className="w-4 h-4" />
+			</Button>
 			<DialogModal title="Add note to appointment" onOpenChange={setOpen} open={open}>
 				<form onSubmit={handleSubmit}>
-					<DialogInput
-						className="w-full"
-						type="textarea"
-						label="Notes"
-						rows={3}
-						value={note}
-						onChange={setNotes}
-						required={true}
-					/>
+					<DialogInput type="textarea" label="Notes" rows={3} value={note} onChange={setNotes} required={true} />
 
 					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
 						Add
