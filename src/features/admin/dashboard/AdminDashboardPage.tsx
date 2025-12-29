@@ -1,4 +1,4 @@
-import { Calendar, Users, MoveRight, Clock } from "lucide-react";
+import { Calendar, Users, MoveRight, Clock, MessageSquare } from "lucide-react";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Button } from "../../../components/ui/PrimaryButton";
@@ -10,10 +10,56 @@ export default function AdminDashboardPage() {
 	const exampleUser = { fullName: "John Doe" };
 	const recentPatients = mockPatients.slice(0, 3);
 	const upcomingAppointments = mockAppointments.slice(0, 3);
+	const todaysAppointments = mockAppointments.filter(
+		appointment => new Date(appointment.date).toDateString() === new Date().toDateString()
+	).length;
 
 	return (
 		<>
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of today's activities" />
+
+			{/* Stats Cards */}
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+				{/* Total Patients */}
+				<Card className="shadow-none hover:shadow-none">
+					<CardContent className="flex items-center justify-between gap-3">
+						<div>
+							<p className="text-xs text-card-foreground mb-0.5">Total Patients</p>
+							<p className="text-xl font-bold text-success">{mockPatients.length}</p>
+						</div>
+						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
+							<Users className="h-5 w-5 text-primary" />
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Today's Appointments */}
+				<Card className="shadow-none hover:shadow-none">
+					<CardContent className="flex items-center justify-between gap-3">
+						<div>
+							<p className="text-xs text-card-foreground mb-0.5">Today's Appointments</p>
+							<p className="text-xl font-bold text-foreground">{todaysAppointments}</p>
+						</div>
+						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
+							<Calendar className="h-5 w-5 text-primary" />
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Unread Messages */}
+				<Card className="shadow-none hover:shadow-none">
+					<CardContent className="flex items-center justify-between gap-3">
+						<div>
+							<p className="text-xs text-card-foreground mb-0.5">Unread Messages</p>
+							<p className="text-xl font-bold text-warning">5</p>
+						</div>
+						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
+							<MessageSquare className="h-5 w-5 text-primary" />
+						</div>
+					</CardContent>
+				</Card>
+			</div>
+
 			<div className="flex gap-6">
 				<Card className="flex-1 mt-6 p-4 shadow-none hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
