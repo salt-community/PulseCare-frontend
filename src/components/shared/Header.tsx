@@ -21,6 +21,9 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 	const handleAuthClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		const button = userButtonRef.current?.querySelector("button");
+		if (button && button.contains(e.target as Node)) {
+			return;
+		}
 		button?.click();
 	};
 	return (
