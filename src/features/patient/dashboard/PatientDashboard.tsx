@@ -1,6 +1,6 @@
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
 import { mockAppointments, mockHealthStats, mockMedications, mockNotes } from "../../../lib/api/mockData";
-import { Calendar, Clock, Clock4, InfoIcon, MoveRight, PillIcon, Stethoscope, StickyNote } from "lucide-react";
+import { Calendar, Clock, Clock4, MoveRight, PillIcon, Stethoscope, StickyNote } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
@@ -23,7 +23,7 @@ export default function PatientDashboard() {
 		<>
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
 				{orderedHealthData.map(d => {
 					const StatIcon = statIcons[d.type];
 					return (
@@ -47,8 +47,8 @@ export default function PatientDashboard() {
 					);
 				})}
 			</div>
-			<div className="grid gap-4 md:grid-cols-2">
-				<Card className=" p-4 hover:shadow-none col-start-1 row-end-2 md:row-end-2">
+			<div className="grid gap-4 lg:grid-cols-2 lg:grid-rows-2">
+				<Card className="p-4 hover:shadow-none lg:row-span-1">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<PillIcon className="text-primary shrink-0" size={20} />
 						Medications
@@ -86,48 +86,8 @@ export default function PatientDashboard() {
 						))}
 					</div>
 				</Card>
-				<Card className="p-4 hover:shadow-none col-start-1">
-					<CardTitle className="flex items-center gap-2 text-foreground p-3 ">
-						<StickyNote className="text-primary shrink-0" size={20} />
-						Appointment Notes
-						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/notes">
-								View all <MoveRight />
-							</Link>
-						</Button>
-					</CardTitle>
-					<div className="space-y-4">
-						{notesData.map((d, index) => (
-							<Card
-								key={d.id}
-								className="transition-shadow animate-slide-up hover:shadow-none"
-								style={{ animationDelay: `${index * 0.1}s` }}
-							>
-								<CardContent className="p-4">
-									<div className="flex items-start gap-1 mb-1">
-										<Icon>
-											<Stethoscope className="h-5 w-5 text-primary" />
-										</Icon>
 
-										<div className="flex-1 min-w-0">
-											<div className="flex items-start justify-between gap-2 mb-1">
-												<h3 className="font-semibold text-foreground">{d.title}</h3>
-												<span className="text-xs text-card-foreground whitespace-nowrap">
-													{format(new Date(d.date), "MMM d")}
-												</span>
-											</div>
-											<p className="text-sm text-primary font-medium mb-3">{d.doctorName}</p>
-
-											{d.content && <span className="text-sm text-card-foreground">{d.content}</span>}
-										</div>
-									</div>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</Card>
-
-				<Card className="col-start-2 row-start-1 row-end-3 p-4 hover:shadow-none">
+				<Card className="p-4 hover:shadow-none lg:row-span-2">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
@@ -163,6 +123,47 @@ export default function PatientDashboard() {
 									</div>
 									<div className="flex flex-col md:flex-col gap-4 mt-2 text-xs">
 										<span>{d.reason}</span>
+									</div>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</Card>
+
+				<Card className="p-4 hover:shadow-none lg:row-span-1">
+					<CardTitle className="flex items-center gap-2 text-foreground p-3 ">
+						<StickyNote className="text-primary shrink-0" size={20} />
+						Appointment Notes
+						<Button asChild variant="outline" size="default" className="ml-auto">
+							<Link to="/patient/notes">
+								View all <MoveRight />
+							</Link>
+						</Button>
+					</CardTitle>
+					<div className="space-y-4">
+						{notesData.map((d, index) => (
+							<Card
+								key={d.id}
+								className="transition-shadow animate-slide-up hover:shadow-none"
+								style={{ animationDelay: `${index * 0.1}s` }}
+							>
+								<CardContent className="p-4">
+									<div className="flex items-start gap-1 mb-1">
+										<Icon>
+											<Stethoscope className="h-5 w-5 text-primary" />
+										</Icon>
+
+										<div className="flex-1 min-w-0">
+											<div className="flex items-start justify-between gap-2 mb-1">
+												<h3 className="font-semibold text-foreground">{d.title}</h3>
+												<span className="text-xs text-card-foreground whitespace-nowrap">
+													{format(new Date(d.date), "MMM d")}
+												</span>
+											</div>
+											<p className="text-sm text-primary font-medium mb-3">{d.doctorName}</p>
+
+											{d.content && <span className="text-sm text-card-foreground">{d.content}</span>}
+										</div>
 									</div>
 								</CardContent>
 							</Card>
