@@ -26,7 +26,7 @@ export default function PatientDashboard() {
 				{orderedHealthData.map(d => {
 					const StatIcon = statIcons[d.type];
 					return (
-						<Card className="max-w-70" key={d.id}>
+						<Card className="hover:shadow-none max-w-70" key={d.id}>
 							<CardContent className="flex flex-row justify-between align-middle p-3 max-h-28">
 								<div className="flex flex-col">
 									<span className="text-sm capitalize">{d.type.replace("_", " ")}</span>
