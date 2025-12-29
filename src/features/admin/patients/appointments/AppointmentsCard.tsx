@@ -16,7 +16,7 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 	return (
 		<div className="flex-1 flex flex-col">
 			<CardHeader className="font-semibold text-xl p-0  ps-4">{cardHeader}</CardHeader>
-			<CardContent className="flex-1 space-y-4">
+			<CardContent className="flex-1 space-y-4 p-0">
 				{appointments.length === 0 ? (
 					<Card className="flex h-full items-center justify-center mt-2 shadow-md hover:shadow-md">
 						<p className="text-center text-muted-foreground">No appointments scheduled</p>

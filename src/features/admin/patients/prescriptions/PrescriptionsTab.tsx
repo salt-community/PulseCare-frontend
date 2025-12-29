@@ -11,7 +11,7 @@ type MedicationProps = {
 export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 	return (
 		<>
-			<div className="flex justify-start items-center ps-4">
+			<div className="flex justify-start items-center">
 				<AddPrescriptionForm patient={patient} />
 			</div>
 			<Card className="shadow-sm rounded-xl">
