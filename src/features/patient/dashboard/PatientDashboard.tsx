@@ -7,6 +7,7 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { Icon } from "../../../components/shared/Icon";
 import { statIcons } from "../../../lib/StatsIcons";
+import { Link } from "@tanstack/react-router";
 
 export default function PatientDashboard() {
 	const data = mockAppointments;
@@ -51,8 +52,10 @@ export default function PatientDashboard() {
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<PillIcon className="text-primary" />
 						Medications
-						<Button variant="outline" size="default" className="ml-auto">
-							View all <MoveRight />
+						<Button asChild variant="outline" size="default" className="ml-auto">
+							<Link to="/patient/medications">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="grid gap-4">
@@ -87,47 +90,55 @@ export default function PatientDashboard() {
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 ">
 						<StickyNote className="text-primary" />
 						Appointment Notes
-						<Button variant="outline" size="default" className="ml-auto">
-							View all <MoveRight />
+						<Button asChild variant="outline" size="default" className="ml-auto">
+							<Link to="/patient/notes">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
-							<div className="space-y-4">
-					{notesData.map((d, index) => (
-						<Card key={d.id} className="transition-shadow animate-slide-up hover:shadow-none" style={{ animationDelay: `${index * 0.1}s` }}>
-							<CardContent className="p-1 pr-5">
-								<div className="flex items-start gap-1 mb-1">
-									<Icon>
-										<Stethoscope className="h-5 w-5 text-primary" />
-									</Icon>
+					<div className="space-y-4">
+						{notesData.map((d, index) => (
+							<Card
+								key={d.id}
+								className="transition-shadow animate-slide-up hover:shadow-none"
+								style={{ animationDelay: `${index * 0.1}s` }}
+							>
+								<CardContent className="p-1 pr-5">
+									<div className="flex items-start gap-1 mb-1">
+										<Icon>
+											<Stethoscope className="h-5 w-5 text-primary" />
+										</Icon>
 
-									<div className="flex-1 min-w-0">
-										<div className="flex items-start justify-between gap-2 mb-1">
-											<h3 className="font-semibold text-foreground">{d.title}</h3>
-											<span className="text-xs text-card-foreground whitespace-nowrap">
-												{format(new Date(d.date), "MMM d")}
-											</span>
-										</div>
-										<p className="text-sm text-primary font-medium mb-3">{d.doctorName}</p>
-
-										{d.content && (
-											<div className="">
-												<span className="text-sm text-card-foreground">{d.content}</span>
+										<div className="flex-1 min-w-0">
+											<div className="flex items-start justify-between gap-2 mb-1">
+												<h3 className="font-semibold text-foreground">{d.title}</h3>
+												<span className="text-xs text-card-foreground whitespace-nowrap">
+													{format(new Date(d.date), "MMM d")}
+												</span>
 											</div>
-										)}
+											<p className="text-sm text-primary font-medium mb-3">{d.doctorName}</p>
+
+											{d.content && (
+												<div className="">
+													<span className="text-sm text-card-foreground">{d.content}</span>
+												</div>
+											)}
+										</div>
 									</div>
-								</div>
-							</CardContent>
-						</Card>
-					))}
-				</div>
+								</CardContent>
+							</Card>
+						))}
+					</div>
 				</Card>
 
 				<Card className="col-start-2 row-start-1 row-end-3 p-4 hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<Calendar className="text-primary" />
 						Upcoming Appointments
-						<Button variant="outline" size="default" className="ml-auto">
-							View all <MoveRight />
+						<Button asChild variant="outline" size="default" className="ml-auto">
+							<Link to="/patient/appointments">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="flex flex-col gap-3 mt-2">
