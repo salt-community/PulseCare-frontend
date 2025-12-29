@@ -4,6 +4,7 @@ import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
 import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../../lib/api/mockData";
+import { Button } from "../../../../components/ui/PrimaryButton";
 
 type PrescriptionProps = {
 	patient: Patient;
@@ -62,12 +63,9 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 
 	return (
 		<>
-			<button
-				className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm"
-				onClick={() => setOpen(true)}
-			>
+			<Button onClick={() => setOpen(true)} variant={"outline"}>
 				<Plus className="w-4 h-4" /> New Prescription
-			</button>
+			</Button>
 
 			<DialogModal title="Add prescription" onOpenChange={setOpen} open={open}>
 				<div className="my-4 flex items-center gap-3 ">
@@ -182,12 +180,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 							required={false}
 						/>
 
-						<button
-							type="submit"
-							className="w-full rounded-md bg-primary py-2.5 text-white font-medium hover:bg-primary-dark transition me-4"
-						>
-							Add prescription
-						</button>
+						<Button type="submit">Add prescription</Button>
 					</div>
 				</form>
 			</DialogModal>
