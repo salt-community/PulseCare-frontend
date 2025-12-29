@@ -45,7 +45,8 @@ export interface Appointment {
 	time: string;
 	type: "checkup" | "follow-up" | "consultation" | "lab";
 	status: "scheduled" | "completed" | "cancelled";
-	notes?: string;
+	reason?: string;
+	notes: Note[];
 }
 
 export interface HealthStat {
@@ -85,6 +86,8 @@ export interface Note {
 	title: string;
 	content: string;
 	date: string;
+	diagnosis: string;
+	appointmentDetails: string;
 }
 
 export interface HealthTip {
@@ -226,55 +229,98 @@ export const mockAppointments: Appointment[] = [
 		patientId: "patient-1",
 		patientName: "John Smith",
 		doctorName: "Dr. Sarah Johnson",
-		date: "2024-12-20",
+		date: "2025-12-20",
 		time: "09:00",
 		type: "checkup",
 		status: "scheduled",
-		notes: "Regular quarterly checkup"
+		reason: "Regular quarterly checkup",
+		notes: [
+			{
+				id: "note-1",
+				appointmentId: "apt-1",
+				patientId: "patient-1",
+				doctorName: "Dr. Sarah Johnson",
+				title: "Quarterly Checkup Summary",
+				content:
+					"Patient is managing diabetes well. Blood sugar levels have stabilized. Continue current medication. Recommend increasing daily walks to 45 minutes.",
+				diagnosis: "Diabetes",
+				date: "2024-12-15",
+				appointmentDetails: "From Checkup appointment on 2024-12-14"
+			},
+			{
+				id: "note-3",
+				appointmentId: "apt-1",
+				patientId: "patient-1",
+				doctorName: "Dr. Sarah Johnson",
+				title: "Previous Follow-up Notes",
+				content:
+					"Discussed lifestyle modifications. Patient committed to reducing processed food intake. Scheduled lab work for cholesterol panel.",
+				date: "2024-11-20",
+				diagnosis: "Healthy",
+				appointmentDetails: "From Checkup appointment on 2024-12-14"
+			}
+		]
 	},
 	{
 		id: "apt-2",
 		patientId: "patient-2",
 		patientName: "Emily Davis",
 		doctorName: "Dr. Michael Chen",
-		date: "2024-12-21",
+		date: "2025-12-21",
 		time: "14:30",
 		type: "follow-up",
 		status: "scheduled",
-		notes: "Follow-up on asthma medication"
+		reason: "Follow-up on asthma medication",
+		notes: []
 	},
 	{
 		id: "apt-3",
 		patientId: "patient-3",
 		patientName: "Robert Wilson",
 		doctorName: "Dr. Sarah Johnson",
-		date: "2024-12-22",
+		date: "2025-12-22",
 		time: "10:00",
 		type: "lab",
 		status: "scheduled",
-		notes: "Cholesterol panel"
+		reason: "Cholesterol panel",
+		notes: []
 	},
 	{
 		id: "apt-4",
 		patientId: "patient-4",
 		patientName: "Maria Garcia",
 		doctorName: "Dr. Emily Roberts",
-		date: "2024-12-23",
+		date: "2025-12-23",
 		time: "11:30",
 		type: "consultation",
 		status: "scheduled",
-		notes: "Migraine treatment options"
+		reason: "Migraine treatment options",
+		notes: []
 	},
 	{
 		id: "apt-5",
 		patientId: "patient-1",
 		patientName: "John Smith",
 		doctorName: "Dr. Michael Chen",
-		date: "2024-12-28",
+		date: "2025-12-28",
 		time: "15:00",
 		type: "follow-up",
 		status: "scheduled",
-		notes: "Diabetes management review"
+		reason: "Diabetes management review",
+		notes: [
+			{
+				id: "note-2",
+				appointmentId: "apt-5",
+				patientId: "patient-1",
+				doctorName: "Dr. Michael Chen",
+				title: "Diabetes Management Review",
+				content:
+					"HbA1c levels improved from last visit. Blood pressure slightly elevated - monitor closely. Consider dietary sodium reduction.",
+				date: "2024-12-10",
+				diagnosis: "Unknown",
+				appointmentDetails: "From Checkup appointment on 2024-12-14"
+			}
+		]
 	}
 ];
 
@@ -406,7 +452,9 @@ export const mockNotes: Note[] = [
 		title: "Quarterly Checkup Summary",
 		content:
 			"Patient is managing diabetes well. Blood sugar levels have stabilized. Continue current medication. Recommend increasing daily walks to 45 minutes.",
-		date: "2024-12-15"
+		diagnosis: "Diabetes",
+		date: "2024-12-15",
+		appointmentDetails: "From Checkup appointment on 2024-12-14"
 	},
 	{
 		id: "note-2",
@@ -416,7 +464,9 @@ export const mockNotes: Note[] = [
 		title: "Diabetes Management Review",
 		content:
 			"HbA1c levels improved from last visit. Blood pressure slightly elevated - monitor closely. Consider dietary sodium reduction.",
-		date: "2024-12-10"
+		date: "2024-12-10",
+		diagnosis: "Unknown",
+		appointmentDetails: "From Checkup appointment on 2024-12-14"
 	},
 	{
 		id: "note-3",
@@ -426,7 +476,9 @@ export const mockNotes: Note[] = [
 		title: "Previous Follow-up Notes",
 		content:
 			"Discussed lifestyle modifications. Patient committed to reducing processed food intake. Scheduled lab work for cholesterol panel.",
-		date: "2024-11-20"
+		date: "2024-11-20",
+		diagnosis: "Healthy",
+		appointmentDetails: "From Checkup appointment on 2024-12-14"
 	}
 ];
 
