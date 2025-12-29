@@ -28,7 +28,7 @@ export default function PatientDashboard() {
 					const StatIcon = statIcons[d.type];
 					return (
 						<Card className="hover:shadow-none max-w-70" key={d.id}>
-							<CardContent className="flex flex-row justify-between align-middle p-3 max-h-28">
+							<CardContent className="flex flex-row justify-between align-middle p-4 max-h-28">
 								<div className="flex flex-col">
 									<span className="text-sm capitalize">{d.type.replace("_", " ")}</span>
 									<span>
@@ -50,7 +50,7 @@ export default function PatientDashboard() {
 			<div className="grid gap-4 md:grid-cols-2">
 				<Card className=" p-4 hover:shadow-none col-start-1 row-end-2 md:row-end-2">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
-						<PillIcon className="text-primary" />
+						<PillIcon className="text-primary shrink-0" size={20} />
 						Medications
 						<Button asChild variant="outline" size="default" className="ml-auto">
 							<Link to="/patient/medications">
@@ -88,7 +88,7 @@ export default function PatientDashboard() {
 				</Card>
 				<Card className="p-4 hover:shadow-none col-start-1">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 ">
-						<StickyNote className="text-primary" />
+						<StickyNote className="text-primary shrink-0" size={20} />
 						Appointment Notes
 						<Button asChild variant="outline" size="default" className="ml-auto">
 							<Link to="/patient/notes">
@@ -103,7 +103,7 @@ export default function PatientDashboard() {
 								className="transition-shadow animate-slide-up hover:shadow-none"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
-								<CardContent className="p-1 pr-5">
+								<CardContent className="p-4">
 									<div className="flex items-start gap-1 mb-1">
 										<Icon>
 											<Stethoscope className="h-5 w-5 text-primary" />
@@ -118,11 +118,7 @@ export default function PatientDashboard() {
 											</div>
 											<p className="text-sm text-primary font-medium mb-3">{d.doctorName}</p>
 
-											{d.content && (
-												<div className="">
-													<span className="text-sm text-card-foreground">{d.content}</span>
-												</div>
-											)}
+											{d.content && <span className="text-sm text-card-foreground">{d.content}</span>}
 										</div>
 									</div>
 								</CardContent>
@@ -133,7 +129,7 @@ export default function PatientDashboard() {
 
 				<Card className="col-start-2 row-start-1 row-end-3 p-4 hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
-						<Calendar className="text-primary" />
+						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
 						<Button asChild variant="outline" size="default" className="ml-auto">
 							<Link to="/patient/appointments">
