@@ -1,4 +1,4 @@
-import { Calendar, Users, MoveRight, Clock, MessageSquare } from "lucide-react";
+import { Calendar, Users, MoveRight, Clock, MessageSquare, User } from "lucide-react";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Button } from "../../../components/ui/PrimaryButton";
@@ -75,7 +75,7 @@ export default function AdminDashboardPage() {
 								<CardContent className="flex flex-row items-center justify-between">
 									<div className="flex flex-row items-center gap-4">
 										<div className="p-2 rounded-full bg-primary/10 h-8 w-8">
-											<Users className="h-4 w-4 text-primary" />
+											<User className="h-4 w-4 text-primary" />
 										</div>
 										<div className="flex flex-col">
 											<span className="font-medium text-foreground">{patient.name}</span>
@@ -113,9 +113,7 @@ export default function AdminDashboardPage() {
 											<div className="flex items-center gap-2 text-sm text-card-foreground">
 												<Clock className="h-4 w-4" />
 												<span>{appointment.time}</span>
-												<Pill variant="default" className="h-5 text-xs">
-													{appointment.type}
-												</Pill>
+												<Pill variant="default">{appointment.type}</Pill>
 											</div>
 										</div>
 									</div>
