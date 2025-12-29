@@ -4,6 +4,7 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { mockMessages, type Message } from "../../../lib/api/mockData";
+import { mockPatients } from "../../../lib/api/mockData";
 import { format } from "date-fns";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
@@ -103,19 +104,33 @@ export default function AdminMessagesPage() {
 					open={isOpen}
 					onOpenChange={setIsOpen}
 					title="New Message"
-					description="Create a new message to a patient"
 					buttonText="+ New Message"
 					showTrigger
 				>
 					<form onSubmit={handleSubmit}>
-						<DialogInput
-							type="text"
-							label="Patient"
-							placeholder="Patient name..."
+						<label
+							htmlFor="patient"
+							className="block p-1 text-md font-semibold"
+						>
+							Patient
+						</label>
+						<select
+							id="patient"
 							value={patientInput}
-							onChange={setPatientInput}
+							onChange={(e) => setPatientInput(e.target.value)}
 							required
-						/>
+							className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+						>
+							<option value="" disabled>
+								Choose a patient...
+							</option>
+							{mockPatients.map((patient) => (
+								<option key={patient.id} value={patient.id}>
+									{patient.name}
+								</option>
+							))}
+						</select>
+
 						<DialogInput
 							type="text"
 							label="Subject"
@@ -124,6 +139,7 @@ export default function AdminMessagesPage() {
 							onChange={setSubject}
 							required
 						/>
+
 						<DialogInput
 							type="textarea"
 							label="Message"
