@@ -4,6 +4,7 @@ import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
 import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../../lib/api/mockData";
+import { Button } from "../../../../components/ui/PrimaryButton";
 
 type AppointmentProps = {
 	patient: Patient;
@@ -46,12 +47,9 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 
 	return (
 		<>
-			<button
-				className="flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition text-sm"
-				onClick={() => setOpen(true)}
-			>
+			<Button onClick={() => setOpen(true)} variant={"outline"}>
 				<Plus className="w-4 h-4" /> New Appointment
-			</button>
+			</Button>
 
 			<DialogModal title="Add appointment" onOpenChange={setOpen} open={open}>
 				<div className="my-4 flex items-center gap-3 ">
