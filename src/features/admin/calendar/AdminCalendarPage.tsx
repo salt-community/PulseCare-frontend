@@ -96,9 +96,6 @@ export const AdminCalendarPage = () => {
 
 												{/* Details */}
 												<div className="flex-1">
-													<div className="flex items-center gap-2 mb-2">
-														<Pill>{d.status}</Pill>
-													</div>
 													<div className="flex items-center gap-2 text-foreground mb-1">
 														<User className="h-4 w-4 text-card-foreground" />
 														<span className="font-medium">{d.patientName}</span>
