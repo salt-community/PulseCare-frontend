@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { format, addMonths, parseISO } from "date-fns"; // add
+import { format, addMonths, parseISO } from "date-fns";
 import { enGB } from "date-fns/locale";
 import "react-day-picker/dist/style.css";
 import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
 
-type Appointment = { date: string; [key: string]: any }; // Add
+type Appointment = { date: string; [key: string]: any };
 
 type DatePickerProps = {
 	selected: Date | undefined;
 	onSelect: (date: Date | undefined) => void;
-	appointments: Appointment[]; // Add
+	appointments: Appointment[];
 };
 
 export function DatePicker({ selected, onSelect, appointments }: DatePickerProps) {
 	const [month, setMonth] = useState<Date>(new Date(2025, 11, 1));
 
-	const meetingDates = appointments.map(apt => parseISO(apt.date)); // Add
+	const meetingDates = appointments.map(apt => parseISO(apt.date));
 
 	const handlePrev = () => setMonth(m => addMonths(m, -1));
 	const handleNext = () => setMonth(m => addMonths(m, 1));

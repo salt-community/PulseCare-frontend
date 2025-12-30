@@ -52,10 +52,8 @@ export const AdminCalendarPage = () => {
 							</div>
 						</div>
 						<div className="flex gap-2 justify-end">
-							<Button onClick={() => ""} className="bg-primary text-white">
-								Edit
-							</Button>
-							<Button onClick={() => ""} variant={"destructive"} className="bg-primary text-white">
+							<Button onClick={() => ""}>Edit</Button>
+							<Button onClick={() => ""} variant={"destructive"}>
 								Cancel
 							</Button>
 						</div>
