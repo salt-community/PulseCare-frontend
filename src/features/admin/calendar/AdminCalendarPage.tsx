@@ -54,7 +54,7 @@ export const AdminCalendarPage = () => {
 						<div className="flex gap-2 justify-end">
 							<Button onClick={() => ""}>Edit</Button>
 							<Button onClick={() => ""} variant={"destructive"}>
-								Cancel
+								Remove
 							</Button>
 						</div>
 					</>
