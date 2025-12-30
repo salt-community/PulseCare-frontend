@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format, addMonths } from "date-fns";
-import { enGB, sv } from "date-fns/locale";
+import { enGB } from "date-fns/locale";
 import "react-day-picker/dist/style.css";
 import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
 
