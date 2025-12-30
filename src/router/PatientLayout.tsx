@@ -25,10 +25,10 @@ const PatientLayout = () => {
 				<>
 					<div className="fixed inset-0 bg-black/50 top-19.25 z-40 md:hidden" onClick={closeSidebar} />
 					<div
-						className="fixed inset-x-0 top-19.25 bottom-0 z-50 w-64 md:hidden bg-background-secondary border-r border-border shadow-2xl"
+						className="fixed inset-x-0 top-19.25 bottom-0 z-50 w-60 md:hidden bg-background-secondary border-r border-border shadow-2xl"
 						onClick={e => e.stopPropagation()}
 					>
-						<div className="h-full m-4 overflow-y-auto">
+						<div className="h-full mt-4 overflow-y-auto">
 							<PatientSidebar onClose={closeSidebar} />
 						</div>
 					</div>

@@ -10,6 +10,8 @@ type AddNotesProps = {
 };
 
 export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
+	const [title, setTitle] = useState("");
+	const [diagnosis, setDiagnosis] = useState("");
 	const [note, setNotes] = useState("");
 	const [open, setOpen] = useState(false);
 
@@ -17,11 +19,15 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 		e.preventDefault();
 		const noteRequest = {
 			appointmentId,
+			title,
+			diagnosis,
 			note
 		};
 		console.log(noteRequest);
 		//await noteApi.addNotes(noteRequest)
 		setNotes("");
+		setDiagnosis("");
+		setTitle("");
 		setOpen(false);
 	};
 
@@ -33,6 +39,8 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 			</Button>
 			<DialogModal title="Add note to appointment" onOpenChange={setOpen} open={open}>
 				<form onSubmit={handleSubmit}>
+					<DialogInput type="input" label="Title" value={title} onChange={setTitle} required={true} />
+					<DialogInput type="textarea" label="Diagnosis" rows={3} value={diagnosis} onChange={setDiagnosis} required={true} />
 					<DialogInput type="textarea" label="Notes" rows={3} value={note} onChange={setNotes} required={true} />
 
 					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">

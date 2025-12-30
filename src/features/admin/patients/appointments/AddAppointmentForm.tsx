@@ -76,8 +76,8 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 							onChange={e => setType(e.target.value)}
 							required
 						>
-							{appointmentTypes.map(t => (
-								<option key={t} value={t}>
+							{appointmentTypes.map((t, i) => (
+								<option key={i} value={t}>
 									{t}
 								</option>
 							))}
