@@ -3,7 +3,7 @@ import { DatePicker } from "../../../components/ui/DatePicker";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { enGB } from "date-fns/locale";
 import { format } from "date-fns";
-import { Calendar, Clock, Pill, User } from "lucide-react";
+import { Calendar, Clock, User } from "lucide-react";
 import { ScheduleAppointment } from "./ScheduleAppointment";
 import PageHeader from "../../../components/shared/PageHeader";
 import { mockAppointments } from "../../../lib/api/mockData";
