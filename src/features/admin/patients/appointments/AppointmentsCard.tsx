@@ -14,17 +14,17 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 	const cardHeader = isUpcoming ? "Upcoming Appointments" : "Previous Appointments";
 
 	return (
-		<Card className="shadow-sm rounded-xl flex-1 flex flex-col">
-			<CardHeader className="font-semibold text-xl p-0 pt-4 ps-4">{cardHeader}</CardHeader>
-			<CardContent className="flex-1 space-y-4 overflow-auto">
+		<div className="flex-1 flex flex-col">
+			<CardHeader className="font-semibold text-xl p-0  ps-4">{cardHeader}</CardHeader>
+			<CardContent className="flex-1 space-y-4">
 				{appointments.length === 0 ? (
-					<div className="flex h-full items-center justify-center">
+					<Card className="flex h-full items-center justify-center mt-2 shadow-md hover:shadow-md">
 						<p className="text-center text-muted-foreground">No appointments scheduled</p>
-					</div>
+					</Card>
 				) : (
 					<div className="flex flex-col gap-3 mt-2">
 						{appointments.map((apt: Appointment) => (
-							<Card key={apt.id} className="relative flex flex-row p-3 align-middle shadow-md rounded-xl">
+							<Card key={apt.id} className="relative flex flex-row p-3 align-middle shadow-md hover:shadow-md rounded-xl">
 								{isUpcoming ? (
 									<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
 								) : (
@@ -68,12 +68,10 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 										<div className="flex flex-col gap-2 text-sm text-muted-foreground">
 											<div className="flex justify-between">
 												<span className="flex gap-2 font-semibold text-foreground">
-													<FileText className="size-4 mt-0.5" />
+													<FileText className="size-5" />
 													<span className="font-semibold text-foreground/70">Notes</span>
 												</span>
-												<span className="flex gap-2 font-semibold text-foreground hover:bg-primary hover:text-white rounded-sm p-0.5">
-													<AddNotesForm appointmentId={apt.id} />
-												</span>
+												<AddNotesForm appointmentId={apt.id} />
 											</div>
 											{apt.notes!.length > 0 ? (
 												apt.notes!.map(n => (
@@ -92,6 +90,6 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 					</div>
 				)}
 			</CardContent>
-		</Card>
+		</div>
 	);
 };

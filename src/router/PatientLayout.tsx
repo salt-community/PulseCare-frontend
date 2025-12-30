@@ -23,7 +23,7 @@ const PatientLayout = () => {
 
 			{sidebarOpen && (
 				<>
-					<div className="fixed inset-0 bg-black/50 top-[4.8125rem] z-40 md:hidden" onClick={closeSidebar} />
+					<div className="fixed inset-0 bg-black/50 top-19.25 z-40 md:hidden" onClick={closeSidebar} />
 					<div
 						className="fixed inset-x-0 top-[4.8125rem] bottom-0 z-50 w-60 md:hidden bg-background-secondary border-r border-border shadow-2xl"
 						onClick={e => e.stopPropagation()}
