@@ -18,20 +18,20 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 			<CardHeader className="font-semibold text-xl p-0  ps-4">{cardHeader}</CardHeader>
 			<CardContent className="flex-1 space-y-4 p-0">
 				{appointments.length === 0 ? (
-					<Card className="flex h-full items-center justify-center mt-2 shadow-md hover:shadow-md">
+					<Card className="flex h-full items-center justify-center mt-2 hover:shadow-none">
 						<p className="text-center text-muted-foreground">No appointments scheduled</p>
 					</Card>
 				) : (
 					<div className="flex flex-col gap-3 mt-2">
 						{appointments.map((apt: Appointment) => (
-							<Card key={apt.id} className="relative flex flex-row p-3 align-middle shadow-md hover:shadow-md rounded-xl">
+							<Card key={apt.id} className="hover:shadow-none">
 								{isUpcoming ? (
 									<CalendarOff className="absolute size-8 top-3 right-3 z-10 hover:bg-destructive-dark/70 rounded-sm p-1" />
 								) : (
 									<></>
 								)}
-								<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center  lg:p-2 w-full">
-									<div className="flex gap-4 items-center">
+								<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center p-4 w-full">
+									<div className="flex flex-col items-center">
 										<div className="flex flex-col bg-(image:--gradient-primary) text-white py-3 p-6 rounded-md">
 											<span className="text-2xl font-bold">{format(new Date(apt.date), "dd")}</span>
 											<span className="text-sm">{format(new Date(apt.date), "MMM")}</span>

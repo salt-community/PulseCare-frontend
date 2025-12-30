@@ -16,7 +16,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 
 	const dosageUnits = ["mg", "mcg", "g", "Tablet", "Capsule", "mL", "L", "IU", "U"];
 	const medicineTypes = ["Metformin", "Lisinopril", "Atorvastatin", "Vitamin D3"];
-	const frequencyUnits = ["day", "week", "month"];
+	const frequencyUnits = ["Day", "Week", "Month"];
 
 	const [date, setDate] = useState<string>("");
 	const [expireDate, setExpireDate] = useState<string>("");
@@ -98,8 +98,8 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 									<option value="" disabled>
 										Select medicine
 									</option>
-									{medicineTypes.map(t => (
-										<option key={t} value={t}>
+									{medicineTypes.map((t, i) => (
+										<option key={i} value={t}>
 											{t}
 										</option>
 									))}
@@ -130,8 +130,8 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 											<option value="" disabled>
 												Unit
 											</option>
-											{dosageUnits.map(u => (
-												<option key={u} value={u}>
+											{dosageUnits.map((u, i) => (
+												<option key={i} value={u}>
 													{u}
 												</option>
 											))}
@@ -139,7 +139,6 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 									</div>
 								</div>
 
-								{/* Times */}
 								<div className="grid grid-cols-1 gap-3 md:grid-cols-[30%_40%]">
 									<div>
 										<label className="block p-1 text-md font-semibold">Times</label>
@@ -153,7 +152,6 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 										/>
 									</div>
 
-									{/* Per */}
 									<div>
 										<label className="block p-1 text-md font-semibold invisible">Per</label>
 										<select
@@ -162,8 +160,8 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 											onChange={e => setFrequencyUnit(e.target.value)}
 											required
 										>
-											{frequencyUnits.map(f => (
-												<option key={f} value={f}>
+											{frequencyUnits.map((f, i) => (
+												<option key={i} value={f}>
 													per {f}
 												</option>
 											))}
