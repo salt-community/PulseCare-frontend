@@ -64,7 +64,7 @@ export const AdminCalendarPage = () => {
 			</DialogModal>
 
 			<div className="flex flex-col gap-10 lg:flex-row">
-				<DatePicker selected={selected} onSelect={setSelected} />
+				<DatePicker selected={selected} onSelect={setSelected} appointments={appointments} />
 				<div className="flex-1 flex flex-col gap-4">
 					<h2 className="flex items-center gap-2 text-2xl font-semibold">
 						<Calendar className="h-6 text-primary" />
