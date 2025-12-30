@@ -1,5 +1,5 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { Outlet, useNavigate, useRouterState, useRouter } from "@tanstack/react-router";
+import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const RootLayout = () => {
@@ -7,13 +7,6 @@ export const RootLayout = () => {
 	const { isSignedIn, isLoaded } = useAuth();
 	const { location } = useRouterState();
 	const { user } = useUser();
-	const auth = useAuth();
-	const router = useRouter();
-
-	useEffect(() => {
-		// eslint-disable-next-line react-hooks/immutability
-		router.options.context = { auth };
-	}, [auth, router]);
 
 	useEffect(() => {
 		if (!isLoaded) return;
