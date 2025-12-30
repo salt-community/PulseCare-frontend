@@ -10,6 +10,7 @@ export default function HealthStatsPage() {
 	console.log("health stats", mockHealthStats);
 	const data = mockHealthStats;
 	const orderedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+	const bloodData = orderedData.filter(d => d.type === "cholesterol" || d.type === "glucose");
 
 	return (
 		<div>
@@ -57,7 +58,7 @@ export default function HealthStatsPage() {
 							Latest Blood Sample Results
 						</CardTitle>
 						<div className="flex flex-col gap-3 mt-2">
-							{orderedData.map(d => {
+							{bloodData.map(d => {
 								const StatIcon = statIcons[d.type];
 								return (
 									<Card key={d.id} className="bg-background-secondary hover:shadow-none">

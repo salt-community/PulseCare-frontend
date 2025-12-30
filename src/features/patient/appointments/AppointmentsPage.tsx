@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
 import { DialogModal } from "../../../components/shared/DialogModal";
+import { DateBlock } from "../../../components/ui/DateBlock";
 import { useState } from "react";
 
 type Appointment = (typeof mockAppointments)[number];
@@ -69,10 +70,7 @@ export default function AppointmentsPage() {
 								<div className="flex flex-col md:flex-row md:items-center gap-4">
 									{/* Date Block */}
 									<div className="flex items-center gap-4 md:w-48">
-										<div className="p-4 rounded-xl bg-(image:--gradient-primary) text-white text-center min-w-17.5">
-											<p className="text-2xl font-bold text-white">{format(new Date(d.date), "d")}</p>
-											<p className="text-xs text-white/80 uppercase">{format(new Date(d.date), "MMM")}</p>
-										</div>
+										<DateBlock date={d.date} />
 										<div>
 											<p className="font-medium text-foreground">{format(new Date(d.date), "EEEE")}</p>
 											<div className="flex items-center gap-1 text-sm text-card-foreground">
