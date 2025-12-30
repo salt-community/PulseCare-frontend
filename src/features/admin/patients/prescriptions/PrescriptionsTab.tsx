@@ -1,7 +1,8 @@
-import { LucidePill, Trash } from "lucide-react";
+import { CalendarSync, LucidePill, Trash } from "lucide-react";
 import { Card, CardContent } from "../../../../components/ui/Card";
 import type { Medication, Patient } from "../../../../lib/api/mockData";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
+import { Button } from "../../../../components/ui/PrimaryButton";
 
 type MedicationProps = {
 	patient: Patient;
@@ -14,7 +15,7 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 			<div className="flex justify-start items-center">
 				<AddPrescriptionForm patient={patient} />
 			</div>
-			<Card className="shadow-sm rounded-xl">
+			<Card className="hover:shadow-none">
 				<CardContent className="text-base">
 					{medications.length === 0 ? (
 						<p>No medications</p>
@@ -31,9 +32,18 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 											)}
 										</div>
 									</div>
-									<button className="mt-2 md:mt-0 text-gray-500 hover:text-gray-700 transition">
-										<Trash />
-									</button>
+									<div className="flex gap-2">
+										<Button variant={"outline"} size={"icon"} className="[&_svg]:size-5">
+											<CalendarSync className="m-0 p-0" />
+										</Button>
+										<Button
+											variant={"outline"}
+											size={"icon"}
+											className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-5"
+										>
+											<Trash />
+										</Button>
+									</div>
 								</li>
 							))}
 						</ul>
