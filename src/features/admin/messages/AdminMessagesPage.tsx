@@ -14,6 +14,7 @@ const getMessagesForAdmin = (): Message[] => {
 	return mockMessages.filter(m => m.fromPatient);
 };
 
+/* Unused code was commented out to fix lint errors. No unused code in dev.
 const getUnreadMessagesForAdmin = (): Message[] => {
 	return mockMessages.filter(m => m.fromPatient && !m.read);
 };
@@ -21,6 +22,7 @@ const getUnreadMessagesForAdmin = (): Message[] => {
 const getUnreadAdminCount = (): number => {
 	return getUnreadMessagesForAdmin().length;
 };
+*/
 
 export default function AdminMessagesPage() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -36,11 +38,7 @@ export default function AdminMessagesPage() {
 	const [toastVisible, setToastVisible] = useState(false);
 
 	const markAsReadByAdmin = (id: string) => {
-		setMessages(prev =>
-			prev.map(m =>
-				m.id === id ? { ...m, read: true } : m
-			)
-		);
+		setMessages(prev => prev.map(m => (m.id === id ? { ...m, read: true } : m)));
 	};
 
 	const handleCardClick = (msg: Message) => {
@@ -139,10 +137,7 @@ export default function AdminMessagesPage() {
 			)}
 
 			<div className="flex items-center justify-between">
-				<PageHeader
-					title="Messages"
-					description={`You have ${unreadCount} unread message(s)`}
-				/>
+				<PageHeader title="Messages" description={`You have ${unreadCount} unread message(s)`} />
 
 				<DialogModal
 					open={dialogOpen}
@@ -163,32 +158,23 @@ export default function AdminMessagesPage() {
 					</form>
 				</DialogModal>
 
-				<DialogModal
-					open={isOpen}
-					onOpenChange={setIsOpen}
-					title="New Message"
-					buttonText="+ New Message"
-					showTrigger
-				>
+				<DialogModal open={isOpen} onOpenChange={setIsOpen} title="New Message" buttonText="+ New Message" showTrigger>
 					<form onSubmit={handleSubmit}>
 						<div className="p-1 m-1">
-							<label
-								htmlFor="patient"
-								className="block p-1 text-md font-semibold"
-							>
+							<label htmlFor="patient" className="block p-1 text-md font-semibold">
 								Patient
 							</label>
 							<select
 								id="patient"
 								value={patientInput}
-								onChange={(e) => setPatientInput(e.target.value)}
+								onChange={e => setPatientInput(e.target.value)}
 								required
 								className="focus:ring-2 focus:outline-none focus:ring-primary focus:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
 							>
 								<option value="" disabled>
 									Choose a patient
 								</option>
-								{mockPatients.map((patient) => (
+								{mockPatients.map(patient => (
 									<option key={patient.id} value={patient.id}>
 										{patient.name}
 									</option>
@@ -196,14 +182,7 @@ export default function AdminMessagesPage() {
 							</select>
 						</div>
 
-						<DialogInput
-							type="text"
-							label="Subject"
-							placeholder="Subject"
-							value={subject}
-							onChange={setSubject}
-							required
-						/>
+						<DialogInput type="text" label="Subject" placeholder="Subject" value={subject} onChange={setSubject} required />
 
 						<DialogInput
 							type="textarea"
@@ -229,42 +208,50 @@ export default function AdminMessagesPage() {
 			) : (
 				<div className="grid gap-6 lg:grid-cols-[400px_1fr]">
 					<div className="space-y-2">
-						{messages?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((message) => (
-							<Card
-								key={message.id}
-								className={`mb-4 cursor-pointer ${selected?.id === message.id ? "border-2 border-primary" : ""}`}
-								onClick={() => handleCardClick(message)}
-							>
-								<CardContent className="p-4">
-									<div className="flex items-start gap-3">
-										<div className={message.read ? 'p-2 rounded-full bg-muted' : 'p-2 rounded-full bg-gray-200'}>
-											{message.read ? (
-												<MailOpen className="h-4 w-4 text-muted-foreground" />
-											) : (
-												<MailOpen className="h-4 w-4 text-primary" />
-											)}
-										</div>
-
-										<div className="flex-1 min-w-0">
-											<div className="flex items-center justify-between gap-2 mb-1">
-												<span className={message.read ? 'text-muted-foreground' : 'text-foreground font-medium truncate'}>
-													{message.patientName}
-												</span>
-												{!message.read && (
-													<Pill variant="secondary">New</Pill>
+						{messages
+							?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+							.map(message => (
+								<Card
+									key={message.id}
+									className={`mb-4 cursor-pointer ${selected?.id === message.id ? "border-2 border-primary" : ""}`}
+									onClick={() => handleCardClick(message)}
+								>
+									<CardContent className="p-4">
+										<div className="flex items-start gap-3">
+											<div className={message.read ? "p-2 rounded-full bg-muted" : "p-2 rounded-full bg-gray-200"}>
+												{message.read ? (
+													<MailOpen className="h-4 w-4 text-muted-foreground" />
+												) : (
+													<MailOpen className="h-4 w-4 text-primary" />
 												)}
 											</div>
-											<p className={message.read ? 'text-muted-foreground' : 'text-foreground font-medium truncate mb-1'}>
-												{message.subject}
-											</p>
-											<p className="text-xs text-muted-foreground">
-												{format(new Date(message.date), 'MMM d, h:mm a')}
-											</p>
+
+											<div className="flex-1 min-w-0">
+												<div className="flex items-center justify-between gap-2 mb-1">
+													<span
+														className={
+															message.read ? "text-muted-foreground" : "text-foreground font-medium truncate"
+														}
+													>
+														{message.patientName}
+													</span>
+													{!message.read && <Pill variant="secondary">New</Pill>}
+												</div>
+												<p
+													className={
+														message.read ? "text-muted-foreground" : "text-foreground font-medium truncate mb-1"
+													}
+												>
+													{message.subject}
+												</p>
+												<p className="text-xs text-muted-foreground">
+													{format(new Date(message.date), "MMM d, h:mm a")}
+												</p>
+											</div>
 										</div>
-									</div>
-								</CardContent>
-							</Card>
-						))}
+									</CardContent>
+								</Card>
+							))}
 					</div>
 
 					<Card className="shadow-card h-fit lg:sticky lg:top-20">
@@ -290,7 +277,7 @@ export default function AdminMessagesPage() {
 								</div>
 								<div className="mt-6 pt-6 border-t border-border">
 									<Button className="w-full sm:w-auto" onClick={handleReplyClick}>
-										Reply to {selected.patientName.split(' ')[0]}
+										Reply to {selected.patientName.split(" ")[0]}
 									</Button>
 								</div>
 							</CardContent>

@@ -23,7 +23,7 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 					) : (
 						<ul className="space-y-2">
 							{medications.map((med: Medication) => (
-								<li key={med.id} className="flex flex-row justify-between items-center border-b-1 py-2">
+								<li key={med.id} className="flex flex-row justify-between items-center border-b py-2">
 									<div className="flex items-center gap-2">
 										<LucidePill className="text-primary w-5 h-5" />
 										<div>

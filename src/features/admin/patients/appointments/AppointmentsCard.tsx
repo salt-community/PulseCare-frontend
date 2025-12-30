@@ -30,7 +30,7 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 								) : (
 									<></>
 								)}
-								<CardContent className="flex flex-col gap-3 p-2 md:flex-row md:items-center p-4 w-full">
+								<CardContent className="flex flex-col gap-3 md:flex-row md:items-center p-4 w-full">
 									<div className="flex flex-col items-center">
 										<div className="flex flex-col bg-(image:--gradient-primary) text-white py-3 p-6 rounded-md">
 											<span className="text-2xl font-bold">{format(new Date(apt.date), "dd")}</span>

@@ -22,7 +22,6 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 			title,
 			diagnosis,
 			note
-			
 		};
 		console.log(noteRequest);
 		//await noteApi.addNotes(noteRequest)
