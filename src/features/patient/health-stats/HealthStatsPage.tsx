@@ -5,12 +5,45 @@ import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
 import { mockHealthStats } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { statIcons } from "../../../lib/StatsIcons";
+import { useEffect, useState } from "react";
+
+type HealthStats = {
+	id: string;
+	type: string;
+	value: string;
+	unit: string;
+	date: string;
+	status: string;
+};
+
+const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = {
+	Normal: "secondary",
+	Warning: "warning",
+	Critical: "destructive"
+};
 
 export default function HealthStatsPage() {
 	console.log("health stats", mockHealthStats);
-	const data = mockHealthStats;
+	const [data, setData] = useState<HealthStats[]>([]);
 	const orderedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	const bloodData = orderedData.filter(d => d.type === "cholesterol" || d.type === "glucose");
+	const bloodData = data.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
+	const testId = "1f5bebfb-cfe4-48af-aa8f-72ff49c73540";
+	const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+	async function getData() {
+		try {
+			const response = await fetch(baseUrl + "/HealthStats/" + testId);
+			const responseData = response.json();
+
+			return responseData;
+		} catch (err: unknown) {
+			throw new Error();
+		}
+	}
+
+	useEffect(() => {
+		getData().then(result => setData(result));
+	}, []);
 
 	return (
 		<div>
@@ -35,7 +68,7 @@ export default function HealthStatsPage() {
 												<Icon variant="red">{StatIcon && <StatIcon />} </Icon>
 											</span>
 											<span>
-												<Pill variant="warning">{d.status}</Pill>
+												<Pill variant={statusVariants[d.status]}>{d.status}</Pill>
 											</span>
 										</div>
 										<div className="flex flex-col">
@@ -79,7 +112,7 @@ export default function HealthStatsPage() {
 													<span className="text-xl font-semibold text-foreground mr-2">{d.value}</span>
 													<span className="text-sm">{d.unit}</span>
 												</div>
-												<Pill variant="secondary">{d.status}</Pill>
+												<Pill variant={statusVariants[d.status]}>{d.status}</Pill>
 											</div>
 										</CardContent>
 									</Card>
