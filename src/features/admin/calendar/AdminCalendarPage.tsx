@@ -32,7 +32,7 @@ export const AdminCalendarPage = () => {
 			<DialogModal
 				open={dialogOpen}
 				onOpenChange={setDialogOpen}
-				title={selectedAppointment ? `Appointment with ${selectedAppointment.doctorName}` : "Appointment"}
+				title={selectedAppointment ? `Appointment with ${selectedAppointment.patientName}` : "Appointment"}
 				description={selectedAppointment?.reason}
 				showTrigger={false}
 			>
@@ -101,7 +101,7 @@ export const AdminCalendarPage = () => {
 													</div>
 													<div className="flex items-center gap-2 text-foreground mb-1">
 														<User className="h-4 w-4 text-card-foreground" />
-														<span className="font-medium">{d.doctorName}</span>
+														<span className="font-medium">{d.patientName}</span>
 													</div>
 													{d.reason && <p className="text-sm text-card-foreground mt-2">{d.reason}</p>}
 												</div>
