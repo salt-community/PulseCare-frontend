@@ -1,8 +1,9 @@
-import { CalendarSync, LucidePill, Trash } from "lucide-react";
+import { LucidePill, Trash } from "lucide-react";
 import { Card, CardContent } from "../../../../components/ui/Card";
 import type { Medication, Patient } from "../../../../lib/api/mockData";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
 import { Button } from "../../../../components/ui/PrimaryButton";
+import { RenewPrescriptionForm } from "./RenewPrescriptionForm";
 
 type MedicationProps = {
 	patient: Patient;
@@ -22,7 +23,7 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 					) : (
 						<ul className="space-y-2">
 							{medications.map((med: Medication) => (
-								<li key={med.id} className="flex flex-col md:flex-row md:justify-between md:items-center border-b py-2">
+								<li key={med.id} className="flex flex-row justify-between items-center border-b-1 py-2">
 									<div className="flex items-center gap-2">
 										<LucidePill className="text-primary w-5 h-5" />
 										<div>
@@ -33,9 +34,7 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 										</div>
 									</div>
 									<div className="flex gap-2">
-										<Button variant={"outline"} size={"icon"} className="[&_svg]:size-5">
-											<CalendarSync className="m-0 p-0" />
-										</Button>
+										<RenewPrescriptionForm patient={patient} prescription={med} />
 										<Button
 											variant={"outline"}
 											size={"icon"}
