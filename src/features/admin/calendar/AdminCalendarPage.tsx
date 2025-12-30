@@ -8,6 +8,8 @@ import { ScheduleAppointment } from "./ScheduleAppointment";
 import PageHeader from "../../../components/shared/PageHeader";
 import { mockAppointments } from "../../../lib/api/mockData";
 import { DialogModal } from "../../../components/shared/DialogModal";
+import { Pill } from "../../../components/ui/Pill";
+import { Button } from "../../../components/ui/PrimaryButton";
 
 type Appointment = (typeof mockAppointments)[number];
 
@@ -37,17 +39,27 @@ export const AdminCalendarPage = () => {
 				showTrigger={false}
 			>
 				{selectedAppointment && (
-					<div className="mt-4 space-y-2">
-						<div className="text-foreground">
-							<strong>Date:</strong> {format(new Date(selectedAppointment.date), "yyyy-MM-dd")}
+					<>
+						<div className="mt-4 space-y-2">
+							<div className="text-foreground">
+								<strong>Date:</strong> {format(new Date(selectedAppointment.date), "yyyy-MM-dd")}
+							</div>
+							<div className="text-foreground">
+								<strong>Time:</strong> {selectedAppointment.time}
+							</div>
+							<div className="text-foreground">
+								<strong>Status:</strong> {selectedAppointment.status}
+							</div>
 						</div>
-						<div className="text-foreground">
-							<strong>Time:</strong> {selectedAppointment.time}
+						<div className="flex gap-2 justify-end">
+							<Button onClick={() => ""} className="bg-primary text-white">
+								Edit
+							</Button>
+							<Button onClick={() => ""} variant={"destructive"} className="bg-primary text-white">
+								Cancel
+							</Button>
 						</div>
-						<div className="text-foreground">
-							<strong>Status:</strong> {selectedAppointment.status}
-						</div>
-					</div>
+					</>
 				)}
 			</DialogModal>
 
@@ -73,29 +85,24 @@ export const AdminCalendarPage = () => {
 								.map((d, index) => (
 									<Card
 										key={d.id}
-										className="transition-all animate-slide-up"
+										className="transition-all animate-slide-up cursor-pointer"
 										style={{ animationDelay: `${index * 0.1}s` }}
 										onClick={() => handleCardClick(d)}
 									>
 										<CardContent className="p-5">
 											<div className="flex flex-col md:flex-row md:items-center gap-4">
-												{/* Date Block */}
-												<div className="flex items-center gap-4 md:w-48">
-													<div className="p-4 rounded-xl bg-(image:--gradient-primary) text-white text-center min-w-17.5">
-														<p className="text-2xl font-bold text-white">{format(new Date(d.date), "d")}</p>
-														<p className="text-xs text-white/80 uppercase">{format(new Date(d.date), "MMM")}</p>
-													</div>
-													<div>
-														<p className="font-medium text-foreground">{format(new Date(d.date), "EEEE")}</p>
-														<div className="flex items-center gap-1 text-sm text-card-foreground">
-															<Clock className="h-4 w-4" />
-															<span>{d.time}</span>
-														</div>
+												<div>
+													<div className="flex items-center gap-1 text-sm text-foreground">
+														<Clock className="h-4 w-4" />
+														<span className="font-medium">{d.time}</span>
 													</div>
 												</div>
-
 												{/* Details */}
 												<div className="flex-1">
+													<div className="flex items-center gap-2 mb-2">
+														<Pill variant="secondary">{d.type}</Pill>
+														<Pill>{d.status}</Pill>
+													</div>
 													<div className="flex items-center gap-2 text-foreground mb-1">
 														<User className="h-4 w-4 text-card-foreground" />
 														<span className="font-medium">{d.patientName}</span>
