@@ -6,6 +6,7 @@ import { mockHealthStats } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { statIcons } from "../../../lib/StatsIcons";
 import { useEffect, useState } from "react";
+import Spinner from "../../../components/shared/Spinner";
 
 type HealthStats = {
 	id: string;
@@ -29,11 +30,13 @@ export default function HealthStatsPage() {
 	const bloodData = data.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
 	const testId = "1f5bebfb-cfe4-48af-aa8f-72ff49c73540";
 	const baseUrl = import.meta.env.VITE_API_BASE_URL;
+	const [isError, setIsError] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	async function getData() {
 		try {
 			const response = await fetch(baseUrl + "/HealthStats/" + testId);
-			const responseData = response.json();
+			const responseData = await response.json();
 
 			return responseData;
 		} catch (err: unknown) {
@@ -42,17 +45,32 @@ export default function HealthStatsPage() {
 	}
 
 	useEffect(() => {
-		getData().then(result => setData(result));
+		getData()
+			.then(result => setData(result))
+			.then(_ => setIsLoading(false))
+			.catch(() => setIsError(true))
+			.then(_ => setIsLoading(false));
 	}, []);
 
 	return (
 		<div>
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
-			{data.length === 0 ? (
+			{data.length === 0 && isLoading === false ? (
 				<Card className="mb-4">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
+						{isError ? (
+							<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
+						) : (
+							<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
+						)}
+					</CardContent>
+				</Card>
+			) : isLoading ? (
+				<Card className="flex flex-col items-center">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">Loading health stats... </p>
+						<Spinner />
 					</CardContent>
 				</Card>
 			) : (
