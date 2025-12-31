@@ -26,7 +26,7 @@ const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = 
 export default function HealthStatsPage() {
 	console.log("health stats", mockHealthStats);
 	const [data, setData] = useState<HealthStats[]>([]);
-	const orderedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+	const orderedData = [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 	const bloodData = data.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
 	const testId = "1f5bebfb-cfe4-48af-aa8f-72ff49c73540";
 	const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -47,9 +47,8 @@ export default function HealthStatsPage() {
 	useEffect(() => {
 		getData()
 			.then(result => setData(result))
-			.then(_ => setIsLoading(false))
 			.catch(() => setIsError(true))
-			.then(_ => setIsLoading(false));
+			.finally(() => setIsLoading(false));
 	}, []);
 
 	return (
