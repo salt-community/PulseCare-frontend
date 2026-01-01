@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import HealthStatsPage from "./HealthStatsPage";
 
@@ -10,21 +10,22 @@ describe("HealthStatsPage", () => {
 			...(import.meta as any).env,
 			VITE_API_BASE_URL: "http://test.local"
 		};
+	});
 
+	afterEach(() => {
+		cleanup();
+		vi.unstubAllGlobals();
+		vi.restoreAllMocks();
+	});
+
+	it("shows Loading first and then 'No new results' when API returns empty array", async () => {
 		vi.stubGlobal(
 			"fetch",
 			vi.fn().mockResolvedValue({
 				json: vi.fn().mockResolvedValue([])
 			} as any)
 		);
-	});
 
-	afterEach(() => {
-		vi.unstubAllGlobals();
-		vi.restoreAllMocks();
-	});
-
-	it("shows Loading first and then 'No new results' when API returns empty array", async () => {
 		render(<HealthStatsPage />);
 
 		expect(screen.getByText(/Loading health stats/i)).toBeInTheDocument();
@@ -34,5 +35,21 @@ describe("HealthStatsPage", () => {
 		});
 
 		expect(screen.queryByText(/Loading health stats/i)).not.toBeInTheDocument();
+	});
+
+	it("shows 'No data could be loaded' with network exception", async () => {
+		vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("Network error")));
+
+		render(<HealthStatsPage />);
+
+		await waitFor(() => {
+			expect(screen.getByText(/No data could be loaded/i)).toBeInTheDocument();
+		});
+
+		await waitFor(() => {
+			expect(screen.queryByText(/Loading health stats/i)).not.toBeInTheDocument();
+		});
+
+		expect(screen.queryByText(/No new results/i)).not.toBeInTheDocument();
 	});
 });
