@@ -37,7 +37,7 @@ describe("HealthStatsPage", () => {
 		expect(screen.queryByText(/Loading health stats/i)).not.toBeInTheDocument();
 	});
 
-	it("shows 'No data could be loaded' with network exception", async () => {
+	it("shows 'No data could be loaded' when fetch rejects", async () => {
 		vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("Network error")));
 
 		render(<HealthStatsPage />);
