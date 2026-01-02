@@ -20,7 +20,7 @@ export default function AdminDashboardPage() {
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of today's activities" />
 
 			{/* Stats Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 				{/* Total Patients */}
 				<Card className="shadow-none hover:shadow-none">
 					<CardContent className="p-5 flex items-center justify-between gap-3">
@@ -103,7 +103,7 @@ export default function AdminDashboardPage() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2 px-2 pb-2">
+					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
 						{upcomingAppointments.map(appointment => (
 							<Card key={appointment.id} className="bg-background-secondary hover:shadow-none">
 								<CardContent className="p-5">
