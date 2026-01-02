@@ -28,7 +28,7 @@ export default function NotesPage() {
 							className="transition-shadow animate-slide-up hover:shadow-none"
 							style={{ animationDelay: `${index * 0.1}s` }}
 						>
-							<CardContent className="p-5">
+							<CardContent className="p-5 pt-8 pr-10">
 								<div className="flex items-start gap-4 mb-4">
 									<Icon>
 										<Stethoscope className="h-5 w-5 text-primary" />
