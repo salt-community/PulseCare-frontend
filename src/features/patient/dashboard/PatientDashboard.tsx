@@ -23,19 +23,21 @@ export default function PatientDashboard() {
 		<>
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6 justify-items-stretch">
 				{orderedHealthData.map(d => {
 					const StatIcon = statIcons[d.type];
 					return (
-						<Card className="hover:shadow-none max-w-70" key={d.id}>
-							<CardContent className="flex flex-row justify-between align-middle p-4 max-h-28">
+						<Card className="hover:shadow-none" key={d.id}>
+							<CardContent className="flex flex-row justify-between align-middle p-5 max-h-28">
 								<div className="flex flex-col">
 									<span className="text-sm capitalize">{d.type.replace("_", " ")}</span>
 									<span>
 										<span className="text-3xl font-semibold text-foreground mr-2">{d.value}</span>
 										{d.unit}
 									</span>
-									<span className="text-xs pt-2">Last updated: {format(new Date(d.date), "MMM dd, yyyy")}</span>
+									<span className="text-xs pt-2 whitespace-nowrap">
+										Last updated: {format(new Date(d.date), "MMM dd, yyyy")}
+									</span>
 								</div>
 								<div className="flex flex-row display justify-end pb-4">
 									<span>
@@ -58,11 +60,11 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="grid gap-4">
+					<div className="grid gap-4 px-2 pb-2">
 						{medicationData.map((medication, index) => (
 							<Card
 								key={medication.id}
-								className="transition-shadow animate-slide-up hover:shadow-none"
+								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
 								<CardContent className="p-5">
@@ -72,13 +74,17 @@ export default function PatientDashboard() {
 										</Icon>
 										<div className="flex-1 min-w-0">
 											<p className="font-medium text-sm text-foreground">{medication.name}</p>
-											<p className="text-xs text-muted-foreground">
-												{medication.dosage} • {medication.timesPerDay}x daily
-											</p>
+											<div className="flex gap-2">
+												<Clock className="h-3.5 w-3.5" />
+												<p className="text-xs text-muted-foreground">
+													{medication.timesPerDay} x {medication.frequency}
+												</p>
+											</div>
 										</div>
 										<div className="flex items-center gap-1 pt-3 text-xs text-muted-foreground">
-											<Clock className="h-3.5 w-3.5" />
-											<span>{medication.frequency}</span>
+											<Pill>
+												<span>{medication.dosage} </span>
+											</Pill>
 										</div>
 									</div>
 								</CardContent>
@@ -97,20 +103,20 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2">
+					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
 						{data.map(d => (
-							<Card key={d.id} className="p-3 bg-background-secondary hover:shadow-none">
-								<CardContent className="flex flex-col">
-									<div className="flex flex-col gap-4 mr-2">
-										<Pill variant="secondary">
-											<span className="">{d.type}</span>
-										</Pill>
+							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
+								<CardContent className="p-5 flex flex-col">
+									<div className="flex justify-between mr-2">
 										<div className="flex flex-col gap-4 mr-2">
 											<span className="text-foreground text-sm font-semibold">
 												<Stethoscope className="text-card-foreground inline size-4 mr-1.5 mb-1" />
 												{d.doctorName}
 											</span>
 										</div>
+										<Pill variant="secondary">
+											<span className="">{d.type}</span>
+										</Pill>
 									</div>
 									<div className="border-b border-foreground/20 mt-2 pb-2 flex flex-row items-center">
 										<Calendar className="inline size-4 mr-1" />
@@ -140,14 +146,14 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="space-y-4">
+					<div className="space-y-4 px-2 pb-2">
 						{notesData.map((d, index) => (
 							<Card
 								key={d.id}
-								className="transition-shadow animate-slide-up hover:shadow-none"
+								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary pt-2 pr-4"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
-								<CardContent className="p-4">
+								<CardContent className="p-5">
 									<div className="flex items-start gap-4 mb-1">
 										<Icon>
 											<Stethoscope className="h-5 w-5 text-primary" />

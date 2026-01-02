@@ -33,7 +33,7 @@ export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
 
 	return (
 		<>
-			<Button className="flex items-center gap-1 h-auto p-0.5" variant={"outline"} size={"sm"} onClick={() => setOpen(true)}>
+			<Button variant="outline" size="sm" onClick={() => setOpen(true)}>
 				Add
 				<Plus className="w-4 h-4" />
 			</Button>

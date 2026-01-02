@@ -14,7 +14,7 @@ type DatePickerProps = {
 };
 
 export function DatePicker({ selected, onSelect, appointments }: DatePickerProps) {
-	const [month, setMonth] = useState<Date>(new Date(2025, 11, 1));
+	const [month, setMonth] = useState<Date>(new Date());
 
 	const meetingDates = appointments.map(apt => parseISO(apt.date));
 
@@ -22,7 +22,7 @@ export function DatePicker({ selected, onSelect, appointments }: DatePickerProps
 	const handleNext = () => setMonth(m => addMonths(m, 1));
 
 	return (
-		<div className="p-4 sm:p-6 w-full max-w-sm mx-auto bg-white">
+		<div className="p-4 sm:p-6 w-full max-w-sm mx-auto h-max border border-border rounded-xl bg-white">
 			<div className="flex items-center justify-between mb-3 px-1 sm:px-2">
 				<button type="button" onClick={handlePrev} className="p-2 sm:p-3 hover:text-primary cursor-pointer transition-colors">
 					<CircleChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" />

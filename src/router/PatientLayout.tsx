@@ -34,7 +34,9 @@ const PatientLayout = () => {
 						</div>
 					</aside>
 					<main className="flex-1 overflow-y-auto p-6 bg-background">
-						<Outlet />
+						<div className="max-w-7xl mx-auto">
+							<Outlet />
+						</div>
 					</main>
 				</div>
 

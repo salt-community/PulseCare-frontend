@@ -25,7 +25,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 	const [doseUnit, setDoseUnit] = useState<string>("");
 	const [frequencyValue, setFrequencyValue] = useState<number>(1);
 	const [frequencyUnit, setFrequencyUnit] = useState<string>("day");
-	const [instructions, setInstructions] = useState<string>("Instructions: ");
+	const [instructions, setInstructions] = useState<string>("");
 
 	const resetForm = () => {
 		setDate("");
@@ -35,7 +35,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 		setDoseUnit("");
 		setFrequencyUnit("Day");
 		setFrequencyValue(1);
-		setInstructions("Instructions: ");
+		setInstructions("");
 	};
 
 	const handleSubmit = (e: FormEvent) => {
