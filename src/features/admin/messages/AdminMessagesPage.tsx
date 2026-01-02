@@ -107,7 +107,7 @@ export default function AdminMessagesPage() {
 					<CardContent className="py-12 text-center text-muted-foreground">No messages yet</CardContent>
 				</Card>
 			) : (
-				<div className="space-y-2">
+				<div className="space-y-4">
 					{conversations.map(conv => {
 						const last = conv.messages[conv.messages.length - 1];
 

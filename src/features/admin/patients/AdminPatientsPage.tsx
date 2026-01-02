@@ -20,7 +20,7 @@ export const AdminPatientsPage = () => {
 			{filteredPatients.length === 0 ? (
 				<p className="mt-10 text-center text-muted-foreground">No patients found</p>
 			) : (
-				<div className="mt-6 space-y-3">
+				<div className="mt-6 space-y-4">
 					{filteredPatients.map(patient => (
 						<PatientInfoCard key={patient.id} patient={patient} />
 					))}
