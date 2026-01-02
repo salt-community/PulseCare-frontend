@@ -2,11 +2,11 @@ import { format } from "date-fns";
 import { Icon } from "../../../components/shared/Icon";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
-import { mockHealthStats } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { statIcons } from "../../../lib/StatsIcons";
 import { useEffect, useState } from "react";
 import Spinner from "../../../components/shared/Spinner";
+import { useAuth } from "@clerk/clerk-react";
 
 type HealthStats = {
 	id: string;
@@ -24,32 +24,54 @@ const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = 
 };
 
 export default function HealthStatsPage() {
-	console.log("health stats", mockHealthStats);
+	const { getToken, isLoaded } = useAuth();
+
 	const [data, setData] = useState<HealthStats[]>([]);
-	const orderedData = [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	const bloodData = data.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
-	const testId = "1f5bebfb-cfe4-48af-aa8f-72ff49c73540";
+	const orderedData = Array.isArray(data) ? [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : [];
+	const bloodData = Array.isArray(data) ? data.filter(d => d.type === "Cholesterol" || d.type === "Glucose") : [];
+	console.log("health stats", data);
+
+	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21";
 	const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 	const [isError, setIsError] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	async function getData() {
-		try {
-			const response = await fetch(baseUrl + "/HealthStats/" + testId);
-			const responseData = await response.json();
+		if (!isLoaded) return;
 
-			return responseData;
-		} catch (err: unknown) {
-			throw new Error();
+		const token = await getToken({ template: "pulsecare-jwt-template" });
+
+		if (!token) {
+			throw new Error("No auth token available");
 		}
+
+		const response = await fetch(baseUrl + "/HealthStats/" + testId, {
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error("Request failed");
+		}
+
+		return await response.json();
 	}
 
 	useEffect(() => {
 		getData()
-			.then(result => setData(result))
+			.then(result => {
+				if (Array.isArray(result?.value)) {
+					setData(result.value);
+				} else {
+					setData([]);
+				}
+			})
 			.catch(() => setIsError(true))
 			.finally(() => setIsLoading(false));
-	}, []);
+	}, [isLoaded]);
 
 	return (
 		<div>
