@@ -23,11 +23,11 @@ export default function PatientDashboard() {
 		<>
 			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6 justify-items-stretch">
 				{orderedHealthData.map(d => {
 					const StatIcon = statIcons[d.type];
 					return (
-						<Card className="hover:shadow-none max-w-70" key={d.id}>
+						<Card className="hover:shadow-none" key={d.id}>
 							<CardContent className="flex flex-row justify-between align-middle p-5 max-h-28">
 								<div className="flex flex-col">
 									<span className="text-sm capitalize">{d.type.replace("_", " ")}</span>
@@ -35,7 +35,9 @@ export default function PatientDashboard() {
 										<span className="text-3xl font-semibold text-foreground mr-2">{d.value}</span>
 										{d.unit}
 									</span>
-									<span className="text-xs pt-2">Last updated: {format(new Date(d.date), "MMM dd, yyyy")}</span>
+									<span className="text-xs pt-2 whitespace-nowrap">
+										Last updated: {format(new Date(d.date), "MMM dd, yyyy")}
+									</span>
 								</div>
 								<div className="flex flex-row display justify-end pb-4">
 									<span>
