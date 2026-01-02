@@ -28,7 +28,7 @@ export default function PatientDashboard() {
 					const StatIcon = statIcons[d.type];
 					return (
 						<Card className="hover:shadow-none max-w-70" key={d.id}>
-							<CardContent className="flex flex-row justify-between align-middle p-4 max-h-28">
+							<CardContent className="flex flex-row justify-between align-middle p-5 max-h-28">
 								<div className="flex flex-col">
 									<span className="text-sm capitalize">{d.type.replace("_", " ")}</span>
 									<span>
@@ -58,7 +58,7 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="grid gap-4">
+					<div className="grid gap-4 px-2">
 						{medicationData.map((medication, index) => (
 							<Card
 								key={medication.id}
@@ -97,10 +97,10 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2">
+					<div className="flex flex-col gap-3 mt-2 px-2">
 						{data.map(d => (
-							<Card key={d.id} className="p-3 bg-background-secondary hover:shadow-none">
-								<CardContent className="flex flex-col">
+							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
+								<CardContent className="p-5 flex flex-col">
 									<div className="flex flex-col gap-4 mr-2">
 										<Pill variant="secondary">
 											<span className="">{d.type}</span>
@@ -140,14 +140,14 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="space-y-4">
+					<div className="space-y-4 px-2">
 						{notesData.map((d, index) => (
 							<Card
 								key={d.id}
 								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
-								<CardContent className="p-4">
+								<CardContent className="p-5">
 									<div className="flex items-start gap-4 mb-1">
 										<Icon>
 											<Stethoscope className="h-5 w-5 text-primary" />
