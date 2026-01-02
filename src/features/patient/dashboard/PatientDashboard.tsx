@@ -62,7 +62,7 @@ export default function PatientDashboard() {
 						{medicationData.map((medication, index) => (
 							<Card
 								key={medication.id}
-								className="transition-shadow animate-slide-up hover:shadow-none"
+								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
 								<CardContent className="p-5">
@@ -144,7 +144,7 @@ export default function PatientDashboard() {
 						{notesData.map((d, index) => (
 							<Card
 								key={d.id}
-								className="transition-shadow animate-slide-up hover:shadow-none"
+								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
 								<CardContent className="p-4">
