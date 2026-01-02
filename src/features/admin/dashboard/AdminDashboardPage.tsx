@@ -23,7 +23,7 @@ export default function AdminDashboardPage() {
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
 				{/* Total Patients */}
 				<Card className="shadow-none hover:shadow-none">
-					<CardContent className="flex items-center justify-between gap-3">
+					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Total Patients</p>
 							<p className="text-xl font-bold text-success">{mockPatients.length}</p>
@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
 
 				{/* Today's Appointments */}
 				<Card className="shadow-none hover:shadow-none">
-					<CardContent className="flex items-center justify-between gap-3">
+					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Today's Appointments</p>
 							<p className="text-xl font-bold text-foreground">{todaysAppointments}</p>
@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
 
 				{/* Unread Messages */}
 				<Card className="shadow-none hover:shadow-none">
-					<CardContent className="flex items-center justify-between gap-3">
+					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Unread Messages</p>
 							<p className="text-xl font-bold text-warning">5</p>
@@ -63,7 +63,7 @@ export default function AdminDashboardPage() {
 
 			<div className="flex flex-col lg:flex-row gap-6">
 				<Card className="flex-1 p-4 shadow-none hover:shadow-none">
-					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
+					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<Users className="text-primary shrink-0" size={20} />
 						Recent Patients
 						<Button asChild variant="outline" size="default" className="ml-auto">
@@ -72,10 +72,10 @@ export default function AdminDashboardPage() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2">
+					<div className="grid gap-4 px-2 pb-2">
 						{recentPatients.map(patient => (
 							<Card key={patient.id} className="bg-background-secondary hover:shadow-none">
-								<CardContent className="flex flex-row items-center justify-between">
+								<CardContent className="p-5 flex flex-row items-center justify-between">
 									<div className="flex flex-row items-center gap-4">
 										<div className="p-2 rounded-full bg-primary/10 h-8 w-8">
 											<User className="h-4 w-4 text-primary" />
@@ -94,7 +94,7 @@ export default function AdminDashboardPage() {
 					</div>
 				</Card>
 				<Card className="flex-1 p-4 shadow-none hover:shadow-none">
-					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
+					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
 						<Button asChild variant="outline" size="default" className="ml-auto">
@@ -103,10 +103,10 @@ export default function AdminDashboardPage() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2">
+					<div className="flex flex-col gap-3 mt-2 px-2 pb-2">
 						{upcomingAppointments.map(appointment => (
 							<Card key={appointment.id} className="bg-background-secondary hover:shadow-none">
-								<CardContent className="p-4">
+								<CardContent className="p-5">
 									<div className="flex items-center gap-4">
 										<DateBlock date={appointment.date} size="sm" />
 
