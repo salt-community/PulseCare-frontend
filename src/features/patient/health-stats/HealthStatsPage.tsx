@@ -17,7 +17,7 @@ export default function HealthStatsPage() {
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
 			{data.length === 0 ? (
-				<Card className="mb-4">
+				<Card className="mb-4 shadow-none hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
 						<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
 					</CardContent>
@@ -28,7 +28,7 @@ export default function HealthStatsPage() {
 						{orderedData.map(d => {
 							const StatIcon = statIcons[d.type];
 							return (
-								<Card key={d.id}>
+								<Card key={d.id} className="shadow-none hover:shadow-none">
 									<CardContent className="flex flex-col p-5">
 										<div className="flex flex-row justify-between align-middle pb-4">
 											<span>
@@ -54,10 +54,10 @@ export default function HealthStatsPage() {
 
 					<Card className="mt-6 p-4 shadow-none hover:shadow-none">
 						<CardTitle className="flex items-center gap-2 text-foreground p-3">
-							<statIcons.droplets className="text-destructive-foreground" />
+							<statIcons.droplets className="text-primary shrink-0" />
 							Latest Blood Sample Results
 						</CardTitle>
-						<div className="flex flex-col gap-3 mt-2">
+						<div className="flex flex-col gap-3 mt-2 px-2 pb-2">
 							{bloodData.map(d => {
 								const StatIcon = statIcons[d.type];
 								return (
