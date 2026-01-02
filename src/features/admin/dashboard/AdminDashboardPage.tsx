@@ -5,6 +5,7 @@ import { Button } from "../../../components/ui/PrimaryButton";
 import { Pill } from "../../../components/ui/Pill";
 import { DateBlock } from "../../../components/ui/DateBlock";
 import { mockPatients, mockAppointments } from "../../../lib/api/mockData";
+import { Link } from "@tanstack/react-router";
 
 export default function AdminDashboardPage() {
 	const exampleUser = { fullName: "John Doe" };
@@ -65,8 +66,10 @@ export default function AdminDashboardPage() {
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
 						<Users className="text-primary shrink-0" size={20} />
 						Recent Patients
-						<Button variant="outline" size="default" className="ml-auto">
-							View all <MoveRight />
+						<Button asChild variant="outline" size="default" className="ml-auto">
+							<Link to="/admin/patients">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="flex flex-col gap-3 mt-2">
@@ -94,8 +97,10 @@ export default function AdminDashboardPage() {
 					<CardTitle className="flex items-center gap-2 text-foreground p-3 text-lg md:text-xl lg:text-2xl">
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
-						<Button variant="outline" size="default" className="ml-auto">
-							View Calendar <MoveRight />
+						<Button asChild variant="outline" size="default" className="ml-auto">
+							<Link to="/admin/calendar">
+								View Calendar <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="flex flex-col gap-3 mt-2">
