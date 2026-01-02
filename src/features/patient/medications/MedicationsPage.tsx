@@ -33,7 +33,7 @@ export default function MedicationsPage() {
 										<div className="flex items-center gap-2 text-muted-foreground">
 											<Clock className="h-4 w-4" />
 											<span>
-												{medication.timesPerDay}x daily ({medication.frequency})
+												{medication.timesPerDay}x {medication.frequency}
 											</span>
 										</div>
 										<div className="flex items-center gap-2 text-muted-foreground">
