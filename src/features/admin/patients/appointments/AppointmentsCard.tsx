@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "../../../../components/ui/Card";
 import type { Appointment } from "../../../../lib/api/mockData";
 import { format } from "date-fns";
 import { Pill } from "../../../../components/ui/Pill";
+import { DateBlock } from "../../../../components/ui/DateBlock";
 import { AddNotesForm } from "./AddNotesForm";
 
 type AppointmentsCardProps = {
@@ -15,7 +16,7 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 
 	return (
 		<div className="flex-1 flex flex-col">
-			<CardHeader className="font-semibold text-xl p-0  ps-4">{cardHeader}</CardHeader>
+			<CardHeader className="font-semibold text-xl p-0 ps-4">{cardHeader}</CardHeader>
 			<CardContent className="flex-1 space-y-4 p-0">
 				{appointments.length === 0 ? (
 					<Card className="flex h-full items-center justify-center mt-2 hover:shadow-none">
@@ -30,57 +31,56 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 								) : (
 									<></>
 								)}
-								<CardContent className="flex flex-col gap-3 md:flex-row md:items-center p-4 w-full">
-									<div className="flex flex-col items-center">
-										<div className="flex flex-col bg-(image:--gradient-primary) text-white py-3 p-6 rounded-md">
-											<span className="text-2xl font-bold">{format(new Date(apt.date), "dd")}</span>
-											<span className="text-sm">{format(new Date(apt.date), "MMM")}</span>
-										</div>
+								<CardContent className="flex flex-col gap-4 md:flex-row md:items-start p-5 w-full">
+									<div className="flex flex-col items-center md:items-start md:shrink-0">
+										<DateBlock date={apt.date} />
 										<div className="flex flex-col pt-2">
-											<span className="font-semibold text-foreground">{format(new Date(apt.date), "EEEE")}</span>
-											<span className="text-sm text-muted-foreground">
-												<Clock4 className="inline size-4 mr-1 mb-1" />
+											<span className="font-semibold text-foreground text-sm">
+												{format(new Date(apt.date), "EEEE")}
+											</span>
+											<span className="text-xs text-muted-foreground">
+												<Clock4 className="inline size-3 mr-1" />
 												{apt.time}
 											</span>
 										</div>
 									</div>
 
 									<div className="w-full">
-										<div className="flex flex-row gap-2">
-											<Pill variant="secondary">
-												<span>{apt.type}</span>
-											</Pill>
-											<Pill variant="default">
-												<span>{apt.status}</span>
-											</Pill>
-										</div>
-										<div className="flex flex-col gap-1 m-2">
-											<span className="font-bold text-lg text-foreground">
-												<Stethoscope className="inline size-4 mr-1.5 mb-1" />
+										<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+											<span className="font-semibold text-foreground flex items-center gap-2">
+												<Stethoscope className="size-4" />
 												{apt.doctorName}
 											</span>
-											<span className="text-sm text-muted-foreground">
-												<span className="font-semibold text-foreground/70">Reason:</span> {apt.reason}
-											</span>
+											<div className="flex flex-row gap-2 w-fit">
+												<Pill variant="secondary">
+													<span>{apt.type}</span>
+												</Pill>
+												<Pill variant="default">
+													<span>{apt.status}</span>
+												</Pill>
+											</div>
 										</div>
-										<div className="my-3 border-t w-full" />
 
-										<div className="flex flex-col gap-2 text-sm text-muted-foreground">
-											<div className="flex justify-between">
-												<span className="flex gap-2 font-semibold text-foreground">
-													<FileText className="size-5" />
-													<span className="font-semibold text-foreground/70">Notes</span>
+										<span className="text-sm text-muted-foreground block mb-3">
+											<span className="font-semibold text-foreground">Reason:</span> {apt.reason}
+										</span>
+
+										<div className="border-t border-foreground/10 pt-3">
+											<div className="flex justify-between items-center mb-2">
+												<span className="flex gap-2 font-semibold text-foreground text-sm">
+													<FileText className="size-4" />
+													Notes
 												</span>
 												<AddNotesForm appointmentId={apt.id} />
 											</div>
 											{apt.notes!.length > 0 ? (
 												apt.notes!.map(n => (
-													<>
-														<p key={n.id}>{n.content}</p>
-													</>
+													<p key={n.id} className="text-sm text-muted-foreground">
+														{n.content}
+													</p>
 												))
 											) : (
-												<p className="italic text-muted-foreground">No doctor’s note added yet</p>
+												<p className="italic text-sm text-muted-foreground">No doctor's note added yet</p>
 											)}
 										</div>
 									</div>
