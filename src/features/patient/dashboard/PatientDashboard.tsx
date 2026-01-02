@@ -74,13 +74,17 @@ export default function PatientDashboard() {
 										</Icon>
 										<div className="flex-1 min-w-0">
 											<p className="font-medium text-sm text-foreground">{medication.name}</p>
-											<p className="text-xs text-muted-foreground">
-												{medication.dosage} • {medication.timesPerDay}x daily
-											</p>
+											<div className="flex gap-2">
+												<Clock className="h-3.5 w-3.5" />
+												<p className="text-xs text-muted-foreground">
+													{medication.timesPerDay} x {medication.frequency}
+												</p>
+											</div>
 										</div>
 										<div className="flex items-center gap-1 pt-3 text-xs text-muted-foreground">
-											<Clock className="h-3.5 w-3.5" />
-											<span>{medication.frequency}</span>
+											<Pill>
+												<span>{medication.dosage} </span>
+											</Pill>
 										</div>
 									</div>
 								</CardContent>
@@ -103,16 +107,16 @@ export default function PatientDashboard() {
 						{data.map(d => (
 							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
 								<CardContent className="p-5 flex flex-col">
-									<div className="flex flex-col gap-4 mr-2">
-										<Pill variant="secondary">
-											<span className="">{d.type}</span>
-										</Pill>
+									<div className="flex justify-between mr-2">
 										<div className="flex flex-col gap-4 mr-2">
 											<span className="text-foreground text-sm font-semibold">
 												<Stethoscope className="text-card-foreground inline size-4 mr-1.5 mb-1" />
 												{d.doctorName}
 											</span>
 										</div>
+										<Pill variant="secondary">
+											<span className="">{d.type}</span>
+										</Pill>
 									</div>
 									<div className="border-b border-foreground/20 mt-2 pb-2 flex flex-row items-center">
 										<Calendar className="inline size-4 mr-1" />
@@ -146,7 +150,7 @@ export default function PatientDashboard() {
 						{notesData.map((d, index) => (
 							<Card
 								key={d.id}
-								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary"
+								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary pt-2 pr-4"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
 								<CardContent className="p-5">
