@@ -61,8 +61,8 @@ export default function AdminDashboardPage() {
 				</Card>
 			</div>
 
-			<div className="flex flex-col lg:flex-row gap-6">
-				<Card className="flex-1 p-4 shadow-none hover:shadow-none">
+			<div className="grid grid-cols-1 min-[1100px]:grid-cols-2 gap-6 mb-6">
+				<Card className="p-4 shadow-none hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<Users className="text-primary shrink-0" size={20} />
 						Recent Patients
@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
 						))}
 					</div>
 				</Card>
-				<Card className="flex-1 p-4 shadow-none hover:shadow-none">
+				<Card className="p-4 shadow-none hover:shadow-none">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
