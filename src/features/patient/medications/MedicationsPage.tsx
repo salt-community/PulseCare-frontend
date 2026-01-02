@@ -5,6 +5,7 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { Icon } from "../../../components/shared/Icon";
 import { useEffect, useState } from "react";
 import Spinner from "../../../components/shared/Spinner";
+import { useAuth } from "@clerk/clerk-react";
 
 type Medications = {
 	id: string;
@@ -17,22 +18,36 @@ type Medications = {
 };
 
 export default function MedicationsPage() {
+	const { getToken, isLoaded } = useAuth();
+
 	const [data, setData] = useState<Medications[]>([]);
-	const baseUrl = import.meta.env.VITE_API_BASE_URL;
 	const [isError, setIsError] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
+	const baseUrl = import.meta.env.VITE_API_BASE_URL;
 	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21";
 
 	async function getData() {
-		try {
-			const response = await fetch(baseUrl + "/Medications/" + testId);
-			const responseData = await response.json();
+		if (!isLoaded) return;
 
-			return responseData;
-		} catch (err: unknown) {
-			throw new Error();
+		const token = await getToken({ template: "pulsecare-jwt-template" });
+
+		if (!token) {
+			throw new Error("No auth token available");
 		}
+
+		const response = await fetch(`${baseUrl}/Medications/${testId}`, {
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error("Request failed");
+		}
+
+		return response.json();
 	}
 
 	useEffect(() => {
