@@ -19,9 +19,9 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => 
 						</div>
 
 						<div className="flex-1 min-w-0">
-							<div className="flex items-center justify-between gap-2 mb-2">
+							<div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
 								<span className="font-medium text-foreground">{patient.name}</span>
-								<div className="flex items-center gap-2">
+								<div className="flex items-center gap-2 flex-wrap justify-end">
 									{patient.conditions.slice(0, 2).map(condition => (
 										<Pill key={condition} variant="secondary">
 											{condition}
@@ -31,12 +31,14 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => 
 								</div>
 							</div>
 
-							<div className="flex items-center gap-4 text-sm text-muted-foreground">
+							<div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
 								<span className="flex items-center gap-2">
-									<Mail className="h-4 w-4" /> {patient.email}
+									<Mail className="h-4 w-4" />
+									{patient.email}
 								</span>
 								<span className="flex items-center gap-2">
-									<Phone className="h-4 w-4" /> {patient.phone}
+									<Phone className="h-4 w-4" />
+									{patient.phone}
 								</span>
 							</div>
 						</div>
