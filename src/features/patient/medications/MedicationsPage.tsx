@@ -10,9 +10,13 @@ export default function MedicationsPage() {
 	return (
 		<>
 			<PageHeader title={"Medications"} description="Your current prescriptions and medication schedule" />
-			<div className="grid gap-4 md:grid-cols-2">
+			<div className="grid gap-4 lg:grid-cols-2">
 				{data.map((medication, index) => (
-					<Card key={medication.id} className="transition-shadow animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+					<Card
+						key={medication.id}
+						className="transition-shadow animate-slide-up hover:shadow-none"
+						style={{ animationDelay: `${index * 0.1}s` }}
+					>
 						<CardContent className="p-5">
 							<div className="flex items-start gap-4">
 								<Icon variant="red">
@@ -29,7 +33,7 @@ export default function MedicationsPage() {
 										<div className="flex items-center gap-2 text-muted-foreground">
 											<Clock className="h-4 w-4" />
 											<span>
-												{medication.timesPerDay}x daily ({medication.frequency})
+												{medication.timesPerDay}x {medication.frequency}
 											</span>
 										</div>
 										<div className="flex items-center gap-2 text-muted-foreground">
