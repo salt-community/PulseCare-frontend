@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DatePicker } from "../../../components/ui/DatePicker";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { enGB } from "date-fns/locale";
@@ -18,6 +18,13 @@ export const AdminCalendarPage = () => {
 	const [selected, setSelected] = useState<Date>();
 	const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 	const appointments = mockAppointments;
+	const appointmentsRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (selected && appointmentsRef.current) {
+			appointmentsRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+		}
+	}, [selected]);
 
 	function handleCardClick(appointment: Appointment) {
 		setSelectedAppointment(appointment);
@@ -26,7 +33,7 @@ export const AdminCalendarPage = () => {
 
 	return (
 		<>
-			<div className="flex justify-between items-center">
+			<div className="flex flex-wrap justify-between items-center">
 				<PageHeader title={"Calendar"} description="View and manage all patient appointments" />
 				<ScheduleAppointment currentDate={selected ?? new Date()} />
 			</div>
@@ -63,7 +70,7 @@ export const AdminCalendarPage = () => {
 
 			<div className="flex flex-col gap-10 lg:flex-row">
 				<DatePicker selected={selected} onSelect={setSelected} appointments={appointments} />
-				<div className="flex-1 flex flex-col gap-4">
+				<div ref={appointmentsRef} className="flex-1 flex flex-col gap-4">
 					<h2 className="flex items-center gap-2 text-2xl font-semibold">
 						<Calendar className="h-6 text-primary" />
 
