@@ -48,7 +48,7 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 						direction="left"
 					/>
 				</button>
-				<div className="flex-1 md:flex-none mx-auto md:mx-0">
+				<div className="absolute left-1/2 transform -translate-x-1/2 md:static md:transform-none md:flex-1">
 					<Link
 						to={path}
 						className="flex items-center justify-center md:justify-start gap-3 hover:opacity-90 transition-opacity"
