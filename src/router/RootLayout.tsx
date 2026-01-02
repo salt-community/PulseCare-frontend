@@ -21,10 +21,14 @@ export const RootLayout = () => {
 		if (!isSignedIn) return;
 
 		const sync = async () => {
-			const token = await getToken();
+			const token = await getToken({ template: "pulsecare-jwt-template" });
+			console.log("token: ", token);
 			if (!token) return;
-
-			await syncUser(token);
+			const userInfo = {
+				name: user?.fullName ?? "",
+				email: user?.primaryEmailAddress?.emailAddress ?? ""
+			};
+			await syncUser(token, userInfo);
 		};
 
 		sync();
