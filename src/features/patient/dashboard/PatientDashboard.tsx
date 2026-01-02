@@ -60,7 +60,7 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="grid gap-4 px-2">
+					<div className="grid gap-4 px-2 pb-2">
 						{medicationData.map((medication, index) => (
 							<Card
 								key={medication.id}
@@ -99,7 +99,7 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2 px-2">
+					<div className="flex flex-col gap-3 mt-2 px-2 pb-2">
 						{data.map(d => (
 							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
 								<CardContent className="p-5 flex flex-col">
@@ -142,7 +142,7 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="space-y-4 px-2">
+					<div className="space-y-4 px-2 pb-2">
 						{notesData.map((d, index) => (
 							<Card
 								key={d.id}
