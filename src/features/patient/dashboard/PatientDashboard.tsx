@@ -103,7 +103,7 @@ export default function PatientDashboard() {
 							</Link>
 						</Button>
 					</CardTitle>
-					<div className="flex flex-col gap-3 mt-2 px-2 pb-2">
+					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
 						{data.map(d => (
 							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
 								<CardContent className="p-5 flex flex-col">

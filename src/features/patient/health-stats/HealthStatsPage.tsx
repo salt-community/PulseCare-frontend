@@ -57,7 +57,7 @@ export default function HealthStatsPage() {
 							<statIcons.droplets className="text-primary shrink-0" />
 							Latest Blood Sample Results
 						</CardTitle>
-						<div className="flex flex-col gap-3 mt-2 px-2 pb-2">
+						<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
 							{bloodData.map(d => {
 								const StatIcon = statIcons[d.type];
 								return (
