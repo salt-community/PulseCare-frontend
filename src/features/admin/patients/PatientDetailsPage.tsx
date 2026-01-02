@@ -33,7 +33,7 @@ export function PatientDetailsPage() {
 	] as const;
 
 	return (
-		<div className="space-y-6 max-w-7xl mx-auto">
+		<div className="space-y-6">
 			<button
 				onClick={() => navigate({ to: "/admin/patients" })}
 				className="text-card-foreground hover:text-primary text-sm font-medium"
