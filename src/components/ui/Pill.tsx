@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const pillVariants = cva(
-	"flex justify-center h-5 inline-flex  items-center rounded-full border h-6 px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 max-w-max whitespace-nowrap",
+	"flex justify-center h-5 inline-flex items-center rounded-full border h-6 px-2.5 py-0.5 max-[440px]:text-[11px] max-[400px]:text-[10px] max-[440px]:px-2 max-[440px]:py-0.5 max-[400px]:px-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 max-w-max whitespace-nowrap",
 	{
 		variants: {
 			variant: {
