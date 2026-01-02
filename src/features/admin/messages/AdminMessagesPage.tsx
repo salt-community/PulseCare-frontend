@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, MailOpen, User } from "lucide-react";
+import { Mail, MailOpen, Plus, User } from "lucide-react";
 import { format } from "date-fns";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
@@ -9,6 +9,7 @@ import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { useMessages } from "../../../hooks/useMessages";
 import { mockPatients } from "../../../lib/api/mockData";
+import { SelectInput } from "../../../components/ui/SelectInput";
 
 const CURRENT_DOCTOR_ID = "doctor-1";
 
@@ -21,6 +22,27 @@ export default function AdminMessagesPage() {
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
 	const [replyText, setReplyText] = useState("");
 	const [isThreadOpen, setIsThreadOpen] = useState(false);
+	const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
+	const [newMessagePatientId, setNewMessagePatientId] = useState("");
+	const [newMessageSubject, setNewMessageSubject] = useState("");
+	const [newMessageContent, setNewMessageContent] = useState("");
+
+	const handleNewMessage = (e: React.FormEvent) => {
+		e.preventDefault();
+
+		sendMessage({
+			subject: newMessageSubject,
+			content: newMessageContent,
+			patientId: newMessagePatientId,
+			doctorId: CURRENT_DOCTOR_ID,
+			sender: "doctor"
+		});
+
+		setIsNewMessageOpen(false);
+		setNewMessagePatientId("");
+		setNewMessageSubject("");
+		setNewMessageContent("");
+	};
 
 	const openThread = (id: string) => {
 		setSelectedConvId(id);
@@ -53,6 +75,32 @@ export default function AdminMessagesPage() {
 	return (
 		<div className="space-y-4">
 			<PageHeader title="Messages" description={`You have ${unreadCount} unread message(s)`} />
+			<div className="flex justify-end">
+				<Button variant="default" className="flex items-center gap-1 px-3 py-1.5 text-sm" onClick={() => setIsNewMessageOpen(true)}>
+					<Plus className="h-4 w-4" />
+					New Message
+				</Button>
+			</div>
+
+			<DialogModal open={isNewMessageOpen} onOpenChange={setIsNewMessageOpen} title="New message" showTrigger={false}>
+				<form onSubmit={handleNewMessage} className="space-y-4">
+					<SelectInput
+						label="Select patient"
+						value={newMessagePatientId}
+						onChange={setNewMessagePatientId}
+						options={mockPatients.map(p => ({ label: p.name, value: p.id }))}
+						required
+					/>
+
+					<DialogInput type="textarea" label="Subject" value={newMessageSubject} onChange={setNewMessageSubject} required />
+
+					<DialogInput type="textarea" label="Message" value={newMessageContent} onChange={setNewMessageContent} required />
+
+					<Button variant="submit" className="w-full">
+						Send
+					</Button>
+				</form>
+			</DialogModal>
 
 			{conversations.length === 0 ? (
 				<Card>
