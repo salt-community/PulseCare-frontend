@@ -67,7 +67,7 @@ export default function AppointmentsPage() {
 							onClick={() => handleCardClick(d)}
 						>
 							<CardContent className="p-5">
-								<div className="flex flex-col md:flex-row md:items-center gap-4">
+								<div className="flex flex-col min-[850px]:flex-row min-[850px]:items-center gap-4">
 									{/* Date Block */}
 									<div className="flex items-center gap-4 md:w-48">
 										<DateBlock date={d.date} />
@@ -81,16 +81,18 @@ export default function AppointmentsPage() {
 									</div>
 
 									{/* Details */}
-									<div className="flex-1">
-										<div className="flex items-center gap-2 mb-2">
+									<div className="flex-1 flex flex-col min-[850px]:flex-row min-[850px]:items-center justify-between gap-4">
+										<div>
+											<div className="flex items-center gap-2 mb-2">
+												<User className="h-4 w-4 text-card-foreground shrink-0" />
+												<span className="font-medium text-foreground">{d.doctorName}</span>
+											</div>
+											{d.reason && <p className="text-sm text-card-foreground">{d.reason}</p>}
+										</div>
+										<div className="flex items-center gap-2 flex-wrap">
 											<Pill variant="secondary">{d.type}</Pill>
 											<Pill>{d.status}</Pill>
 										</div>
-										<div className="flex items-center gap-2 text-foreground mb-1">
-											<User className="h-4 w-4 text-card-foreground" />
-											<span className="font-medium">{d.doctorName}</span>
-										</div>
-										{d.reason && <p className="text-sm text-card-foreground mt-2">{d.reason}</p>}
 									</div>
 								</div>
 							</CardContent>
