@@ -5,26 +5,9 @@ import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
 import { DateBlock } from "../../../components/ui/DateBlock";
-import { useAuth } from "@clerk/clerk-react";
-import { useEffect } from "react";
 
 export default function AppointmentsPage() {
 	const data = mockAppointments;
-
-	// -------------------------
-	// TEMPORARY: Log Clerk token for Postman
-	const { getToken, isSignedIn } = useAuth();
-
-	useEffect(() => {
-		const logIt = async () => {
-			if (isSignedIn) {
-				const token = await getToken();
-				console.log("CLERK_JWT:", token);
-			}
-		};
-		logIt();
-	}, [getToken, isSignedIn]);
-	// -------------------------
 
 	return (
 		<>

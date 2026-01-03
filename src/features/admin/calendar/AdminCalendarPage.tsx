@@ -9,9 +9,8 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useAllAppointments, useDeleteAppointment, usePatientAppointments } from "../../appointments/hooks";
+import { useAllAppointments, useDeleteAppointment } from "../../appointments/hooks";
 import type { Appointment } from "../../appointments/types";
-import { useAuth } from "@clerk/clerk-react";
 
 export const AdminCalendarPage = () => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -21,21 +20,6 @@ export const AdminCalendarPage = () => {
 
 	const { data: appointments = [], isLoading, error } = useAllAppointments();
 	const deleteMutation = useDeleteAppointment();
-
-	// -------------------------
-	// TEMPORARY: Log Clerk token for Postman
-	const { getToken, isSignedIn } = useAuth();
-
-	useEffect(() => {
-		const logIt = async () => {
-			if (isSignedIn) {
-				const token = await getToken();
-				console.log("CLERK_JWT:", token);
-			}
-		};
-		logIt();
-	}, [getToken, isSignedIn]);
-	// -------------------------
 
 	useEffect(() => {
 		if (selected && appointmentsRef.current) {
