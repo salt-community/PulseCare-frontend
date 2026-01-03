@@ -1,7 +1,7 @@
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import { useRef } from "react";
 import { NavLink } from "../shared/NavLink";
-import { HouseHeart } from "lucide-react";
+import { HouseHeart, Users, Calendar, MessageCircleMore } from "lucide-react";
 
 interface PatientSidebarProps {
 	className?: string;
@@ -28,13 +28,13 @@ export const AdminSidebar = ({ className = "", onClose }: PatientSidebarProps) =
 				<HouseHeart strokeWidth={1.5} />
 			</NavLink>
 			<NavLink label="Patients" to="/admin/patients" onClick={onClose}>
-				<HouseHeart strokeWidth={1.5} />
+				<Users strokeWidth={1.5} />
 			</NavLink>
 			<NavLink label="Calendar" to="/admin/calendar" onClick={onClose}>
-				<HouseHeart strokeWidth={1.5} />
+				<Calendar strokeWidth={1.5} />
 			</NavLink>
 			<NavLink label="Messages" to="/admin/messages" onClick={onClose}>
-				<HouseHeart strokeWidth={1.5} />
+				<MessageCircleMore strokeWidth={1.5} />
 			</NavLink>
 			<div className="flex md:hidden mt-8 pt-4 border-t border-border">
 				<SignedIn>
