@@ -2,24 +2,96 @@ import { format } from "date-fns";
 import { Icon } from "../../../components/shared/Icon";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
-import { mockHealthStats } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { statIcons } from "../../../lib/StatsIcons";
+import { useEffect, useState } from "react";
+import Spinner from "../../../components/shared/Spinner";
+import { useAuth } from "@clerk/clerk-react";
+
+type HealthStats = {
+	id: string;
+	type: string;
+	value: string;
+	unit: string;
+	date: string;
+	status: string;
+};
+
+const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = {
+	Normal: "secondary",
+	Warning: "warning",
+	Critical: "destructive"
+};
 
 export default function HealthStatsPage() {
-	console.log("health stats", mockHealthStats);
-	const data = mockHealthStats;
-	const orderedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	const bloodData = orderedData.filter(d => d.type === "cholesterol" || d.type === "glucose");
+	const { getToken, isLoaded } = useAuth();
+
+	const [data, setData] = useState<HealthStats[]>([]);
+	const orderedData = Array.isArray(data) ? [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : [];
+	const bloodData = Array.isArray(data) ? data.filter(d => d.type === "Cholesterol" || d.type === "Glucose") : [];
+	console.log("health stats", data);
+
+	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21";
+	const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+	const [isError, setIsError] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+
+	async function getData() {
+		if (!isLoaded) return;
+
+		const token = await getToken({ template: "pulsecare-jwt-template" });
+
+		if (!token) {
+			throw new Error("No auth token available");
+		}
+
+		const response = await fetch(baseUrl + "/HealthStats/" + testId, {
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error("Request failed");
+		}
+
+		return await response.json();
+	}
+
+	useEffect(() => {
+		getData()
+			.then(result => {
+				if (Array.isArray(result?.value)) {
+					setData(result.value);
+				} else {
+					setData([]);
+				}
+			})
+			.catch(() => setIsError(true))
+			.finally(() => setIsLoading(false));
+	}, [isLoaded]);
 
 	return (
 		<div>
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
-			{data.length === 0 ? (
+			{data.length === 0 && isLoading === false ? (
 				<Card className="mb-4 shadow-none hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
+						{isError ? (
+							<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
+						) : (
+							<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
+						)}
+					</CardContent>
+				</Card>
+			) : isLoading ? (
+				<Card className="flex flex-col items-center">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">Loading health stats... </p>
+						<Spinner />
 					</CardContent>
 				</Card>
 			) : (
@@ -35,7 +107,7 @@ export default function HealthStatsPage() {
 												<Icon variant="red">{StatIcon && <StatIcon />} </Icon>
 											</span>
 											<span>
-												<Pill variant="warning">{d.status}</Pill>
+												<Pill variant={statusVariants[d.status]}>{d.status}</Pill>
 											</span>
 										</div>
 										<div className="flex flex-col">
@@ -79,7 +151,7 @@ export default function HealthStatsPage() {
 													<span className="text-xl font-semibold text-foreground mr-2">{d.value}</span>
 													<span className="text-sm">{d.unit}</span>
 												</div>
-												<Pill variant="secondary">{d.status}</Pill>
+												<Pill variant={statusVariants[d.status]}>{d.status}</Pill>
 											</div>
 										</CardContent>
 									</Card>
