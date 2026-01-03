@@ -9,7 +9,7 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useAllAppointments } from "../../appointments/hooks";
+import { useAllAppointments, useDeleteAppointment } from "../../appointments/hooks";
 import type { Appointment } from "../../appointments/types";
 
 export const AdminCalendarPage = () => {
@@ -19,6 +19,7 @@ export const AdminCalendarPage = () => {
 	const appointmentsRef = useRef<HTMLDivElement>(null);
 
 	const { data: appointments = [], isLoading, error } = useAllAppointments();
+	const deleteMutation = useDeleteAppointment();
 
 	useEffect(() => {
 		if (selected && appointmentsRef.current) {
@@ -29,6 +30,20 @@ export const AdminCalendarPage = () => {
 	function handleCardClick(appointment: Appointment) {
 		setSelectedAppointment(appointment);
 		setDialogOpen(true);
+	}
+
+	async function handleDelete() {
+		if (!selectedAppointment) return;
+
+		if (confirm(`Delete appointment with ${selectedAppointment.patientName}?`)) {
+			try {
+				await deleteMutation.mutateAsync(selectedAppointment.id);
+				setDialogOpen(false);
+				setSelectedAppointment(null);
+			} catch (error) {
+				alert("Failed to delete appointment");
+			}
+		}
 	}
 
 	if (isLoading) {
@@ -68,8 +83,8 @@ export const AdminCalendarPage = () => {
 						</div>
 						<div className="flex gap-2 justify-end">
 							<Button onClick={() => ""}>Edit</Button>
-							<Button onClick={() => ""} variant={"destructive"}>
-								Remove
+							<Button onClick={handleDelete} variant={"destructive"} disabled={deleteMutation.isPending}>
+								{deleteMutation.isPending ? "Deleting..." : "Remove"}
 							</Button>
 						</div>
 					</>
