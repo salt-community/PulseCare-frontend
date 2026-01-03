@@ -6,6 +6,8 @@ import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../lib/api/mockData";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { mockPatients } from "../../../lib/api/mockData";
+import { useCreateAppointment } from "../../appointments/hooks";
+import type { AppointmentType } from "../../appointments/types";
 
 type AppointmentProps = {
 	currentDate: Date;
@@ -16,37 +18,54 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 	const [open, setOpen] = useState(false);
 	const [patient, setPatient] = useState<Patient | null>(null);
 
-	const appointmentTypes = ["Checkup", "Follow-up", "Consultation", "Lab"];
+	const createMutation = useCreateAppointment();
+
+	const appointmentTypes: AppointmentType[] = ["Checkup", "FollowUp", "Consultation", "Lab"];
 	const patients = mockPatients;
 
 	const [date, setDate] = useState<string>(currentDate.toISOString().split("T")[0]);
 	const [time, setTime] = useState<string>("");
-	const [type, setType] = useState<string>("Checkup");
+	const [type, setType] = useState<AppointmentType>("Checkup");
 	const [reason, setReason] = useState<string>("");
 
 	const resetForm = () => {
 		setDate("");
 		setTime("");
-		setType("checkup");
+		setType("Checkup");
 		setReason("");
 	};
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 
-		const start = `${date}T${time}:00`;
+		// TODO: Replace hardcoded IDs with actual authenticated user/patient from Clerk/DB mapping
+		const HARDCODED_PATIENT_ID = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58"; // Alice Johnson from backend SeedData
+		const HARDCODED_DOCTOR_ID = "8c0adcec-45f1-4723-9896-4265df0f9800"; // Dr. Michael Brown from backend SeedData
+
+		console.log("Using hardcoded patient ID:", HARDCODED_PATIENT_ID);
+		console.log("Using hardcoded doctor ID:", HARDCODED_DOCTOR_ID);
+
+		const appointmentDate = new Date(date);
 		const newAppointment = {
-			patientId: patient?.id,
-			doctorId: user?.id,
-			start,
-			type,
-			reason
+			patientId: HARDCODED_PATIENT_ID,
+			doctorId: HARDCODED_DOCTOR_ID,
+			date: appointmentDate.toISOString(),
+			time: time,
+			type: type,
+			reason: reason || undefined
 		};
 
-		console.log("Create appointment:", newAppointment);
+		console.log("Sending appointment:", newAppointment);
 
-		resetForm();
-		setOpen(false);
+		try {
+			await createMutation.mutateAsync(newAppointment);
+			console.log("✅ Appointment created successfully!");
+			resetForm();
+			setOpen(false);
+		} catch (error) {
+			console.error("❌ Failed to create appointment:", error);
+			alert("Failed to create appointment. Check console for details.");
+		}
 	};
 
 	return (
@@ -85,7 +104,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 						<select
 							className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
 							value={type}
-							onChange={e => setType(e.target.value)}
+							onChange={e => setType(e.target.value as AppointmentType)}
 							required
 						>
 							{appointmentTypes.map(t => (
@@ -106,8 +125,12 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 						placeholder="Short reason for the visit"
 					/>
 
-					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-						Add
+					<button
+						type="submit"
+						className="mt-4 w-full bg-primary text-white rounded-md py-2 cursor-pointer hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+						disabled={createMutation.isPending}
+					>
+						{createMutation.isPending ? "Creating..." : "Add"}
 					</button>
 				</form>
 			</DialogModal>
