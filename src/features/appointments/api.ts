@@ -1,8 +1,9 @@
 // Appointment API Service Layer
+// TODO: Add Authorization header with Clerk token once backend endpoints are protected
 
 import type { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest } from "./types";
 
-const API_BASE = "http://localhost:5002/api/Appointments";
+const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/Appointments`;
 
 export const appointmentApi = {
 	// GET /api/Appointments
