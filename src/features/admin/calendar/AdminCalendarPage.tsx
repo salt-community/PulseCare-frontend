@@ -9,7 +9,7 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useAllAppointments, useDeleteAppointment } from "../../appointments/hooks";
+import { useAllAppointments, useDeleteAppointment, usePatientAppointments } from "../../appointments/hooks";
 import type { Appointment } from "../../appointments/types";
 
 export const AdminCalendarPage = () => {
@@ -20,6 +20,11 @@ export const AdminCalendarPage = () => {
 
 	const { data: appointments = [], isLoading, error } = useAllAppointments();
 	const deleteMutation = useDeleteAppointment();
+
+	// TEMPORARY TEST: Verify GET by patientId endpoint
+	const testPatientId = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58"; // Alice Johnson
+	const { data: patientAppts } = usePatientAppointments(testPatientId);
+	console.log("🧪 GET by patientId test:", patientAppts);
 
 	useEffect(() => {
 		if (selected && appointmentsRef.current) {
