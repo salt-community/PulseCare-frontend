@@ -25,7 +25,7 @@ export default function MedicationsPage() {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	const baseUrl = import.meta.env.VITE_API_BASE_URL;
-	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21";
+	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21"; // For testing
 
 	async function getData() {
 		if (!isLoaded) return;
@@ -61,7 +61,7 @@ export default function MedicationsPage() {
 		<>
 			<PageHeader title={"Medications"} description="Your current prescriptions and medication schedule" />
 			{data.length === 0 && isLoading === false ? (
-				<Card className="mb-4">
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
 						{isError ? (
 							<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
@@ -82,7 +82,7 @@ export default function MedicationsPage() {
 					{data.map((medication, index) => (
 						<Card
 							key={medication.id}
-							className="transition-shadow animate-slide-up"
+							className="transition-shadow animate-slide-up hover:shadow-none"
 							style={{ animationDelay: `${index * 0.1}s` }}
 						>
 							<CardContent className="p-5">
