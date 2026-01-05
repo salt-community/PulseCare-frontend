@@ -33,9 +33,9 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 	};
 	return (
 		<header className="sticky top-0 z-60 w-full border-b border-border backdrop-blur-md bg-background/80 shrink-0 min-h-19.25">
-			<div className="flex justify-between items-center py-3 px-6 h-full">
+			<div className="grid grid-cols-3 items-center py-3 px-6 h-full md:flex md:justify-between">
 				<button
-					className="md:hidden p-1.5 rounded-lg hover:bg-muted transition-all mr-4"
+					className="md:hidden col-start-1 p-1.5 rounded-lg hover:bg-muted transition-all"
 					onClick={onMenuToggle}
 					aria-label={sidebarOpen ? "Close menu" : "Open menu"}
 				>
@@ -48,7 +48,7 @@ export function Header({ onMenuToggle, sidebarOpen = false }: HeaderProps): Reac
 						direction="left"
 					/>
 				</button>
-				<div className="absolute left-1/2 transform -translate-x-1/2 md:static md:transform-none md:flex-1">
+				<div className="col-start-2 flex justify-center md:static md:flex-none md:mx-0">
 					<Link
 						to={path}
 						className="flex items-center justify-center md:justify-start gap-3 hover:opacity-90 transition-opacity"
