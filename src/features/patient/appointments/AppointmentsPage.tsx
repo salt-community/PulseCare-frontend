@@ -1,13 +1,24 @@
 import { Card, CardContent } from "../../../components/ui/Card";
-import { mockAppointments } from "../../../lib/api/mockData";
 import { Calendar, Clock, User } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
 import { DateBlock } from "../../../components/ui/DateBlock";
+import { usePatientAppointments } from "../../../hooks/useAppointments";
+import { HARDCODED_PATIENT_ID } from "../../../lib/constants";
 
 export default function AppointmentsPage() {
-	const data = mockAppointments;
+	const { data: appointments = [], isLoading, error } = usePatientAppointments(HARDCODED_PATIENT_ID);
+
+	if (isLoading) {
+		return <div className="text-center p-10">Loading appointments...</div>;
+	}
+
+	if (error) {
+		return <div className="text-red-500">Error loading appointments. Please check if backend is running.</div>;
+	}
+
+	const data = appointments;
 
 	return (
 		<>
