@@ -3,14 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../../../components
 import type { Medication, Patient } from "../../../../lib/api/mockData";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
 import { Button } from "../../../../components/ui/PrimaryButton";
-import { RenewPrescriptionForm } from "./RenewPrescriptionForm";
+import { EditPrescriptionForm } from "./EditPrescriptionForm";
+import Spinner from "../../../../components/shared/Spinner";
 
-type MedicationProps = {
+export const PrescriptionsTab = ({
+	patient,
+	medications,
+	isLoading,
+	isError
+}: {
 	patient: Patient;
 	medications: Medication[];
-};
-
-export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
+	isLoading: boolean;
+	isError: boolean;
+}) => {
 	return (
 		<>
 			<div className="w-fit">
@@ -26,7 +32,16 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 				</CardHeader>
 
 				<CardContent className="p-6 pt-0">
-					{medications.length === 0 ? (
+					{isLoading && (
+						<>
+							<p>Loading prescriptions...</p>
+							<Spinner />
+						</>
+					)}
+
+					{isError && <p className="text-destructive text-sm">Failed to load medications</p>}
+
+					{!isLoading && medications.length === 0 ? (
 						<p className="text-muted-foreground text-sm">No medications prescribed</p>
 					) : (
 						<div className="space-y-4">
@@ -40,7 +55,7 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 											<p className="text-sm text-muted-foreground mt-1">{med.timesPerDay} times per day</p>
 										</div>
 										<div className="flex gap-2 shrink-0">
-											<RenewPrescriptionForm patient={patient} prescription={med} />
+											<EditPrescriptionForm patient={patient} prescription={med} />
 											<Button
 												variant="outline"
 												size="icon"
