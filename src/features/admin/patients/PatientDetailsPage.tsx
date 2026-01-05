@@ -36,7 +36,7 @@ export function PatientDetailsPage() {
 		<div className="space-y-6">
 			<button
 				onClick={() => navigate({ to: "/admin/patients" })}
-				className="text-card-foreground hover:text-primary text-sm font-medium"
+				className="text-card-foreground hover:text-primary text-sm font-medium cursor-pointer"
 			>
 				← Back to Patients
 			</button>
@@ -57,7 +57,7 @@ export function PatientDetailsPage() {
 						<li key={tab.id}>
 							<button
 								onClick={() => setActiveTab(tab.id)}
-								className={`flex items-center gap-2 px-4 py-3 font-medium transition text-sm ${
+								className={`flex items-center gap-2 px-4 py-3 font-medium transition text-sm cursor-pointer ${
 									activeTab === tab.id
 										? "text-primary border-b-2 border-primary"
 										: "text-card-foreground hover:text-primary"
