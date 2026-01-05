@@ -29,12 +29,14 @@ const PatientLayout = () => {
 				<Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
 				<div className="flex flex-1 overflow-hidden">
 					<aside className="hidden md:flex md:shrink-0 h-full">
-						<div className="h-full border-r border-border bg-background-secondary overflow-y-auto">
+						<div className="h-full bg-background-secondary overflow-y-auto">
 							<PatientSidebar />
 						</div>
 					</aside>
 					<main className="flex-1 overflow-y-auto p-6 bg-background">
-						<Outlet />
+						<div className="max-w-7xl mx-auto">
+							<Outlet />
+						</div>
 					</main>
 				</div>
 
@@ -42,7 +44,7 @@ const PatientLayout = () => {
 					<>
 						<div className="fixed inset-0 bg-black/50 top-19.25 z-40 md:hidden" onClick={closeSidebar} />
 						<div
-							className="fixed inset-x-0 top-19.25 bottom-0 z-50 w-60 md:hidden bg-background-secondary border-r border-border shadow-2xl"
+							className="fixed inset-x-0 top-19.25 bottom-0 z-50 w-60 md:hidden bg-background-secondary shadow-2xl"
 							onClick={e => e.stopPropagation()}
 						>
 							<div className="h-full mt-4 overflow-y-auto">

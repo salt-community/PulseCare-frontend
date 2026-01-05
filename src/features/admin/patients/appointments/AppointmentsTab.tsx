@@ -19,7 +19,7 @@ export const AppointmentsTab = ({ appointments, patient }: AppointmentProps) => 
 			<div className="flex justify-between items-center my-2">
 				<AddAppointmentForm patient={patient} />
 			</div>
-			<div className="md:grid md:grid-cols-[50%_50%] flex flex-col gap-4">
+			<div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
 				<AppointmentsCard appointments={upcomingApts} isUpcoming={true} />
 				<AppointmentsCard appointments={prevApts} isUpcoming={false} />
 			</div>
