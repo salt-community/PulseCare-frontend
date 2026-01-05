@@ -25,7 +25,7 @@ const PatientLayout = () => {
 
 	return (
 		<SignedIn>
-			<div className="h-screen w-screen flex flex-col">
+			<div className="h-screen w-full flex flex-col overflow-hidden">
 				<Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
 				<div className="flex flex-1 overflow-hidden">
 					<aside className="hidden md:flex md:shrink-0 h-full">
@@ -33,7 +33,7 @@ const PatientLayout = () => {
 							<PatientSidebar />
 						</div>
 					</aside>
-					<main className="flex-1 overflow-y-auto p-6 bg-background">
+					<main className="flex-1 overflow-y-auto overflow-x-hidden p-6 bg-background">
 						<div className="max-w-7xl mx-auto">
 							<Outlet />
 						</div>
