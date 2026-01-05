@@ -1,10 +1,12 @@
 import type { PatientDashboard } from "../types/patients";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function fetchPatientDashboard(patientId: string): Promise<PatientDashboard> {
-	const res = await fetch(`/api/PatientDashboard/${patientId}/dashboard`, {
-		credentials: "include",
+export async function fetchPatientDashboard(token: string): Promise<PatientDashboard> {
+	const res = await fetch(`${API_BASE_URL}/PatientDashboard/dashboard`, {
+		method: "GET",
 		headers: {
-			"Content-Type": "application/json"
+			"Content-Type": "application/json",
+			"Authorization": `Bearer ${token}`
 		}
 	});
 

@@ -11,6 +11,7 @@ export type HealthStatType = "BloodPressure" | "Glucose" | "Cholesterol" | "Hear
 export type HealthStatusType = "Normal" | "Warning" | "Critical";
 
 export interface Patient {
+	id: string | null;
 	name: string;
 	email: string;
 	phone: string | null;
@@ -18,6 +19,7 @@ export interface Patient {
 }
 
 export interface Note {
+	id: string | null;
 	title: string;
 	doctorName: string;
 	date: string;
@@ -44,6 +46,7 @@ export interface HealthStats {
 }
 
 export interface Appointment {
+	id: string | null;
 	date: string;
 	time: string | null;
 	type: string | null;
