@@ -19,10 +19,18 @@ describe("HealthStatsPage", () => {
 	});
 
 	it("shows Loading first and then 'No new results' when API returns empty array", async () => {
+		vi.mock("@clerk/clerk-react", () => ({
+			useAuth: () => ({
+				getToken: vi.fn().mockResolvedValue("mock-token"),
+				isLoaded: true
+			})
+		}));
+
 		vi.stubGlobal(
 			"fetch",
 			vi.fn().mockResolvedValue({
-				json: vi.fn().mockResolvedValue([])
+				ok: true,
+				json: vi.fn().mockResolvedValue({ value: [] })
 			} as any)
 		);
 
@@ -38,6 +46,13 @@ describe("HealthStatsPage", () => {
 	});
 
 	it("shows 'No data could be loaded' when fetch rejects", async () => {
+		vi.mock("@clerk/clerk-react", () => ({
+			useAuth: () => ({
+				getToken: vi.fn().mockResolvedValue("mock-token"),
+				isLoaded: true
+			})
+		}));
+
 		vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("Network error")));
 
 		render(<HealthStatsPage />);
