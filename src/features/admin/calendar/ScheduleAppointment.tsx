@@ -6,8 +6,8 @@ import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../lib/api/mockData";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { mockPatients } from "../../../lib/api/mockData";
-import { useCreateAppointment } from "../../appointments/hooks";
-import type { AppointmentType } from "../../appointments/types";
+import { useCreateAppointment } from "../../../hooks/useAppointments";
+import type { AppointmentType } from "../../../lib/types/appointment";
 
 type AppointmentProps = {
 	currentDate: Date;

@@ -2,8 +2,8 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
-import { appointmentApi } from "./api";
-import type { UpdateAppointmentRequest } from "./types";
+import { appointmentApi } from "../lib/api/appointmentApi";
+import type { UpdateAppointmentRequest } from "../lib/types/appointment";
 
 export const appointmentKeys = {
 	all: ["appointments"] as const,

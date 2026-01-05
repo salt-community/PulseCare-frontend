@@ -9,8 +9,8 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useAllAppointments, useDeleteAppointment } from "../../appointments/hooks";
-import type { Appointment } from "../../appointments/types";
+import { useAllAppointments, useDeleteAppointment } from "../../../hooks/useAppointments";
+import type { Appointment } from "../../../lib/types/appointment";
 
 export const AdminCalendarPage = () => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);

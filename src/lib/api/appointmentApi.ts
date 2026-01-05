@@ -1,6 +1,6 @@
 // Appointment API Service Layer
 
-import type { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest } from "./types";
+import type { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest } from "../types/appointment";
 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/Appointments`;
 
