@@ -1,0 +1,2 @@
+export const HARDCODED_PATIENT_ID = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58";
+export const HARDCODED_DOCTOR_ID = "8c0adcec-45f1-4723-9896-4265df0f9800";

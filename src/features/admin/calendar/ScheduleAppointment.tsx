@@ -7,6 +7,7 @@ import { Button } from "../../../components/ui/PrimaryButton";
 import { mockPatients } from "../../../lib/api/mockData";
 import { useCreateAppointment } from "../../../hooks/useAppointments";
 import type { AppointmentType } from "../../../lib/types/appointment";
+import { HARDCODED_PATIENT_ID, HARDCODED_DOCTOR_ID } from "../../../lib/constants";
 
 type AppointmentProps = {
 	currentDate: Date;
@@ -35,12 +36,6 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-
-		const HARDCODED_PATIENT_ID = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58";
-		const HARDCODED_DOCTOR_ID = "8c0adcec-45f1-4723-9896-4265df0f9800";
-
-		console.log("Using hardcoded patient ID:", HARDCODED_PATIENT_ID);
-		console.log("Using hardcoded doctor ID:", HARDCODED_DOCTOR_ID);
 
 		const appointmentDate = new Date(date);
 		const newAppointment = {
