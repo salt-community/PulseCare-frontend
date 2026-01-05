@@ -7,19 +7,14 @@ interface DateBlockProps {
 
 export function DateBlock({ date, size = "md" }: DateBlockProps) {
 	const sizes = {
-		sm: { container: "w-14 h-16", text: "text-xl", subtext: "text-xs" },
-		md: { container: "w-17.5 h-20", text: "text-2xl", subtext: "text-xs" }
+		sm: { text: "text-sm", subtext: "text-xs", padding: "p-2", minWidth: "min-w-12" },
+		md: { text: "text-lg", subtext: "text-xs", padding: "p-3", minWidth: "min-w-16" }
 	};
 
 	return (
-		<div
-			className={`relative p-3 rounded-2xl bg-linear-to-br from-primary-light to-primary text-white text-center ${sizes[size].container} flex items-center justify-center shrink-0`}
-		>
-			<div className="absolute inset-0 rounded-2xl bg-linear-to-br from-primary-light to-primary opacity-50 animate-pulse-glow" />
-			<div className="relative z-10 text-center">
-				<p className={`font-bold text-white leading-none ${sizes[size].text}`}>{format(new Date(date), "d")}</p>
-				<p className={`text-white/80 uppercase ${sizes[size].subtext}`}>{format(new Date(date), "MMM")}</p>
-			</div>
+		<div className={`${sizes[size].padding} rounded-lg bg-primary/10 text-center ${sizes[size].minWidth}`}>
+			<p className={`font-bold text-primary ${sizes[size].text}`}>{format(new Date(date), "d")}</p>
+			<p className={`text-xs text-card-foreground uppercase ${sizes[size].subtext}`}>{format(new Date(date), "MMM")}</p>
 		</div>
 	);
 }

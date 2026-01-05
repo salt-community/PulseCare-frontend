@@ -69,13 +69,14 @@ export interface Message {
 	id: string;
 	patientId: string;
 	patientName: string;
-	doctorId?: string;
-	doctorName?: string;
+	doctorId: string;
+	doctorName: string;
 	subject: string;
 	content: string;
 	date: string;
-	read: boolean;
-	fromPatient: boolean;
+	readByPatient: boolean;
+	readByDoctor: boolean;
+	sender: "patient" | "doctor";
 }
 
 export interface Note {
@@ -290,7 +291,43 @@ export const mockAppointments: Appointment[] = [
 		patientId: "patient-4",
 		patientName: "Maria Garcia",
 		doctorName: "Dr. Emily Roberts",
-		date: "2025-12-23",
+		date: "2026-01-23",
+		time: "11:30",
+		type: "consultation",
+		status: "scheduled",
+		reason: "Migraine treatment options",
+		notes: []
+	},
+	{
+		id: "apt-7",
+		patientId: "patient-4",
+		patientName: "Maria Garcia",
+		doctorName: "Dr. Emily Roberts",
+		date: "2026-01-23",
+		time: "11:30",
+		type: "consultation",
+		status: "scheduled",
+		reason: "Migraine treatment options",
+		notes: []
+	},
+	{
+		id: "apt-6",
+		patientId: "patient-4",
+		patientName: "Maria Garcia",
+		doctorName: "Dr. Emily Roberts",
+		date: "2026-01-23",
+		time: "11:30",
+		type: "consultation",
+		status: "scheduled",
+		reason: "Migraine treatment options",
+		notes: []
+	},
+	{
+		id: "apt-9",
+		patientId: "patient-4",
+		patientName: "Maria Garcia",
+		doctorName: "Dr. Emily Roberts",
+		date: "2026-01-23",
 		time: "11:30",
 		type: "consultation",
 		status: "scheduled",
@@ -391,54 +428,213 @@ export const mockDoctors: Doctor[] = [
 ];
 
 // Mock Messages
-export const mockMessages: Message[] = [
+export const mockConversations = [
 	{
-		id: "msg-1",
+		id: "00000000-0000-0000-0000-000000000001",
 		patientId: "patient-1",
-		patientName: "John Smith",
 		doctorId: "doctor-1",
-		doctorName: "Dr. Sarah Johnson",
-		subject: "Question about medication timing",
-		content: "Hi Dr. Johnson, I wanted to ask about the best time to take my Metformin. Should I take it before or after meals?",
-		date: "2024-12-16T10:30:00",
-		read: false,
-		fromPatient: true
+		patient: null,
+		doctor: null,
+		messages: [
+			{
+				id: "10000000-0000-0000-0000-000000000001",
+				subject: "Question about medication timing",
+				content: "Hi doctor, when should I take my Metformin?",
+				date: "2024-12-16T10:30:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000002",
+				subject: "Re: Question about medication timing",
+				content: "You should take Metformin with food.",
+				date: "2024-12-16T12:00:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000003",
+				subject: "Re: Question about medication timing",
+				content: "Does it matter if it's breakfast or dinner? I usually eat a very light breakfast.",
+				date: "2024-12-16T12:45:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000004",
+				subject: "Re: Question about medication timing",
+				content:
+					"Since you are on a once-daily dose, I recommend taking it with your largest meal, which sounds like dinner. This helps minimize stomach upset.",
+				date: "2024-12-16T14:20:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000005",
+				subject: "Re: Question about medication timing",
+				content: "I've been feeling a bit nauseous after the evening dose. Is that normal in the beginning?",
+				date: "2024-12-18T09:15:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000006",
+				subject: "Re: Question about medication timing",
+				content: "Yes, mild nausea is a common side effect during the first week. Are you managing to keep your fluids up?",
+				date: "2024-12-18T11:00:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000007",
+				subject: "Re: Question about medication timing",
+				content: "Yes, I'm drinking plenty of water. Should I stop the medication if it gets worse?",
+				date: "2024-12-18T13:30:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000008",
+				subject: "Re: Question about medication timing",
+				content:
+					"Please continue for now. If you experience severe vomiting or diarrhea, stop and call the clinic immediately. Let's touch base in 3 days.",
+				date: "2024-12-18T15:45:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000009",
+				subject: "Re: Question about medication timing",
+				content: "The nausea has completely passed now! I feel much better today.",
+				date: "2024-12-21T08:00:00",
+				read: false,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000010",
+				subject: "Re: Question about medication timing",
+				content: "That is great news. It means your body has adjusted. Keep taking it with your dinner as planned.",
+				date: "2024-12-21T09:30:00",
+				read: false,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			}
+		]
 	},
 	{
-		id: "msg-2",
+		id: "00000000-0000-0000-0000-000000000002",
 		patientId: "patient-2",
-		patientName: "Emily Davis",
 		doctorId: "doctor-2",
-		doctorName: "Dr. Michael Chen",
-		subject: "Inhaler refill request",
-		content: "Hello, I need a refill on my albuterol inhaler. My current one is almost empty.",
-		date: "2024-12-15T14:22:00",
-		read: true,
-		fromPatient: true
+		patient: null,
+		doctor: null,
+		messages: [
+			{
+				id: "20000000-0000-0000-0000-000000000001",
+				subject: "Inhaler refill request",
+				content: "Hello, I need a refill on my albuterol inhaler.",
+				date: "2024-12-15T14:22:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000002",
+				conversation: null
+			},
+			{
+				id: "20000000-0000-0000-0000-000000000002",
+				subject: "Re: Inhaler refill request",
+				content: "I’ve sent a refill to your pharmacy.",
+				date: "2024-12-15T15:10:00",
+				read: false,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000002",
+				conversation: null
+			}
+		]
 	},
 	{
-		id: "msg-3",
+		id: "00000000-0000-0000-0000-000000000003",
 		patientId: "patient-3",
-		patientName: "Robert Wilson",
 		doctorId: "doctor-1",
-		doctorName: "Dr. Sarah Johnson",
-		subject: "Lab results inquiry",
-		content: "Dr. Johnson, I was wondering if my recent cholesterol test results are available yet?",
-		date: "2024-12-15T09:15:00",
-		read: false,
-		fromPatient: true
+		patient: null,
+		doctor: null,
+		messages: [
+			{
+				id: "30000000-0000-0000-0000-000000000001",
+				subject: "Lab results inquiry",
+				content: "Are my cholesterol test results available yet?",
+				date: "2024-12-15T09:15:00",
+				read: false,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000003",
+				conversation: null
+			},
+			{
+				id: "30000000-0000-0000-0000-000000000002",
+				subject: "Re: Lab results inquiry",
+				content: "They should be ready tomorrow morning.",
+				date: "2024-12-15T11:40:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000003",
+				conversation: null
+			}
+		]
 	},
 	{
-		id: "msg-4",
+		id: "00000000-0000-0000-0000-000000000004",
 		patientId: "patient-4",
-		patientName: "Maria Garcia",
 		doctorId: "doctor-3",
-		doctorName: "Dr. Emily Roberts",
-		subject: "Appointment rescheduling",
-		content: "I need to reschedule my appointment on December 23rd. Is there availability on the 26th instead?",
-		date: "2024-12-14T16:45:00",
-		read: true,
-		fromPatient: true
+		patient: null,
+		doctor: null,
+		messages: [
+			{
+				id: "40000000-0000-0000-0000-000000000001",
+				subject: "Appointment rescheduling",
+				content: "Can I move my appointment from the 23rd to the 26th?",
+				date: "2024-12-14T16:45:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000004",
+				conversation: null
+			},
+			{
+				id: "40000000-0000-0000-0000-000000000002",
+				subject: "Re: Appointment rescheduling",
+				content: "Yes, the 26th is available. I’ve updated your booking.",
+				date: "2024-12-14T17:10:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000004",
+				conversation: null
+			}
+		]
+	},
+	{
+		id: "00000000-0000-0000-0000-000000000005",
+		patientId: "patient-1",
+		doctorId: "doctor-2",
+		patient: null,
+		doctor: null,
+		messages: [
+			{
+				id: "50000000-0000-0000-0000-000000000001",
+				subject: "Side effects from new medication",
+				content: "I’ve been feeling dizzy since starting the new pills.",
+				date: "2024-12-13T08:20:00",
+				read: false,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000005",
+				conversation: null
+			}
+		]
 	}
 ];
 

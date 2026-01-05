@@ -13,7 +13,7 @@ export default function NotesPage() {
 			<PageHeader title={"Appointment Notes"} description="Notes from your healthcare providers after appointments" />
 
 			{data.length === 0 ? (
-				<Card>
+				<Card className="hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12">
 						<StickyNote className="h-12 w-12 text-card-foreground mb-4" />
 						<p className="text-lg font-medium text-foreground mb-2">No notes yet</p>
@@ -23,8 +23,12 @@ export default function NotesPage() {
 			) : (
 				<div className="space-y-4">
 					{data.map((d, index) => (
-						<Card key={d.id} className="transition-shadow animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
-							<CardContent className="p-5">
+						<Card
+							key={d.id}
+							className="transition-shadow animate-slide-up hover:shadow-none"
+							style={{ animationDelay: `${index * 0.1}s` }}
+						>
+							<CardContent className="p-5 pt-8 pr-10">
 								<div className="flex items-start gap-4 mb-4">
 									<Icon>
 										<Stethoscope className="h-5 w-5 text-primary" />
