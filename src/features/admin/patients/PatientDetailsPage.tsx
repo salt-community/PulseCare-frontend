@@ -1,20 +1,47 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { mockPatients, mockAppointments, mockMedications } from "../../../lib/api/mockData";
+import { mockPatients, mockAppointments } from "../../../lib/api/mockData";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert } from "lucide-react";
 import { AppointmentsTab } from "./appointments/AppointmentsTab";
 import { PrescriptionsTab } from "./prescriptions/PrescriptionsTab";
 import { EditPatientForm } from "./EditPatientForm";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@clerk/clerk-react";
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+const fetchMedications = async (id: string, token: string) => {
+	const res = await fetch(`${baseUrl}/Medications/${id}`, {
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-Type": "application/json"
+		}
+	});
+	if (!res.ok) throw new Error("Failed to fetch medications");
+	return res.json();
+};
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
+	const { getToken } = useAuth();
+
+	const medicationsQuery = useQuery({
+		queryKey: ["medications", patientId],
+		queryFn: async () => {
+			const token = await getToken({ template: "pulsecare-jwt-template" });
+			if (!token) throw new Error("No auth token");
+			return fetchMedications(patientId, token);
+		},
+		enabled: !!patientId
+	});
+
 	const navigate = useNavigate();
+
 	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions">("overview");
 	const patient = useMemo(() => mockPatients.find(p => p.id === patientId), [patientId]);
 	const appointments = useMemo(() => mockAppointments.filter(a => a.patientId === patientId), [patientId]);
-	const medications = useMemo(() => mockMedications, []);
 
 	if (!patient) {
 		return (
@@ -148,7 +175,14 @@ export function PatientDetailsPage() {
 
 				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
 
-				{activeTab === "prescriptions" && <PrescriptionsTab medications={medications} patient={patient} />}
+				{activeTab === "prescriptions" && (
+					<PrescriptionsTab
+						patient={patient}
+						medications={medicationsQuery.data}
+						isLoading={medicationsQuery.isLoading}
+						isError={medicationsQuery.isError}
+					/>
+				)}
 			</div>
 		</div>
 	);
