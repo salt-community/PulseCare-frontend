@@ -92,7 +92,7 @@ export default function AdminMessagesPage() {
 						required
 					/>
 
-					<DialogInput type="textarea" label="Subject" value={newMessageSubject} onChange={setNewMessageSubject} required />
+					<DialogInput type="text" label="Subject" value={newMessageSubject} onChange={setNewMessageSubject} required />
 
 					<DialogInput type="textarea" label="Message" value={newMessageContent} onChange={setNewMessageContent} required />
 
