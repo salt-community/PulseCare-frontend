@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Mail, MailOpen, Plus, User } from "lucide-react";
 import { format } from "date-fns";
 import PageHeader from "../../../components/shared/PageHeader";
@@ -26,6 +26,7 @@ export default function MessagesPage() {
 	const [newMessageDoctorId, setNewMessageDoctorId] = useState("");
 	const [newMessageSubject, setNewMessageSubject] = useState("");
 	const [newMessageContent, setNewMessageContent] = useState("");
+	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
 	const handleNewMessage = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -71,6 +72,15 @@ export default function MessagesPage() {
 		setReplyText("");
 		setIsThreadOpen(false);
 	};
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+	};
+
+	useEffect(() => {
+		if (isThreadOpen) {
+			setTimeout(scrollToBottom, 50);
+		}
+	}, [isThreadOpen, conversation?.messages.length]);
 
 	return (
 		<div className="space-y-4">
@@ -163,7 +173,7 @@ export default function MessagesPage() {
 				showTrigger={false}
 			>
 				{conversation && latest ? (
-					<div className="space-y-4">
+					<div className="flex flex-col h-[70vh] pb-[env(safe-area-inset-bottom)]">
 						<div className="flex items-center gap-3">
 							<div className="p-3 rounded-full bg-primary/10">
 								<User className="h-5 w-5 text-primary" />
@@ -174,7 +184,7 @@ export default function MessagesPage() {
 							</div>
 						</div>
 
-						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
+						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1 flex-1">
 							{conversation.messages.map(msg => {
 								const isPatient = msg.fromPatient;
 
@@ -193,6 +203,7 @@ export default function MessagesPage() {
 									</div>
 								);
 							})}
+							<div ref={messagesEndRef} />
 						</div>
 
 						<form onSubmit={handleReply} className="space-y-2">
