@@ -441,20 +441,92 @@ export const mockConversations = [
 				subject: "Question about medication timing",
 				content: "Hi doctor, when should I take my Metformin?",
 				date: "2024-12-16T10:30:00",
-				read: false,
+				read: true,
 				fromPatient: true,
-				conversationId: "00000000-0000-0000-0000-000000000001",
-				conversation: null
+				conversationId: "00000000-0000-0000-0000-000000000001"
 			},
 			{
 				id: "10000000-0000-0000-0000-000000000002",
 				subject: "Re: Question about medication timing",
 				content: "You should take Metformin with food.",
 				date: "2024-12-16T12:00:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000003",
+				subject: "Re: Question about medication timing",
+				content: "Does it matter if it's breakfast or dinner? I usually eat a very light breakfast.",
+				date: "2024-12-16T12:45:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000004",
+				subject: "Re: Question about medication timing",
+				content:
+					"Since you are on a once-daily dose, I recommend taking it with your largest meal, which sounds like dinner. This helps minimize stomach upset.",
+				date: "2024-12-16T14:20:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000005",
+				subject: "Re: Question about medication timing",
+				content: "I've been feeling a bit nauseous after the evening dose. Is that normal in the beginning?",
+				date: "2024-12-18T09:15:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000006",
+				subject: "Re: Question about medication timing",
+				content: "Yes, mild nausea is a common side effect during the first week. Are you managing to keep your fluids up?",
+				date: "2024-12-18T11:00:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000007",
+				subject: "Re: Question about medication timing",
+				content: "Yes, I'm drinking plenty of water. Should I stop the medication if it gets worse?",
+				date: "2024-12-18T13:30:00",
+				read: true,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000008",
+				subject: "Re: Question about medication timing",
+				content:
+					"Please continue for now. If you experience severe vomiting or diarrhea, stop and call the clinic immediately. Let's touch base in 3 days.",
+				date: "2024-12-18T15:45:00",
+				read: true,
+				fromPatient: false,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000009",
+				subject: "Re: Question about medication timing",
+				content: "The nausea has completely passed now! I feel much better today.",
+				date: "2024-12-21T08:00:00",
+				read: false,
+				fromPatient: true,
+				conversationId: "00000000-0000-0000-0000-000000000001"
+			},
+			{
+				id: "10000000-0000-0000-0000-000000000010",
+				subject: "Re: Question about medication timing",
+				content: "That is great news. It means your body has adjusted. Keep taking it with your dinner as planned.",
+				date: "2024-12-21T09:30:00",
 				read: false,
 				fromPatient: false,
-				conversationId: "00000000-0000-0000-0000-000000000001",
-				conversation: null
+				conversationId: "00000000-0000-0000-0000-000000000001"
 			}
 		]
 	},
