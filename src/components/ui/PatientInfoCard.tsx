@@ -11,7 +11,7 @@ interface PatientInfoCardProps {
 export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => {
 	return (
 		<Link to={`/admin/patients/${patient.id}`} className="block transition-all">
-			<Card className="transition-all hover:shadow-none">
+			<Card className="transition-all">
 				<CardContent className="p-5">
 					<div className="flex items-center gap-4">
 						<div className="p-2.5 rounded-full bg-primary/10 h-10 w-10 shrink-0 flex items-center justify-center">
