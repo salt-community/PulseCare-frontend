@@ -38,25 +38,8 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 
-		// TODO: Replace hardcoded IDs with actual authenticated user/patient from Clerk/DB mapping
-
-		// Hardcoded IDs for testing. Works with local backend SeedData.
-
-		const HARDCODED_PATIENT_ID = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58"; // Alice Johnson from backend SeedData
-		const HARDCODED_DOCTOR_ID = "8c0adcec-45f1-4723-9896-4265df0f9800"; // Dr. Michael Brown from backend SeedData
-
-		// Alternative: Fetch doctor by Clerk email match, use selected patient from dropdown
-		// const doctorResponse = await fetch(`http://localhost:5002/api/Users/by-email/${user?.emailAddresses[0]?.emailAddress}`);
-		// const doctorData = await doctorResponse.json();
-		// const doctorId = doctorData.id;
-
-		// 		const [patients, setPatients] = useState([]);
-
-		// useEffect(() => {
-		//   fetch('http://localhost:5002/api/Patients')
-		//     .then(res => res.json())
-		//     .then(data => setPatients(data));
-		// }, []);
+		const HARDCODED_PATIENT_ID = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58";
+		const HARDCODED_DOCTOR_ID = "8c0adcec-45f1-4723-9896-4265df0f9800";
 
 		console.log("Using hardcoded patient ID:", HARDCODED_PATIENT_ID);
 		console.log("Using hardcoded doctor ID:", HARDCODED_DOCTOR_ID);
@@ -66,7 +49,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 			patientId: HARDCODED_PATIENT_ID,
 			// patientId: patient?.id,
 			doctorId: HARDCODED_DOCTOR_ID,
-			// doctorId: user?.publicMetadata?.doctorId as string,
+			// doctorId: user?.id,
 			date: appointmentDate.toISOString(),
 			time: time,
 			type: type,
