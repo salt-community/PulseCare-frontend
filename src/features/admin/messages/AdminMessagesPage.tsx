@@ -168,7 +168,7 @@ export default function AdminMessagesPage() {
 				showTrigger={false}
 			>
 				{conversation && latest ? (
-					<div className="flex flex-col max-h-[75vh] pb-20 md:pb-4">
+					<div className="flex flex-col max-h-[75vh] pb-18 md:pb-4">
 						<div className="flex items-center gap-3">
 							<div className="p-3 rounded-full bg-primary/10">
 								<User className="h-5 w-5 text-primary" />
