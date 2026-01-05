@@ -32,7 +32,7 @@ export function DialogModal({
 			{shouldRenderTrigger && <Dialog.Trigger asChild>{trigger ?? <Button type="button">{buttonText}</Button>}</Dialog.Trigger>}
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed left-0 right-0 bottom-0 bg-black/50 top-19.25" />
-				<Dialog.Content className="fixed left-1/2 top-[calc(19.25*0.25rem+50%)] -translate-x-1/2 -translate-y-1/2 w-[min(95%,32rem)] max-h-[calc(100vh-19.25*0.25rem-1rem)] overflow-auto bg-background-secondary rounded-2xl p-4 z-50">
+				<Dialog.Content className="fixed left-1/2 top-[calc((100vh-19.25*0.25rem)/2+19.25*0.25rem)] -translate-x-1/2 -translate-y-1/2 w-[min(95%,32rem)] bg-background-secondary rounded-2xl p-4 z-50">
 					<Dialog.Title className="text-foreground font-semibold text-2xl text-center">{title}</Dialog.Title>
 					{description && <Dialog.Description className="text-foreground">{description}</Dialog.Description>}
 					{children}
