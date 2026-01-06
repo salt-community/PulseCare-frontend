@@ -7,7 +7,7 @@ const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/Appointments`;
 export const appointmentApi = {
 	// GET /api/Appointments
 	getAllAppointments: async (token: string): Promise<Appointment[]> => {
-		const response = await fetch(API_BASE, {
+		const response = await fetch(`${API_BASE}/all`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		if (!response.ok) throw new Error("Failed to fetch appointments");

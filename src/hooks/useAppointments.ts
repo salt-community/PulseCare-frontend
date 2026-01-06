@@ -21,7 +21,7 @@ export const useAllAppointments = () => {
 	return useQuery({
 		queryKey: appointmentKeys.lists(),
 		queryFn: async () => {
-			const token = await getToken();
+			const token = await getToken({ template: "pulsecare-jwt-template" });
 			if (!token) throw new Error("Not authenticated");
 			return appointmentApi.getAllAppointments(token);
 		}
