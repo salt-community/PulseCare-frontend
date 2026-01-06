@@ -4,12 +4,12 @@ import type { PatientDashboard } from "../lib/types/patients";
 import { useAuth } from "@clerk/clerk-react";
 
 export const usePatientDashboard = () => {
-	const { getToken } = useAuth();
+	const { getToken, userId } = useAuth();
 
 	return useQuery<PatientDashboard>({
-		queryKey: ["patientDashboard"],
+		queryKey: ["patientDashboard", userId],
 		queryFn: async () => {
-			const token = await getToken();
+			const token = await getToken({ template: "pulsecare-jwt-template" });
 			if (!token) throw new Error("No auth token available");
 			return fetchPatientDashboard(token);
 		},
