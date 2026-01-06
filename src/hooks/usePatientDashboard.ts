@@ -8,6 +8,7 @@ export const usePatientDashboard = () => {
 
 	return useQuery<PatientDashboard>({
 		queryKey: ["patientDashboard", userId],
+		enabled: !!userId,
 		queryFn: async () => {
 			const token = await getToken({ template: "pulsecare-jwt-template" });
 			if (!token) throw new Error("No auth token available");
