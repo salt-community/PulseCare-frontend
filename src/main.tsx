@@ -6,6 +6,8 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./router/routeTree.ts";
 import { clerkAppearance } from "./lib/utils.ts";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const queryClient = new QueryClient();
@@ -15,6 +17,7 @@ createRoot(document.getElementById("root")!).render(
 		<ClerkProvider publishableKey={clerkPubKey} appearance={clerkAppearance}>
 			<QueryClientProvider client={queryClient}>
 				<RouterProvider router={router} />
+				<ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover />
 			</QueryClientProvider>
 		</ClerkProvider>
 	</StrictMode>
