@@ -15,14 +15,14 @@ export const AddHealthStat = ({ patient }: AddHealthStatProps) => {
 	const createMutation = useCreateHealthStat(patient.id);
 
 	const healthStatTypes = [
-		{ value: "BloodPressure", label: "Blood Pressure", unit: "mmHg" },
-		{ value: "BloodSugar", label: "Blood Sugar", unit: "mg/dL" },
-		{ value: "HeartRate", label: "Heart Rate", unit: "bpm" },
-		{ value: "Weight", label: "Weight", unit: "lbs" },
-		{ value: "Temperature", label: "Temperature", unit: "°F" }
+		{ value: "BloodPressure" as const, label: "Blood Pressure", unit: "mmHg" },
+		{ value: "Glucose" as const, label: "Glucose", unit: "mg/dL" },
+		{ value: "Cholesterol" as const, label: "Cholesterol", unit: "mg/dL" },
+		{ value: "HeartRate" as const, label: "Heart Rate", unit: "bpm" },
+		{ value: "Weight" as const, label: "Weight", unit: "lbs" }
 	];
 
-	const statusOptions = ["Normal", "Warning", "Critical"];
+	const statusOptions = ["Normal", "Warning", "Critical"] as const;
 
 	const [date, setDate] = useState<string>("");
 	const [type, setType] = useState<string>("");
@@ -141,7 +141,7 @@ export const AddHealthStat = ({ patient }: AddHealthStatProps) => {
 									</option>
 									{statusOptions.map(s => (
 										<option key={s} value={s}>
-											{s.charAt(0).toUpperCase() + s.slice(1)}
+											{s}
 										</option>
 									))}
 								</select>
