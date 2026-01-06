@@ -5,7 +5,7 @@ import type { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest } 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/Appointments`;
 
 export const appointmentApi = {
-	// GET /api/Appointments
+	// GET /api/Appointments/all
 	getAllAppointments: async (token: string): Promise<Appointment[]> => {
 		const response = await fetch(`${API_BASE}/all`, {
 			headers: { Authorization: `Bearer ${token}` }
@@ -14,9 +14,9 @@ export const appointmentApi = {
 		return response.json();
 	},
 
-	// GET /api/Appointments/{patientId}
-	getPatientAppointments: async (patientId: string, token: string): Promise<Appointment[]> => {
-		const response = await fetch(`${API_BASE}/${patientId}`, {
+	// GET /api/Appointments/all/patient
+	getPatientAppointments: async (token: string): Promise<Appointment[]> => {
+		const response = await fetch(`${API_BASE}/all/patient`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		if (!response.ok) throw new Error("Failed to fetch patient appointments");
