@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Mail, MailOpen, Plus, User } from "lucide-react";
 import { format } from "date-fns";
 import PageHeader from "../../../components/shared/PageHeader";
@@ -7,19 +7,23 @@ import { Pill } from "../../../components/ui/Pill";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useMessages } from "../../../hooks/useMessages";
-import { mockDoctors } from "../../../lib/api/mockData";
 import { SelectInput } from "../../../components/ui/SelectInput";
+import { mockDoctors } from "../../../lib/api/mockData";
+import { useConversations } from "../../../hooks/useConversations";
+import { useChat } from "../../../hooks/useChat";
+import type { Conversation, Message } from "../../../lib/types/conversation";
 
-const CURRENT_PATIENT_ID = "patient-1";
+const CURRENT_PATIENT_ID = "183977c2-a4a1-408b-89fb-7d4a136738df";
 
 export default function MessagesPage() {
-	const { conversations, unreadCount, markConversationAsRead, sendMessage } = useMessages({
+	const { conversations, unreadCount, startConversation } = useConversations({
 		role: "patient",
-		patientId: CURRENT_PATIENT_ID
+		userId: CURRENT_PATIENT_ID
 	});
 
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
+	const chat = useChat(selectedConvId ?? "", CURRENT_PATIENT_ID, "patient");
+
 	const [replyText, setReplyText] = useState("");
 	const [isThreadOpen, setIsThreadOpen] = useState(false);
 	const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -27,15 +31,34 @@ export default function MessagesPage() {
 	const [newMessageSubject, setNewMessageSubject] = useState("");
 	const [newMessageContent, setNewMessageContent] = useState("");
 
+	const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	};
+
+	useEffect(() => {
+		if (isThreadOpen) {
+			const timer = setTimeout(scrollToBottom, 100);
+			return () => clearTimeout(timer);
+		}
+	}, [chat.messages, isThreadOpen]);
+
+	const openThread = (id: string) => {
+		setSelectedConvId(id);
+		setIsThreadOpen(true);
+		chat.markAsRead();
+	};
+
 	const handleNewMessage = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		sendMessage({
-			subject: newMessageSubject,
-			content: newMessageContent,
+		startConversation({
 			patientId: CURRENT_PATIENT_ID,
 			doctorId: newMessageDoctorId,
-			sender: "patient"
+			subject: newMessageSubject,
+			content: newMessageContent,
+			fromPatient: true
 		});
 
 		setIsNewMessageOpen(false);
@@ -44,40 +67,31 @@ export default function MessagesPage() {
 		setNewMessageContent("");
 	};
 
-	const openThread = (id: string) => {
-		setSelectedConvId(id);
-		setIsThreadOpen(true);
-		markConversationAsRead(id);
-	};
-
-	const conversation = conversations.find(c => c.id === selectedConvId);
-	const latest = conversation?.messages[conversation.messages.length - 1];
-
-	const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? id;
-
 	const handleReply = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!conversation || !latest) return;
+		if (!selectedConvId) return;
 
-		sendMessage({
-			conversationId: conversation.id,
-			subject: latest.subject.startsWith("Re:") ? latest.subject : `Re: ${latest.subject}`,
+		const last = chat.messages[chat.messages.length - 1];
+		const subject = last.subject.startsWith("Re:") ? last.subject : `Re: ${last.subject}`;
+
+		chat.sendMessage({
+			subject,
 			content: replyText,
-			patientId: conversation.patientId,
-			doctorId: conversation.doctorId,
-			sender: "patient"
+			fromPatient: true
 		});
 
 		setReplyText("");
-		setIsThreadOpen(false);
 	};
 
+	// const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? id;
+	const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? "Doctor";
 	return (
 		<div className="space-y-4">
 			<PageHeader
 				title="Messages"
 				description={unreadCount > 0 ? `You have ${unreadCount} unread message(s)` : "Send messages to your healthcare providers"}
 			/>
+
 			<div className="flex justify-end">
 				<Button variant="default" className="flex items-center gap-1 px-3 py-1.5 text-sm" onClick={() => setIsNewMessageOpen(true)}>
 					<Plus className="h-4 w-4" />
@@ -113,10 +127,9 @@ export default function MessagesPage() {
 				</Card>
 			) : (
 				<div className="space-y-4">
-					{conversations.map(conv => {
-						const last = conv.messages[conv.messages.length - 1];
-
-						const hasUnread = conv.messages.some(m => !m.fromPatient && !m.read);
+					{conversations.map((conv: Conversation) => {
+						const last = conv.latestMessage;
+						const hasUnread = conv.unreadCount > 0;
 
 						return (
 							<Card key={conv.id} className="cursor-pointer" onClick={() => openThread(conv.id)}>
@@ -139,13 +152,15 @@ export default function MessagesPage() {
 											</div>
 
 											<p
-												className={`text-sm truncate ${hasUnread ? "text-black font-semibold" : "text-muted-foreground"}`}
+												className={`text-sm truncate ${
+													hasUnread ? "text-black font-semibold" : "text-muted-foreground"
+												}`}
 											>
-												{last.subject}
+												{last?.subject}
 											</p>
 
 											<p className={`text-xs ${hasUnread ? "text-black" : "text-muted-foreground"}`}>
-												{format(new Date(last.date), "MMM d, HH:mm")}
+												{last ? format(new Date(last.date), "MMM d, HH:mm") : ""}
 											</p>
 										</div>
 									</div>
@@ -158,24 +173,29 @@ export default function MessagesPage() {
 
 			<DialogModal
 				open={isThreadOpen}
-				onOpenChange={setIsThreadOpen}
-				title={latest ? latest.subject : "Conversation"}
+				onOpenChange={open => {
+					setIsThreadOpen(open);
+					if (!open) setSelectedConvId(null);
+				}}
+				title="Conversation"
 				showTrigger={false}
 			>
-				{conversation && latest ? (
+				{chat.messages.length > 0 ? (
 					<div className="space-y-4">
 						<div className="flex items-center gap-3">
 							<div className="p-3 rounded-full bg-primary/10">
 								<User className="h-5 w-5 text-primary" />
 							</div>
 							<div>
-								<p className="font-semibold">{getDoctorName(conversation.doctorId)}</p>
+								<p className="font-semibold">
+									{getDoctorName(conversations.find((c: Conversation) => c.id === selectedConvId)?.doctorId ?? "")}
+								</p>
 								<p className="text-sm text-muted-foreground">Conversation</p>
 							</div>
 						</div>
 
 						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
-							{conversation.messages.map(msg => {
+							{chat.messages.map((msg: Message) => {
 								const isPatient = msg.fromPatient;
 
 								return (
@@ -193,15 +213,19 @@ export default function MessagesPage() {
 									</div>
 								);
 							})}
+							<div ref={messagesEndRef} />
 						</div>
-
+						{chat.isTyping && <p className="text-xs text-muted-foreground italic px-1">Typing...</p>}
 						<form onSubmit={handleReply} className="space-y-2">
 							<DialogInput
 								type="textarea"
 								label="Your reply"
 								placeholder="Type your reply..."
 								value={replyText}
-								onChange={setReplyText}
+								onChange={val => {
+									setReplyText(val);
+									chat.sendTyping();
+								}}
 								required
 							/>
 							<Button variant="submit" className="w-full">
