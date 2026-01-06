@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { mockPatients, mockAppointments } from "../../../lib/api/mockData";
+import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert } from "lucide-react";
@@ -9,55 +8,72 @@ import { PrescriptionsTab } from "./prescriptions/PrescriptionsTab";
 import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
+import Spinner from "../../../components/shared/Spinner";
+import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const fetchMedications = async (id: string, token: string) => {
-	const res = await fetch(`${baseUrl}/Medications/${id}`, {
-		headers: {
-			"Authorization": `Bearer ${token}`,
-			"Content-Type": "application/json"
-		}
+const fetchPatientOverview = async (patientId: string, token: string): Promise<PatientOverviewDto> => {
+	const res = await fetch(`${baseUrl}/patients/${patientId}/overview`, {
+		headers: { Authorization: `Bearer ${token}` }
 	});
-	if (!res.ok) throw new Error("Failed to fetch medications");
+	if (!res.ok) throw new Error("Failed to fetch patient overview");
 	return res.json();
 };
+
+const toPatientDetailsVm = (id: string, dto: PatientOverviewDto): PatientDetailsVm => ({
+	id,
+	...dto,
+	phone: dto.phone ?? "",
+	emergencyContact: dto.emergencyContact ?? { name: "", phone: "", relationship: "" }
+});
+
+const tabs = [
+	{ id: "overview", label: "Overview", icon: <User /> },
+	{ id: "appointments", label: "Appointments", icon: <Calendar /> },
+	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> }
+] as const;
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
 	const { getToken } = useAuth();
+	const navigate = useNavigate();
+	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions">("overview");
 
-	const medicationsQuery = useQuery({
-		queryKey: ["medications", patientId],
+	const patientQuery = useQuery({
+		queryKey: ["patient-overview", patientId],
 		queryFn: async () => {
 			const token = await getToken({ template: "pulsecare-jwt-template" });
 			if (!token) throw new Error("No auth token");
-			return fetchMedications(patientId, token);
+			return fetchPatientOverview(patientId, token);
 		},
-		enabled: !!patientId
+		enabled: Boolean(patientId)
 	});
 
-	const navigate = useNavigate();
+	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
 
-	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions">("overview");
-	const patient = useMemo(() => mockPatients.find(p => p.id === patientId), [patientId]);
-	const appointments = useMemo(() => mockAppointments.filter(a => a.patientId === patientId), [patientId]);
-
-	if (!patient) {
+	if (patientQuery.isLoading) {
 		return (
 			<Card className="max-w-md mx-auto mt-8 rounded-xl hover:shadow-none">
-				<CardContent className="p-5 text-center">
-					<p className="text-foreground text-base font-medium">Patient not found</p>
+				<CardContent className="p-5 text-center flex flex-col items-center justify-center">
+					<p className="text-foreground text-base font-medium">Loading patient...</p>
+					<Spinner />
 				</CardContent>
 			</Card>
 		);
 	}
 
-	const tabs = [
-		{ id: "overview", label: "Overview", icon: <User /> },
-		{ id: "appointments", label: "Appointments", icon: <Calendar /> },
-		{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> }
-	] as const;
+	if (patientQuery.isError || !patient) {
+		return (
+			<Card className="max-w-md mx-auto mt-8 rounded-xl hover:shadow-none">
+				<CardContent className="p-5 text-center">
+					<p className="text-destructive text-base font-medium">
+						{patientQuery.isError ? "Failed to load patient" : "Patient not found"}
+					</p>
+				</CardContent>
+			</Card>
+		);
+	}
 
 	return (
 		<div className="space-y-6">
@@ -68,8 +84,7 @@ export function PatientDetailsPage() {
 				← Back to Patients
 			</button>
 
-			{/* Header Section */}
-			<div className="flex flex-row justify-between  gap-4">
+			<div className="flex flex-row justify-between gap-4">
 				<div>
 					<h1 className="text-3xl font-semibold text-foreground mb-2">{patient.name}</h1>
 					<p className="text-sm text-muted-foreground">Patient since {patient.createdAt}</p>
@@ -77,7 +92,6 @@ export function PatientDetailsPage() {
 				<EditPatientForm patient={patient} />
 			</div>
 
-			{/* Tabs */}
 			<div className="border-b border-foreground/10">
 				<ul className="flex max-[500px]:justify-evenly gap-2 -mb-px">
 					{tabs.map(tab => (
@@ -101,7 +115,6 @@ export function PatientDetailsPage() {
 			<div className="space-y-6">
 				{activeTab === "overview" && (
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-						{/* Contact Info Card */}
 						<Card className="hover:shadow-none">
 							<CardHeader className="p-5 pb-3">
 								<CardTitle className="text-base flex items-center gap-2 text-foreground">
@@ -110,22 +123,12 @@ export function PatientDetailsPage() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="p-5 pt-0 space-y-4 text-sm">
-								<div>
-									<p className="text-foreground font-semibold mb-1">Email</p>
-									<p className="text-card-foreground">{patient.email}</p>
-								</div>
-								<div>
-									<p className="text-foreground font-semibold mb-1">Phone</p>
-									<p className="text-card-foreground">{patient.phone}</p>
-								</div>
-								<div>
-									<p className="text-foreground font-semibold mb-1">Date of Birth</p>
-									<p className="text-card-foreground">{patient.dateOfBirth}</p>
-								</div>
+								<InfoRow label="Email" value={patient.email} />
+								<InfoRow label="Phone" value={patient.phone} />
+								<InfoRow label="Date of Birth" value={patient.dateOfBirth} />
 							</CardContent>
 						</Card>
 
-						{/* Health Info Card */}
 						<Card className="hover:shadow-none">
 							<CardHeader className="p-5 pb-3">
 								<CardTitle className="text-base flex items-center gap-2 text-foreground">
@@ -134,23 +137,14 @@ export function PatientDetailsPage() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="p-5 pt-0 space-y-4 text-sm">
-								<div>
-									<p className="text-foreground font-semibold mb-2">Blood Type</p>
-									<p className="text-card-foreground font-medium">{patient.bloodType}</p>
-								</div>
+								<InfoRow label="Blood Type" value={patient.bloodType} />
 
 								<div className="border-t border-foreground/10 pt-4">
 									<p className="text-foreground font-semibold mb-2 flex items-center gap-2">
 										<AlertTriangle className="h-4 w-4" />
 										Conditions
 									</p>
-									<div className="flex flex-wrap gap-2">
-										{patient.conditions.map(c => (
-											<Pill key={c} variant="secondary">
-												{c}
-											</Pill>
-										))}
-									</div>
+									<PillList items={patient.conditions} variant="secondary" emptyText="No known conditions" />
 								</div>
 
 								<div className="border-t border-foreground/10 pt-4">
@@ -158,32 +152,36 @@ export function PatientDetailsPage() {
 										<CircleAlert className="h-4 w-4" />
 										Allergies
 									</p>
-									{patient.allergies.length === 0 ? (
-										<p className="text-card-foreground">No known allergies</p>
-									) : (
-										<div className="flex flex-wrap gap-2">
-											{patient.allergies.map(a => (
-												<Pill key={a}>{a}</Pill>
-											))}
-										</div>
-									)}
+									<PillList items={patient.allergies} emptyText="No known allergies" />
 								</div>
 							</CardContent>
 						</Card>
 					</div>
 				)}
 
-				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
-
-				{activeTab === "prescriptions" && (
-					<PrescriptionsTab
-						patient={patient}
-						medications={medicationsQuery.data}
-						isLoading={medicationsQuery.isLoading}
-						isError={medicationsQuery.isError}
-					/>
-				)}
+				{activeTab === "appointments" && <AppointmentsTab appointments={[]} patient={patient} />}
+				{activeTab === "prescriptions" && <PrescriptionsTab patient={patient} medications={patient.medications} />}
 			</div>
 		</div>
 	);
 }
+
+const InfoRow = ({ label, value }: { label: string; value: string }) => (
+	<div>
+		<p className="text-foreground font-semibold mb-1">{label}</p>
+		<p className="text-card-foreground">{value}</p>
+	</div>
+);
+
+const PillList = ({ items, variant, emptyText }: { items: string[]; variant?: "secondary"; emptyText: string }) =>
+	items.length === 0 ? (
+		<p className="text-card-foreground">{emptyText}</p>
+	) : (
+		<div className="flex flex-wrap gap-2">
+			{items.map(item => (
+				<Pill key={item} variant={variant}>
+					{item}
+				</Pill>
+			))}
+		</div>
+	);
