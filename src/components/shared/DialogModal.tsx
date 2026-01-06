@@ -34,9 +34,9 @@ export function DialogModal({
 				<Dialog.Overlay className="fixed left-0 right-0 bottom-0 bg-black/50 top-19.25" />
 				<Dialog.Content
 					onOpenAutoFocus={e => e.preventDefault()}
-					className="fixed left-1/2 top-[calc((100vh-19.25*0.25rem)/2+19.25*0.25rem)] -translate-x-1/2 -translate-y-1/2 w-[min(95%,32rem)] bg-background-secondary rounded-2xl p-4 z-50"
+					className="fixed left-1/2 top-[calc((100vh-19.25*0.25rem)/2+19.25*0.25rem)] -translate-x-1/2 -translate-y-51/100 w-[min(95%,32rem)] bg-background-secondary rounded-2xl p-4 z-50 overflow-y-auto max-h-[calc(100vh-19.25*0.25rem-2rem)]"
 				>
-					<Dialog.Title className="text-foreground font-semibold text-2xl text-center">{title}</Dialog.Title>
+					<Dialog.Title className="text-foreground font-semibold text-lg md:text-2xl text-center">{title}</Dialog.Title>
 					{description && <Dialog.Description className="text-foreground">{description}</Dialog.Description>}
 					{children}
 					<Dialog.Close asChild>
