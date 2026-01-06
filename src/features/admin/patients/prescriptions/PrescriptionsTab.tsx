@@ -1,22 +1,16 @@
 import { LucidePill, Trash } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/Card";
-import type { Medication, Patient } from "../../../../lib/api/mockData";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
 import { Button } from "../../../../components/ui/PrimaryButton";
 import { EditPrescriptionForm } from "./EditPrescriptionForm";
-import Spinner from "../../../../components/shared/Spinner";
+import type { Medication, PatientDetailsVm } from "../../../../lib/types";
 
-export const PrescriptionsTab = ({
-	patient,
-	medications,
-	isLoading,
-	isError
-}: {
-	patient: Patient;
+type PrescriptionsTabProps = {
+	patient: PatientDetailsVm;
 	medications: Medication[];
-	isLoading: boolean;
-	isError: boolean;
-}) => {
+};
+
+export const PrescriptionsTab = ({ patient, medications }: PrescriptionsTabProps) => {
 	return (
 		<>
 			<div className="w-fit">
@@ -32,16 +26,7 @@ export const PrescriptionsTab = ({
 				</CardHeader>
 
 				<CardContent className="p-6 pt-0">
-					{isLoading && (
-						<>
-							<p>Loading prescriptions...</p>
-							<Spinner />
-						</>
-					)}
-
-					{isError && <p className="text-destructive text-sm">Failed to load medications</p>}
-
-					{!isLoading && medications.length === 0 ? (
+					{medications.length === 0 ? (
 						<p className="text-muted-foreground text-sm">No medications prescribed</p>
 					) : (
 						<div className="space-y-4">
