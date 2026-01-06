@@ -39,12 +39,28 @@ export const EditAppointment = ({ appointment, open, onOpenChange }: EditAppoint
 
 		if (!appointment) return;
 
+		// Map string enums to numbers for backend
+		const typeMap: Record<AppointmentType, number> = {
+			Checkup: 0,
+			FollowUp: 1,
+			Consultation: 2,
+			Lab: 3
+		};
+
+		const statusMap: Record<AppointmentStatus, number> = {
+			Scheduled: 0,
+			Completed: 1,
+			Cancelled: 2
+		};
+
 		const appointmentDate = new Date(date);
+		const timeWithSeconds = time.length === 5 ? `${time}:00` : time;
+
 		const updatedAppointment = {
 			date: appointmentDate.toISOString(),
-			time: time,
-			type: type,
-			status: status,
+			time: timeWithSeconds,
+			type: typeMap[type],
+			status: statusMap[status],
 			reason: reason || undefined
 		};
 
@@ -127,13 +143,9 @@ export const EditAppointment = ({ appointment, open, onOpenChange }: EditAppoint
 					placeholder="Short reason for the visit"
 				/>
 
-				<button
-					type="submit"
-					className="mt-4 w-full bg-primary text-white rounded-md py-2 cursor-pointer hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-					disabled={updateMutation.isPending}
-				>
+				<Button type="submit" className="mt-4 w-full" disabled={updateMutation.isPending}>
 					{updateMutation.isPending ? "Updating..." : "Update"}
-				</button>
+				</Button>
 			</form>
 		</DialogModal>
 	);
