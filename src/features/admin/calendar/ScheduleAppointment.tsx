@@ -2,10 +2,9 @@ import { Plus } from "lucide-react";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import type { Patient } from "../../../lib/api/mockData";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { mockPatients } from "../../../lib/api/mockData";
 import { useCreateAppointment } from "../../../hooks/useAppointments";
+import { usePatients } from "../../../hooks/usePatients";
 import type { AppointmentType } from "../../../lib/types/appointment";
 
 type AppointmentProps = {
@@ -14,12 +13,12 @@ type AppointmentProps = {
 
 export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 	const [open, setOpen] = useState(false);
-	const [patient, setPatient] = useState<Patient | null>(null);
+	const [selectedPatientId, setSelectedPatientId] = useState<string>("");
 
 	const createMutation = useCreateAppointment();
+	const { data: patients, isLoading: isPatientsLoading } = usePatients();
 
 	const appointmentTypes: AppointmentType[] = ["Checkup", "FollowUp", "Consultation", "Lab"];
-	const patients = mockPatients;
 
 	const [date, setDate] = useState<string>(currentDate.toISOString().split("T")[0]);
 	const [time, setTime] = useState<string>("");
@@ -27,6 +26,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 	const [reason, setReason] = useState<string>("");
 
 	const resetForm = () => {
+		setSelectedPatientId("");
 		setDate("");
 		setTime("");
 		setType("Checkup");
@@ -35,30 +35,26 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-
-		const HARDCODED_PATIENT_ID = "8aa6b85e-52f9-40e4-b2f4-5fb767dd7e58";
-
-		console.log("Using hardcoded patient ID:", HARDCODED_PATIENT_ID);
+		if (!selectedPatientId) {
+			alert("Please select a patient");
+			return;
+		}
 
 		const appointmentDate = new Date(date);
 		const newAppointment = {
-			patientId: HARDCODED_PATIENT_ID,
-			// patientId: patient?.id,
+			patientId: selectedPatientId,
 			date: appointmentDate.toISOString(),
 			time: time,
 			type: type,
 			reason: reason || undefined
 		};
 
-		console.log("Sending appointment:", newAppointment);
-
 		try {
 			await createMutation.mutateAsync(newAppointment);
-			console.log("✅ Appointment created successfully!");
 			resetForm();
 			setOpen(false);
 		} catch (error) {
-			console.error("❌ Failed to create appointment:", error);
+			console.error("Failed to create appointment:", error);
 			alert("Failed to create appointment. Check console for details.");
 		}
 	};
@@ -77,11 +73,13 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 						<label className="block p-1 text-md font-semibold">Patient</label>
 						<select
 							className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
-							value={patient?.id || ""}
-							onChange={e => setPatient(patients.find(p => p.id === e.target.value) || null)}
+							value={selectedPatientId}
+							onChange={e => setSelectedPatientId(e.target.value)}
 							required
+							disabled={isPatientsLoading}
 						>
-							{patients.map(p => (
+							<option value="">{isPatientsLoading ? "Loading patients..." : "Select a patient"}</option>
+							{patients?.map(p => (
 								<option key={p.id} value={p.id}>
 									{p.name}
 								</option>
