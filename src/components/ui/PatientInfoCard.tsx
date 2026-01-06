@@ -2,13 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { Card, CardContent } from "./Card";
 import { User, Mail, Phone, ChevronRight } from "lucide-react";
 import { Pill } from "./Pill";
-import type { Patient } from "../../lib/api/mockData";
+import type { PatientCardVm } from "../../lib/types";
 
-interface PatientInfoCardProps {
-	patient: Patient;
-}
+type PatientInfoCardProps = {
+	patient: PatientCardVm;
+};
 
-export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => {
+export function PatientInfoCard({ patient }: PatientInfoCardProps) {
 	return (
 		<Link to={`/admin/patients/${patient.id}`} className="block transition-all">
 			<Card className="transition-all">
@@ -49,4 +49,4 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient }) => 
 			</Card>
 		</Link>
 	);
-};
+}
