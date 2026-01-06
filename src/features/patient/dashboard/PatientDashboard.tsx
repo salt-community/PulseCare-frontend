@@ -1,5 +1,5 @@
+import { usePatientDashboard } from "../../../hooks/usePatientDashboard";
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
-import { mockAppointments, mockHealthStats, mockMedications, mockNotes } from "../../../lib/api/mockData";
 import { Calendar, Clock, Clock4, MoveRight, PillIcon, Stethoscope, StickyNote } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
@@ -8,23 +8,55 @@ import { Button } from "../../../components/ui/PrimaryButton";
 import { Icon } from "../../../components/shared/Icon";
 import { statIcons } from "../../../lib/StatsIcons";
 import { Link } from "@tanstack/react-router";
+import { useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+import Spinner from "../../../components/shared/Spinner";
 
 export default function PatientDashboard() {
-	const data = mockAppointments;
+	const { user, isSignedIn } = useUser();
+	const { data, isLoading, error } = usePatientDashboard();
+
+	useEffect(() => {
+		if (error) {
+			toast.error("Something went wrong while loading your dashboard.");
+		}
+	}, [error]);
+
+	if (!isSignedIn) return null;
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
+
+	if (!data) return null;
+
 	const exampleUser = {
-		fullName: "John Doe"
+		fullName: data?.patient.name ?? "Patient",
 	};
-	const healthData = mockHealthStats;
-	const orderedHealthData = healthData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	const medicationData = mockMedications;
-	const notesData = mockNotes;
+
+	const healthData = data?.healthStats ?? [];
+	const orderedHealthData = [...healthData].sort(
+		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+	);
+
+	const medicationData = data?.medications ?? [];
+	const notesData = data?.notes ?? [];
+	const appointmentsData = data?.appointments ?? [];
 
 	return (
 		<>
-			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
+			<PageHeader
+				title={`Welcome back ${exampleUser.fullName}`}
+				description="Here's an overview of your health status"
+			/>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6 justify-items-stretch">
-				{orderedHealthData.map(d => {
+				{orderedHealthData.map((d) => {
 					const StatIcon = statIcons[d.type];
 					return (
 						<Card className="hover:shadow-none" key={d.id}>
@@ -49,21 +81,20 @@ export default function PatientDashboard() {
 					);
 				})}
 			</div>
+
 			<div className="grid gap-4 lg:grid-cols-2 lg:grid-rows-2">
 				<Card className="p-4 hover:shadow-none lg:row-span-1">
 					<CardTitle className="flex items-center gap-2 text-foreground p-3">
 						<PillIcon className="text-primary shrink-0" size={20} />
 						Medications
 						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/medications">
-								View all <MoveRight />
-							</Link>
+							<Link to="/patient/medications">View all <MoveRight /></Link>
 						</Button>
 					</CardTitle>
 					<div className="grid gap-4 px-2 pb-2">
 						{medicationData.map((medication, index) => (
 							<Card
-								key={medication.id}
+								key={medication.id ?? index}
 								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
@@ -98,13 +129,11 @@ export default function PatientDashboard() {
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
 						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/appointments">
-								View all <MoveRight />
-							</Link>
+							<Link to="/patient/appointments">View all <MoveRight /></Link>
 						</Button>
 					</CardTitle>
 					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
-						{data.map(d => (
+						{appointmentsData.map((d) => (
 							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
 								<CardContent className="p-5 flex flex-col">
 									<div className="flex justify-between mr-2">
@@ -115,7 +144,7 @@ export default function PatientDashboard() {
 											</span>
 										</div>
 										<Pill variant="secondary">
-											<span className="">{d.type}</span>
+											<span>{d.type}</span>
 										</Pill>
 									</div>
 									<div className="border-b border-foreground/20 mt-2 pb-2 flex flex-row items-center">
@@ -141,15 +170,13 @@ export default function PatientDashboard() {
 						<StickyNote className="text-primary shrink-0" size={20} />
 						Appointment Notes
 						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/notes">
-								View all <MoveRight />
-							</Link>
+							<Link to="/patient/notes">View all <MoveRight /></Link>
 						</Button>
 					</CardTitle>
 					<div className="space-y-4 px-2 pb-2">
 						{notesData.map((d, index) => (
 							<Card
-								key={d.id}
+								key={d.id ?? index}
 								className="transition-shadow animate-slide-up hover:shadow-none bg-background-secondary pt-2 pr-4"
 								style={{ animationDelay: `${index * 0.1}s` }}
 							>
@@ -158,7 +185,6 @@ export default function PatientDashboard() {
 										<Icon>
 											<Stethoscope className="h-5 w-5 text-primary" />
 										</Icon>
-
 										<div className="flex-1 min-w-0">
 											<div className="flex items-start justify-between gap-2 mb-1">
 												<h3 className="font-semibold text-foreground">{d.title}</h3>
@@ -167,7 +193,6 @@ export default function PatientDashboard() {
 												</span>
 											</div>
 											<p className="text-sm text-primary font-medium mb-3">{d.doctorName}</p>
-
 											{d.content && <span className="text-sm text-card-foreground">{d.content}</span>}
 										</div>
 									</div>

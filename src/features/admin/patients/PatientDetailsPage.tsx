@@ -1,15 +1,17 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
-import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert } from "lucide-react";
+import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert, SquareActivity } from "lucide-react";
 import { AppointmentsTab } from "./appointments/AppointmentsTab";
 import { PrescriptionsTab } from "./prescriptions/PrescriptionsTab";
+import { HealthStatsTab } from "./vitals/HealthStatsTab";
 import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
 import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
+import { mockAppointments, mockHealthStats } from "../../../lib/api/mockData";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,14 +33,18 @@ const toPatientDetailsVm = (id: string, dto: PatientOverviewDto): PatientDetails
 const tabs = [
 	{ id: "overview", label: "Overview", icon: <User /> },
 	{ id: "appointments", label: "Appointments", icon: <Calendar /> },
-	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> }
+	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> },
+	{ id: "vitals", label: "Vitals", icon: <SquareActivity /> }
 ] as const;
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
 	const { getToken } = useAuth();
 	const navigate = useNavigate();
-	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions">("overview");
+	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions" | "vitals">("overview");
+
+	const healthStats = useMemo(() => mockHealthStats, []);
+	const appointments = useMemo(() => mockAppointments, []);
 
 	const patientQuery = useQuery({
 		queryKey: ["patient-overview", patientId],
@@ -159,8 +165,11 @@ export function PatientDetailsPage() {
 					</div>
 				)}
 
-				{activeTab === "appointments" && <AppointmentsTab appointments={[]} patient={patient} />}
-				{activeTab === "prescriptions" && <PrescriptionsTab patient={patient} medications={patient.medications} />}
+				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
+
+				{activeTab === "prescriptions" && <PrescriptionsTab medications={patient.medications} patient={patient} />}
+
+				{activeTab === "vitals" && <HealthStatsTab healthStats={healthStats} patient={patient} />}
 			</div>
 		</div>
 	);
