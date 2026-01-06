@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
 import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
+import { HealthStatsTab } from "./vitals/HealthStatsTab";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,14 +32,15 @@ const toPatientDetailsVm = (id: string, dto: PatientOverviewDto): PatientDetails
 const tabs = [
 	{ id: "overview", label: "Overview", icon: <User /> },
 	{ id: "appointments", label: "Appointments", icon: <Calendar /> },
-	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> }
+	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> },
+	{ id: "vitals", label: "Vitals", icon: <SquareActivity /> }
 ] as const;
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
 	const { getToken } = useAuth();
 	const navigate = useNavigate();
-	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions">("overview");
+	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions" | "vitals">("overview");
 
 	const patientQuery = useQuery({
 		queryKey: ["patient-overview", patientId],
@@ -161,8 +163,7 @@ export function PatientDetailsPage() {
 
 				{activeTab === "appointments" && <AppointmentsTab appointments={[]} patient={patient} />}
 				{activeTab === "prescriptions" && <PrescriptionsTab patient={patient} medications={patient.medications} />}
-
-				{activeTab === "vitals" && <HealthStatsTab healthStats={healthStats} patient={patient} />}
+				{activeTab === "vitals" && <HealthStatsTab healthStats={patient.healthStats} patient={patient} />}
 			</div>
 		</div>
 	);
