@@ -4,6 +4,7 @@ import { useState, type FormEvent, useEffect } from "react";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { useUpdateAppointment } from "../../../hooks/useAppointments";
 import type { Appointment, AppointmentType, AppointmentStatus } from "../../../lib/types/appointment";
+import { toast } from "react-toastify";
 
 type EditAppointmentProps = {
 	appointment: Appointment | null;
@@ -69,10 +70,11 @@ export const EditAppointment = ({ appointment, open, onOpenChange }: EditAppoint
 				id: appointment.id,
 				data: updatedAppointment
 			});
+			toast.success("Appointment updated successfully!");
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Failed to update appointment:", error);
-			alert("Failed to update appointment. Please try again.");
+			toast.error("Failed to update appointment. Please try again.");
 		}
 	};
 

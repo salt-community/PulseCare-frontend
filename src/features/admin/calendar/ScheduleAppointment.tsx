@@ -6,6 +6,7 @@ import { Button } from "../../../components/ui/PrimaryButton";
 import { useCreateAppointment } from "../../../hooks/useAppointments";
 import { usePatients } from "../../../hooks/usePatients";
 import type { AppointmentType } from "../../../lib/types/appointment";
+import { toast } from "react-toastify";
 
 type AppointmentProps = {
 	currentDate: Date;
@@ -36,7 +37,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (!selectedPatientId) {
-			alert("Please select a patient");
+			toast.error("Please select a patient");
 			return;
 		}
 
@@ -51,11 +52,12 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 
 		try {
 			await createMutation.mutateAsync(newAppointment);
+			toast.success("Appointment created successfully!");
 			resetForm();
 			setOpen(false);
 		} catch (error) {
 			console.error("Failed to create appointment:", error);
-			alert("Failed to create appointment. Check console for details.");
+			toast.error("Failed to create appointment. Please try again.");
 		}
 	};
 

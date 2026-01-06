@@ -12,6 +12,7 @@ import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { useAllAppointments, useDeleteAppointment } from "../../../hooks/useAppointments";
 import type { Appointment } from "../../../lib/types/appointment";
+import { toast } from "react-toastify";
 
 export const AdminCalendarPage = () => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -45,10 +46,11 @@ export const AdminCalendarPage = () => {
 		if (confirm(`Delete appointment with ${selectedAppointment.patientName}?`)) {
 			try {
 				await deleteMutation.mutateAsync(selectedAppointment.id);
+				toast.success("Appointment deleted successfully!");
 				setDialogOpen(false);
 				setSelectedAppointment(null);
 			} catch (error) {
-				alert("Failed to delete appointment");
+				toast.error("Failed to delete appointment. Please try again.");
 			}
 		}
 	}
