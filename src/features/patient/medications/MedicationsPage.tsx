@@ -3,83 +3,69 @@ import { Pill } from "../../../components/ui/Pill";
 import { Calendar, Pill as PillIcon, InfoIcon, Clock } from "lucide-react";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Icon } from "../../../components/shared/Icon";
-import { useEffect, useState } from "react";
 import Spinner from "../../../components/shared/Spinner";
 import { useAuth } from "@clerk/clerk-react";
+import { useQuery } from "@tanstack/react-query";
+import { type Medication } from "../../../lib/types";
 
-type Medications = {
-	id: string;
-	name: string;
-	dosage: string;
-	timesPerDay: number;
-	frequency: string;
-	startDate: string;
-	instructions: string;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+const fetchMedications = async (token: string): Promise<Medication[]> => {
+	const res = await fetch(`${baseUrl}/Medications/me`, {
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-Type": "application/json"
+		}
+	});
+
+	if (!res.ok) {
+		throw new Error(`Failed to fetch medications: ${res.status}`);
+	}
+
+	return res.json();
 };
 
 export default function MedicationsPage() {
-	const { getToken, isLoaded } = useAuth();
+	const { getToken } = useAuth();
 
-	const [data, setData] = useState<Medications[]>([]);
-	const [isError, setIsError] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-
-	const baseUrl = import.meta.env.VITE_API_BASE_URL;
-	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21"; // For testing
-
-	async function getData() {
-		if (!isLoaded) return;
-
-		const token = await getToken({ template: "pulsecare-jwt-template" });
-
-		if (!token) {
-			throw new Error("No auth token available");
-		}
-
-		const response = await fetch(`${baseUrl}/Medications/${testId}`, {
-			headers: {
-				"Authorization": `Bearer ${token}`,
-				"Content-Type": "application/json"
+	const medicationsQuery = useQuery({
+		queryKey: ["medications"],
+		queryFn: async () => {
+			const token = await getToken({ template: "pulsecare-jwt-template" });
+			if (!token) {
+				throw new Error("No auth token available");
 			}
-		});
-
-		if (!response.ok) {
-			throw new Error("Request failed");
+			return fetchMedications(token);
 		}
+	});
 
-		return response.json();
-	}
-
-	useEffect(() => {
-		getData()
-			.then(result => setData(result))
-			.catch(() => setIsError(true))
-			.finally(() => setIsLoading(false));
-	}, []);
+	const medications = medicationsQuery.data ?? [];
 
 	return (
 		<>
 			<PageHeader title={"Medications"} description="Your current prescriptions and medication schedule" />
-			{data.length === 0 && isLoading === false ? (
-				<Card className="transition-shadow animate-slide-up hover:shadow-none">
-					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						{isError ? (
-							<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
-						) : (
-							<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
-						)}
-					</CardContent>
-				</Card>
-			) : isLoading ? (
+			{medicationsQuery.isLoading ? (
 				<Card className="flex flex-col items-center">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
 						<p className="text-lg font-medium text-foreground mb-2">Loading medications... </p>
 						<Spinner />
 					</CardContent>
 				</Card>
+			) : medicationsQuery.isError ? (
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
+					</CardContent>
+				</Card>
+			) : medications.length === 0 ? (
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">No new results</p>
+					</CardContent>
+				</Card>
 			) : (
 				<div className="grid gap-4 md:grid-cols-2">
-					{data.map((medication, index) => (
+					{medications.map((medication, index) => (
 						<Card
 							key={medication.id}
 							className="transition-shadow animate-slide-up hover:shadow-none"
