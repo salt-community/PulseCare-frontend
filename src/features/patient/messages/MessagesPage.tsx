@@ -8,17 +8,18 @@ import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { SelectInput } from "../../../components/ui/SelectInput";
-import { mockDoctors } from "../../../lib/api/mockData";
 import { useConversations } from "../../../hooks/useConversations";
 import { useChat } from "../../../hooks/useChat";
 import type { Conversation, Message } from "../../../lib/types/conversation";
 import { useUser } from "@clerk/clerk-react";
+import { useDoctors } from "../../../hooks/useDoctor";
 
 export default function MessagesPage() {
 	const { user } = useUser();
 	const { conversations, unreadCount, startConversation } = useConversations({
 		role: "patient"
 	});
+	const { data: doctors } = useDoctors();
 
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
 	const chat = useChat(selectedConvId ?? "", "patient");
@@ -82,8 +83,10 @@ export default function MessagesPage() {
 		setReplyText("");
 	};
 
-	// const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? id;
-	const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? "Doctor";
+	const getDoctorName = (id: string) => doctors?.find(d => d.id === id)?.name ?? id;
+	console.log();
+	// const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? "Doctor";
+
 	return (
 		<div className="space-y-4">
 			<PageHeader
@@ -103,10 +106,12 @@ export default function MessagesPage() {
 						label="Select doctor"
 						value={newMessageDoctorId}
 						onChange={setNewMessageDoctorId}
-						options={mockDoctors.map(d => ({
-							label: d.name,
-							value: d.id
-						}))}
+						options={
+							doctors?.map(d => ({
+								label: d.name,
+								value: d.id
+							})) || []
+						}
 						required
 					/>
 
