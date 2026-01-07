@@ -81,30 +81,33 @@ export default function AdminDashboardPage() {
 					</CardTitle>
 					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
 						{recentPatients.map(patient => (
-							<Card key={patient.id} className="bg-background-secondary hover:shadow-none">
-								<CardContent className="p-5">
-									<div className="flex items-center gap-4 min-w-0">
-										<div className="p-2 rounded-full bg-primary/10 h-8 w-8 flex-shrink-0">
-											<User className="h-4 w-4 text-primary" />
-										</div>
+							<Link to={`/admin/patients/${patient.id}`} className="block transition-all">
+								<Card key={patient.id} className="bg-background-secondary">
+									<CardContent className="p-5">
+										<div className="flex items-center gap-4 min-w-0">
+											<div className="p-2 rounded-full bg-primary/10 h-8 w-8 flex-shrink-0">
+												<User className="h-4 w-4 text-primary" />
+											</div>
 
-										<div className="flex-1 min-w-0">
-											<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-												<div className="min-w-0">
-													<span className="font-medium text-foreground block truncate">{patient.name}</span>
-													<span className="text-sm text-secondary-foreground">{patient.email}</span>
-												</div>
+											<div className="flex-1 min-w-0">
+												<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+													<div className="min-w-0">
+														<span className="font-medium text-foreground block truncate">{patient.name}</span>
+														<span className="text-sm text-secondary-foreground">{patient.email}</span>
+													</div>
 
-												<div className="mt-2 sm:mt-0 sm:ml-4">
-													<Pill variant="default">
-														{patient.conditions.length} condition{patient.conditions.length !== 1 ? "s" : ""}
-													</Pill>
+													<div className="mt-2 sm:mt-0 sm:ml-4">
+														<Pill variant="default">
+															{patient.conditions.length} condition
+															{patient.conditions.length !== 1 ? "s" : ""}
+														</Pill>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								</CardContent>
-							</Card>
+									</CardContent>
+								</Card>
+							</Link>
 						))}
 					</div>
 				</Card>
