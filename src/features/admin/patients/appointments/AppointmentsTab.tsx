@@ -22,8 +22,8 @@ export const AppointmentsTab = ({ appointments, patient }: AppointmentProps) => 
 				<AddAppointmentForm patient={patient} />
 			</div>
 			<div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
-				<AppointmentsCard appointments={upcomingApts} isUpcoming={true} />
-				<AppointmentsCard appointments={prevApts} isUpcoming={false} />
+				<AppointmentsCard appointments={upcomingApts} isUpcoming={true} patientId={patient.id} />
+				<AppointmentsCard appointments={prevApts} isUpcoming={false} patientId={patient.id} />
 			</div>
 		</>
 	);

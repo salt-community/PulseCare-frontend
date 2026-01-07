@@ -57,7 +57,6 @@ export function PatientDetailsPage() {
 	});
 
 	const appointments: Appointment[] = patientQuery.data?.appointments ?? [];
-	console.log("appointmens detailpage: ", appointments);
 	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
 	const backTarget = from === "dashboard" ? "/admin/dashboard" : "/admin/patients";
 	const backText = from === "dashboard" ? "← Back to Dashboard" : "← Back to Patients";

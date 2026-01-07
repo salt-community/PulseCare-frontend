@@ -8,10 +8,11 @@ import type { Appointment } from "../../../../lib/types";
 
 type AppointmentsCardProps = {
 	appointments: Appointment[];
+	patientId: string;
 	isUpcoming: boolean;
 };
 
-export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardProps) => {
+export const AppointmentsCard = ({ appointments, isUpcoming, patientId }: AppointmentsCardProps) => {
 	const cardHeader = isUpcoming ? "Upcoming Appointments" : "Previous Appointments";
 
 	return (
@@ -71,7 +72,7 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 													<FileText className="size-4 shrink-0" />
 													Notes
 												</span>
-												<AddNotesForm appointmentId={apt.id} />
+												<AddNotesForm appointmentId={apt.id} patientId={patientId} />
 											</div>
 											{apt.notes!.length > 0 ? (
 												apt.notes!.map((n, i) => (
