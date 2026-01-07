@@ -3,27 +3,31 @@ import { DialogModal } from "../../../../components/shared/DialogModal";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { Plus } from "lucide-react";
 import { Button } from "../../../../components/ui/PrimaryButton";
+import { useAddPatientNote } from "../../../../hooks/useAddPatientNote ";
 
-//TODO: hantera notes, utkommenterade är tänkt som bas när api är implementerade
 type AddNotesProps = {
 	appointmentId: string;
+	patientId: string;
 };
 
-export const AddNotesForm = ({ appointmentId }: AddNotesProps) => {
+export const AddNotesForm = ({ appointmentId, patientId }: AddNotesProps) => {
 	const [title, setTitle] = useState("");
 	const [diagnosis, setDiagnosis] = useState("");
 	const [note, setNotes] = useState("");
 	const [open, setOpen] = useState(false);
+	const addNoteMutation = useAddPatientNote(patientId);
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 		const noteRequest = {
 			appointmentId,
+			patientId,
 			title,
 			diagnosis,
 			note
 		};
-		console.log(noteRequest);
+		console.log();
+		addNoteMutation.mutate(noteRequest);
 		//await noteApi.addNotes(noteRequest)
 		setNotes("");
 		setDiagnosis("");

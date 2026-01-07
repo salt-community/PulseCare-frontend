@@ -56,7 +56,6 @@ export function PatientDetailsPage() {
 	});
 
 	const appointments: Appointment[] = patientQuery.data?.appointments ?? [];
-	console.log("appointmens detailpage: ", appointments);
 	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
 
 	if (patientQuery.isLoading) {
