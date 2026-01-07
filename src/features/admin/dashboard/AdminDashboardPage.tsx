@@ -81,8 +81,14 @@ export default function AdminDashboardPage() {
 					</CardTitle>
 					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
 						{recentPatients.map(patient => (
-							<Link to={`/admin/patients/${patient.id}`} className="block transition-all">
-								<Card key={patient.id} className="bg-background-secondary">
+							<Link
+								to="/admin/patients/$patientId"
+								params={{ patientId: patient.id }}
+								search={{ from: "dashboard" }}
+								className="block transition-all"
+								key={patient.id}
+							>
+								<Card className="bg-background-secondary">
 									<CardContent className="p-5">
 										<div className="flex items-center gap-4 min-w-0">
 											<div className="p-2 rounded-full bg-primary/10 h-8 w-8 flex-shrink-0">
