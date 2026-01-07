@@ -1,10 +1,10 @@
 import { CalendarOff, Clock4, FileText, Stethoscope } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/Card";
-import type { Appointment } from "../../../../lib/api/mockData";
 import { format } from "date-fns";
 import { Pill } from "../../../../components/ui/Pill";
 import { DateBlock } from "../../../../components/ui/DateBlock";
 import { AddNotesForm } from "./AddNotesForm";
+import type { Appointment } from "../../../../lib/types";
 
 type AppointmentsCardProps = {
 	appointments: Appointment[];
@@ -74,9 +74,9 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 												<AddNotesForm appointmentId={apt.id} />
 											</div>
 											{apt.notes!.length > 0 ? (
-												apt.notes!.map(n => (
-													<p key={n.id} className="text-sm text-muted-foreground wrap-break-word">
-														{n.content}
+												apt.notes!.map((n, i) => (
+													<p key={i} className="text-sm text-muted-foreground wrap-break-word">
+														{n}
 													</p>
 												))
 											) : (

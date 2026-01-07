@@ -10,8 +10,8 @@ import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
-import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
-import { mockAppointments, mockHealthStats } from "../../../lib/api/mockData";
+import type { PatientOverviewDto, PatientDetailsVm, Appointment } from "../../../lib/types";
+import { mockHealthStats } from "../../../lib/api/mockData";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -44,7 +44,6 @@ export function PatientDetailsPage() {
 	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions" | "vitals">("overview");
 
 	const healthStats = useMemo(() => mockHealthStats, []);
-	const appointments = useMemo(() => mockAppointments, []);
 
 	const patientQuery = useQuery({
 		queryKey: ["patient-overview", patientId],
@@ -56,6 +55,8 @@ export function PatientDetailsPage() {
 		enabled: Boolean(patientId)
 	});
 
+	const appointments: Appointment[] = patientQuery.data?.appointments ?? [];
+	console.log("appointmens detailpage: ", appointments);
 	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
 
 	if (patientQuery.isLoading) {
