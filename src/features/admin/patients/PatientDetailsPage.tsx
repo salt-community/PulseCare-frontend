@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
 import { format } from "date-fns";
-import type { PatientOverviewDto, PatientDetailsVm, Appointment } from "../../../lib/types";
+import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
 import { useSearch } from "@tanstack/react-router";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -56,7 +56,6 @@ export function PatientDetailsPage() {
 		enabled: Boolean(patientId)
 	});
 
-	const appointments: Appointment[] = patientQuery.data?.appointments ?? [];
 	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
 	const backTarget = from === "dashboard" ? "/admin/dashboard" : "/admin/patients";
 	const backText = from === "dashboard" ? "← Back to Dashboard" : "← Back to Patients";
@@ -96,10 +95,7 @@ export function PatientDetailsPage() {
 			<div className="flex flex-row justify-between gap-4">
 				<div>
 					<h1 className="text-3xl font-semibold text-foreground mb-2">{patient.name}</h1>
-					<p className="text-sm text-muted-foreground">
-						Patient since{" "}
-						{format(new Date(patient.createdAt), "d MMMM yyyy")}
-					</p>
+					<p className="text-sm text-muted-foreground">Patient since {format(new Date(patient.createdAt), "d MMMM yyyy")}</p>
 				</div>
 				<EditPatientForm patient={patient} />
 			</div>
@@ -110,10 +106,11 @@ export function PatientDetailsPage() {
 						<li key={tab.id}>
 							<button
 								onClick={() => setActiveTab(tab.id)}
-								className={`flex items-center gap-2 px-4 py-3 font-medium transition text-sm cursor-pointer ${activeTab === tab.id
-									? "text-primary border-b-2 border-primary"
-									: "text-card-foreground hover:text-primary"
-									}`}
+								className={`flex items-center gap-2 px-4 py-3 font-medium transition text-sm cursor-pointer ${
+									activeTab === tab.id
+										? "text-primary border-b-2 border-primary"
+										: "text-card-foreground hover:text-primary"
+								}`}
 							>
 								{tab.icon}
 								<span className="hidden min-[500px]:inline">{tab.label}</span>
@@ -136,10 +133,7 @@ export function PatientDetailsPage() {
 							<CardContent className="p-5 pt-0 space-y-4 text-sm">
 								<InfoRow label="Email" value={patient.email} />
 								<InfoRow label="Phone" value={patient.phone} />
-								<InfoRow
-									label="Date of Birth"
-									value={format(new Date(patient.dateOfBirth), "d MMMM yyyy")}
-								/>
+								<InfoRow label="Date of Birth" value={format(new Date(patient.dateOfBirth), "d MMMM yyyy")} />
 							</CardContent>
 						</Card>
 
