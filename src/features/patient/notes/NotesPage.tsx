@@ -1,18 +1,35 @@
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent } from "../../../components/ui/Card";
-import { mockNotes } from "../../../lib/api/mockData";
 import { Calendar, Stethoscope, StickyNote } from "lucide-react";
 import { format } from "date-fns";
 import { Icon } from "../../../components/shared/Icon";
+import { usePatientNotes } from "../../../hooks/usePatientNotes";
+import Spinner from "../../../components/shared/Spinner";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function NotesPage() {
-	const data = mockNotes;
+	const { data, isLoading, error } = usePatientNotes();
+
+	useEffect(() => {
+		if (error) {
+			toast.error("Something went wrong while loading your dashboard.");
+		}
+	}, [error]);
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
 
 	return (
 		<>
 			<PageHeader title={"Appointment Notes"} description="Notes from your healthcare providers after appointments" />
 
-			{data.length === 0 ? (
+			{data?.length === 0 ? (
 				<Card className="hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12">
 						<StickyNote className="h-12 w-12 text-card-foreground mb-4" />
@@ -22,7 +39,7 @@ export default function NotesPage() {
 				</Card>
 			) : (
 				<div className="space-y-4">
-					{data.map((d, index) => (
+					{data?.map((d, index) => (
 						<Card
 							key={d.id}
 							className="transition-shadow animate-slide-up hover:shadow-none"
