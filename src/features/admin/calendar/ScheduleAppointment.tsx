@@ -122,8 +122,8 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 					</div>
 
 					{conflictError && (
-						<div className="flex gap-2">
-							<div className="w-1/2" />
+						<div className="flex">
+							<div className="flex-1" />
 							<p className="text-red-500 text-sm mt-2">{conflictError}</p>
 						</div>
 					)}
