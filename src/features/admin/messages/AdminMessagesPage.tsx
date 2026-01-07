@@ -200,7 +200,7 @@ export default function AdminMessagesPage() {
 							</div>
 						</div>
 
-						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1 flex-1">
+						<div className="space-y-3 mt-1 max-h-[50vh] overflow-y-auto pr-1 flex-1">
 							{chat.messages.map((msg: Message) => {
 								const isPatient = msg.fromPatient;
 								return (
