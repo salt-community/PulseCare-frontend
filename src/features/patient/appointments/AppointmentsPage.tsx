@@ -1,19 +1,27 @@
 import { Card, CardContent } from "../../../components/ui/Card";
-import { mockAppointments } from "../../../lib/api/mockData";
 import { Calendar, Clock, User } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
 import { DateBlock } from "../../../components/ui/DateBlock";
+import { usePatientAppointments } from "../../../hooks/useAppointments";
 
 export default function AppointmentsPage() {
-	const data = mockAppointments;
+	const { data: appointments = [], isLoading, error } = usePatientAppointments();
+
+	if (isLoading) {
+		return <div className="text-center p-10">Loading appointments...</div>;
+	}
+
+	if (error) {
+		return <div className="text-red-500">Error loading appointments. Please check if backend is running.</div>;
+	}
 
 	return (
 		<>
 			<PageHeader title="Appointments" description="View and manage your upcoming appointments" />
 
-			{data.length === 0 ? (
+			{appointments.length === 0 ? (
 				<Card className="shadow-card hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12">
 						<Calendar className="h-12 w-12 text-card-foreground mb-4" />
@@ -23,7 +31,7 @@ export default function AppointmentsPage() {
 				</Card>
 			) : (
 				<div className="space-y-4">
-					{data.map((d, index) => (
+					{appointments.map((d, index) => (
 						<Card
 							key={d.id}
 							className="transition-all animate-slide-up hover:shadow-none"

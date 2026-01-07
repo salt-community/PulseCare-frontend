@@ -1,16 +1,16 @@
 import { LucidePill, Trash } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/Card";
-import type { Medication, Patient } from "../../../../lib/api/mockData";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
 import { Button } from "../../../../components/ui/PrimaryButton";
-import { RenewPrescriptionForm } from "./RenewPrescriptionForm";
+import { EditPrescriptionForm } from "./EditPrescriptionForm";
+import type { Medication, PatientDetailsVm } from "../../../../lib/types";
 
-type MedicationProps = {
-	patient: Patient;
+type PrescriptionsTabProps = {
+	patient: PatientDetailsVm;
 	medications: Medication[];
 };
 
-export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
+export const PrescriptionsTab = ({ patient, medications }: PrescriptionsTabProps) => {
 	return (
 		<>
 			<div className="w-fit">
@@ -40,7 +40,7 @@ export const PrescriptionsTab = ({ medications, patient }: MedicationProps) => {
 											<p className="text-sm text-muted-foreground mt-1">{med.timesPerDay} times per day</p>
 										</div>
 										<div className="flex gap-2 shrink-0">
-											<RenewPrescriptionForm patient={patient} prescription={med} />
+											<EditPrescriptionForm patient={patient} prescription={med} />
 											<Button
 												variant="outline"
 												size="icon"

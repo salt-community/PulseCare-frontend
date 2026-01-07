@@ -24,6 +24,8 @@ export interface Note {
 	doctorName: string;
 	date: string;
 	content: string;
+	diagnosis?: string;
+	appointmentDetails?: string;
 }
 
 export interface Medication {
