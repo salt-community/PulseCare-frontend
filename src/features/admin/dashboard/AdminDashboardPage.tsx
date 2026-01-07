@@ -4,20 +4,27 @@ import { Card, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { Pill } from "../../../components/ui/Pill";
 import { DateBlock } from "../../../components/ui/DateBlock";
-import { mockPatients, mockAppointments } from "../../../lib/api/mockData";
 import { Link } from "@tanstack/react-router";
+import { useAdminDashboard } from "../../../hooks/useAdminDashboard";
+import Spinner from "../../../components/shared/Spinner";
+import { useUser } from "@clerk/clerk-react";
 
 export default function AdminDashboardPage() {
-	const exampleUser = { fullName: "John Doe" };
-	const recentPatients = mockPatients.slice(0, 3);
-	const upcomingAppointments = mockAppointments.slice(0, 3);
-	const todaysAppointments = mockAppointments.filter(
-		appointment => new Date(appointment.date).toDateString() === new Date().toDateString()
-	).length;
+	const { user } = useUser();
+	const { data, isLoading, isError } = useAdminDashboard();
 
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
+	if (isError || !data) return <div>Failed to load dashboard...</div>;
+	const { totalPatients, unreadMessages, todayAppointments, recentPatients, upcomingAppointments } = data;
 	return (
 		<>
-			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of today's activities" />
+			<PageHeader title={`Welcome back ${user?.fullName ?? "Doctor"}`} description="Here's an overview of today's activities" />
 
 			{/* Stats Cards */}
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -26,7 +33,7 @@ export default function AdminDashboardPage() {
 					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Total Patients</p>
-							<p className="text-xl font-bold text-success">{mockPatients.length}</p>
+							<p className="text-xl font-bold text-success">{totalPatients}</p>
 						</div>
 						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
 							<Users className="h-5 w-5 text-primary" />
@@ -39,7 +46,7 @@ export default function AdminDashboardPage() {
 					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Today's Appointments</p>
-							<p className="text-xl font-bold text-foreground">{todaysAppointments}</p>
+							<p className="text-xl font-bold text-foreground">{todayAppointments}</p>
 						</div>
 						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
 							<Calendar className="h-5 w-5 text-primary" />
@@ -52,7 +59,7 @@ export default function AdminDashboardPage() {
 					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Unread Messages</p>
-							<p className="text-xl font-bold text-warning">5</p>
+							<p className="text-xl font-bold text-warning">{unreadMessages}</p>
 						</div>
 						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
 							<MessageSquare className="h-5 w-5 text-primary" />
@@ -125,7 +132,7 @@ export default function AdminDashboardPage() {
 										{/* Details */}
 										<div className="flex-1">
 											<div className="mb-1">
-												<span className="font-medium text-sm text-foreground">{appointment.doctorName}</span>
+												<span className="font-medium text-sm text-foreground">{appointment.patientName}</span>
 											</div>
 											<div className="flex items-center gap-2 text-sm text-card-foreground">
 												<Clock className="h-4 w-4" />

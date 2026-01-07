@@ -175,7 +175,7 @@ export default function AdminMessagesPage() {
 				open={isThreadOpen}
 				onOpenChange={open => {
 					setIsThreadOpen(open);
-					if (!open) setSelectedConvId(null); // VIKTIGT: Nollställ ID när modalen stängs
+					if (!open) setSelectedConvId(null);
 				}}
 				title="Conversation"
 				showTrigger={false}

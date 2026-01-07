@@ -5,20 +5,24 @@ import { enGB } from "date-fns/locale";
 import { format } from "date-fns";
 import { Calendar, Clock, User } from "lucide-react";
 import { ScheduleAppointment } from "./ScheduleAppointment";
+import { EditAppointment } from "./EditAppointment";
 import PageHeader from "../../../components/shared/PageHeader";
-import { mockAppointments } from "../../../lib/api/mockData";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
-
-type Appointment = (typeof mockAppointments)[number];
+import { useAllAppointments, useDeleteAppointment } from "../../../hooks/useAppointments";
+import type { Appointment } from "../../../lib/types/appointment";
+import { toast } from "react-toastify";
 
 export const AdminCalendarPage = () => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-	const [selected, setSelected] = useState<Date>();
+	const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+	const [selected, setSelected] = useState<Date | undefined>(new Date());
 	const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
-	const appointments = mockAppointments;
 	const appointmentsRef = useRef<HTMLDivElement>(null);
+
+	const { data: appointments = [], isLoading, error } = useAllAppointments();
+	const deleteMutation = useDeleteAppointment();
 
 	useEffect(() => {
 		if (selected && appointmentsRef.current) {
@@ -31,6 +35,34 @@ export const AdminCalendarPage = () => {
 		setDialogOpen(true);
 	}
 
+	function handleEdit() {
+		setDialogOpen(false);
+		setEditDialogOpen(true);
+	}
+
+	async function handleDelete() {
+		if (!selectedAppointment) return;
+
+		if (confirm(`Delete appointment with ${selectedAppointment.patientName}?`)) {
+			try {
+				await deleteMutation.mutateAsync(selectedAppointment.id);
+				toast.success("Appointment deleted successfully!");
+				setDialogOpen(false);
+				setSelectedAppointment(null);
+			} catch (error) {
+				toast.error("Failed to delete appointment. Please try again.");
+			}
+		}
+	}
+
+	if (isLoading) {
+		return <div className="text-center p-10">Loading appointments...</div>;
+	}
+
+	if (error) {
+		return <div className="text-red-500">Error loading appointments. Please check if backend is running on port 5002.</div>;
+	}
+
 	return (
 		<>
 			<div className="flex flex-wrap justify-between items-center">
@@ -41,8 +73,8 @@ export const AdminCalendarPage = () => {
 			<DialogModal
 				open={dialogOpen}
 				onOpenChange={setDialogOpen}
-				title={selectedAppointment ? `Appointment with ${selectedAppointment.patientName}` : "Appointment"}
-				description={selectedAppointment?.reason}
+				title={selectedAppointment ? `Appointment - ${selectedAppointment.patientName || "Unknown Patient"}` : "Appointment"}
+				description={selectedAppointment?.reason ?? undefined}
 				showTrigger={false}
 			>
 				{selectedAppointment && (
@@ -59,24 +91,26 @@ export const AdminCalendarPage = () => {
 							</div>
 						</div>
 						<div className="flex gap-2 justify-end">
-							<Button onClick={() => ""}>Edit</Button>
-							<Button onClick={() => ""} variant={"destructive"}>
-								Remove
+							<Button onClick={handleEdit}>Edit</Button>
+							<Button onClick={handleDelete} variant={"destructive"} disabled={deleteMutation.isPending}>
+								{deleteMutation.isPending ? "Deleting..." : "Remove"}
 							</Button>
 						</div>
 					</>
 				)}
 			</DialogModal>
 
+			<EditAppointment appointment={selectedAppointment} open={editDialogOpen} onOpenChange={setEditDialogOpen} />
+
 			<div className="flex flex-col gap-10 lg:flex-row">
 				<DatePicker selected={selected} onSelect={setSelected} appointments={appointments} />
 				<div ref={appointmentsRef} className="flex-1 flex flex-col gap-4">
 					<h2 className="flex items-center gap-2 text-2xl font-semibold">
 						<Calendar className="h-6 text-primary" />
-
 						{selected ? format(selected, "EEEE dd MMMM yyyy", { locale: enGB }) : "Select a date"}
 					</h2>
-					{!selected || appointments.filter(apt => apt.date === format(selected, "yyyy-MM-dd", { locale: enGB })).length === 0 ? (
+					{!selected ||
+					appointments.filter(apt => apt.date.startsWith(format(selected, "yyyy-MM-dd", { locale: enGB }))).length === 0 ? (
 						<Card className="p-10">
 							<CardContent className="flex items-center gap-4 flex-col">
 								<Calendar className="h-10 w-50" />
@@ -86,7 +120,7 @@ export const AdminCalendarPage = () => {
 					) : (
 						<div className="space-y-4">
 							{appointments
-								.filter(apt => apt.date === format(selected, "yyyy-MM-dd", { locale: enGB }))
+								.filter(apt => apt.date.startsWith(format(selected, "yyyy-MM-dd", { locale: enGB })))
 								.map((d, index) => (
 									<Card
 										key={d.id}
@@ -110,7 +144,7 @@ export const AdminCalendarPage = () => {
 													</div>
 													<div className="flex items-center gap-2 text-foreground mb-1">
 														<User className="h-4 w-4 text-card-foreground" />
-														<span className="font-medium">{d.patientName}</span>
+														<span className="font-medium">{d.patientName || "Unknown Patient"}</span>
 													</div>
 													{d.reason && <p className="text-sm text-card-foreground mt-2">{d.reason}</p>}
 												</div>

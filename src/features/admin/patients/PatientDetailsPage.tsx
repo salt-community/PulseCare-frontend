@@ -1,20 +1,22 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { mockPatients, mockAppointments, mockMedications } from "../../../lib/api/mockData";
+import { mockPatients, mockAppointments, mockMedications, mockHealthStats } from "../../../lib/api/mockData";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
-import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert } from "lucide-react";
+import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert, SquareActivity } from "lucide-react";
 import { AppointmentsTab } from "./appointments/AppointmentsTab";
 import { PrescriptionsTab } from "./prescriptions/PrescriptionsTab";
 import { EditPatientForm } from "./EditPatientForm";
+import { HealthStatsTab } from "./vitals/HealthStatsTab";
 
 export function PatientDetailsPage() {
 	const { patientId } = useParams({ from: "/admin/patients/$patientId" });
 	const navigate = useNavigate();
-	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions">("overview");
+	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions" | "vitals">("overview");
 	const patient = useMemo(() => mockPatients.find(p => p.id === patientId), [patientId]);
 	const appointments = useMemo(() => mockAppointments.filter(a => a.patientId === patientId), [patientId]);
 	const medications = useMemo(() => mockMedications, []);
+	const healthStats = useMemo(() => mockHealthStats, []);
 
 	if (!patient) {
 		return (
@@ -29,14 +31,15 @@ export function PatientDetailsPage() {
 	const tabs = [
 		{ id: "overview", label: "Overview", icon: <User /> },
 		{ id: "appointments", label: "Appointments", icon: <Calendar /> },
-		{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> }
+		{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> },
+		{ id: "vitals", label: "Vitals", icon: <SquareActivity /> }
 	] as const;
 
 	return (
 		<div className="space-y-6">
 			<button
 				onClick={() => navigate({ to: "/admin/patients" })}
-				className="text-card-foreground hover:text-primary text-sm font-medium"
+				className="text-card-foreground hover:text-primary text-sm font-medium cursor-pointer"
 			>
 				← Back to Patients
 			</button>
@@ -52,19 +55,19 @@ export function PatientDetailsPage() {
 
 			{/* Tabs */}
 			<div className="border-b border-foreground/10">
-				<ul className="flex gap-2 -mb-px">
+				<ul className="flex max-[500px]:justify-evenly gap-2 -mb-px">
 					{tabs.map(tab => (
 						<li key={tab.id}>
 							<button
 								onClick={() => setActiveTab(tab.id)}
-								className={`flex items-center gap-2 px-4 py-3 font-medium transition text-sm ${
+								className={`flex items-center gap-2 px-4 py-3 font-medium transition text-sm cursor-pointer ${
 									activeTab === tab.id
 										? "text-primary border-b-2 border-primary"
 										: "text-card-foreground hover:text-primary"
 								}`}
 							>
 								{tab.icon}
-								{tab.label}
+								<span className="hidden min-[500px]:inline">{tab.label}</span>
 							</button>
 						</li>
 					))}
@@ -149,6 +152,8 @@ export function PatientDetailsPage() {
 				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
 
 				{activeTab === "prescriptions" && <PrescriptionsTab medications={medications} patient={patient} />}
+
+				{activeTab === "vitals" && <HealthStatsTab healthStats={healthStats} patient={patient} />}
 			</div>
 		</div>
 	);
