@@ -3,32 +3,50 @@ import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { PenIcon } from "lucide-react";
-import type { Patient } from "../../../lib/api/mockData";
+import type { PatientDetailsVm } from "../../../lib/types/patient";
+import { toast } from "react-toastify";
+import { useUpdatePatient } from "../../../hooks/usePatients";
 
 type EditPatientFormProps = {
-	patient: Patient;
+	patient: PatientDetailsVm;
 };
 
 export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 	const [open, setOpen] = useState(false);
-	const [editedPatient, setEditedPatient] = useState<Patient | null>(null);
+	const [editedPatient, setEditedPatient] = useState<PatientDetailsVm>({ ...patient });
+	const updateMutation = useUpdatePatient();
 
 	const startEdit = () => {
 		setEditedPatient({ ...patient });
 		setOpen(true);
 	};
 
-	const saveEdit = () => {
-		console.log("Save patient (mock):", editedPatient);
-		setOpen(false);
+	const handleEditChange = (field: keyof PatientDetailsVm, value: string) => {
+		setEditedPatient({
+			...editedPatient,
+			[field]: value
+		});
 	};
 
-	const handleEditChange = (field: keyof Patient, value: string) => {
-		if (editedPatient) {
-			setEditedPatient({
-				...editedPatient,
-				[field]: value
+	const saveEdit = async () => {
+		const updatedPatient = {
+			id: editedPatient.id,
+			name: editedPatient.name,
+			email: editedPatient.email,
+			phone: editedPatient.phone,
+			dateOfBirth: editedPatient.dateOfBirth,
+			bloodType: editedPatient.bloodType
+		};
+
+		try {
+			await updateMutation.mutateAsync({
+				patient: updatedPatient
 			});
+			toast.success("Patient updated successfully!");
+			setOpen(false);
+		} catch (error) {
+			console.error("Failed to update patient:", error);
+			toast.error("Failed to update patient. Please try again.");
 		}
 	};
 
@@ -55,14 +73,6 @@ export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 							label="Email"
 							value={editedPatient.email}
 							onChange={value => handleEditChange("email", value)}
-							required={true}
-						/>
-
-						<DialogInput
-							type="tel"
-							label="Phone"
-							value={editedPatient.phone}
-							onChange={value => handleEditChange("phone", value)}
 							required={true}
 						/>
 
