@@ -21,7 +21,7 @@ export const fetchNotes = async (accessToken: string): Promise<Note[]> => {
 
 export const addNote = async (accessToken: string, note: CreateNoteRequest) => {
 	const response = await fetch(API_BASE_URL, {
-		method: "GET",
+		method: "POST",
 		headers: {
 			"Authorization": `Bearer ${accessToken}`,
 			"Content-Type": "application/json"
