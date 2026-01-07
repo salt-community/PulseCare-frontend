@@ -10,7 +10,12 @@ type PatientInfoCardProps = {
 
 export function PatientInfoCard({ patient }: PatientInfoCardProps) {
 	return (
-		<Link to={`/admin/patients/${patient.id}`} className="block transition-all">
+		<Link
+			to="/admin/patients/$patientId"
+			params={{ patientId: patient.id }}
+			search={{ from: "patients" }}
+			className="block transition-all"
+		>
 			<Card className="transition-all">
 				<CardContent className="p-5">
 					<div className="flex items-center gap-4">

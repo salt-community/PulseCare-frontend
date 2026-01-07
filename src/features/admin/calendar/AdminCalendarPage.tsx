@@ -121,6 +121,7 @@ export const AdminCalendarPage = () => {
 						<div className="space-y-4">
 							{appointments
 								.filter(apt => apt.date.startsWith(format(selected, "yyyy-MM-dd", { locale: enGB })))
+								.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 								.map((d, index) => (
 									<Card
 										key={d.id}
