@@ -17,11 +17,12 @@ const CURRENT_DOCTOR_ID = "067fa0de-2b36-4368-a491-604a73454c23";
 
 export default function AdminMessagesPage() {
 	const { conversations, unreadCount, startConversation, isLoading } = useConversations({
-		role: "doctor",
-		userId: CURRENT_DOCTOR_ID
+		role: "doctor"
 	});
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
-	const chat = useChat(selectedConvId ?? "", CURRENT_DOCTOR_ID, "doctor");
+
+	const chat = useChat(selectedConvId ?? "", "doctor");
+
 	const [replyText, setReplyText] = useState("");
 	const [isThreadOpen, setIsThreadOpen] = useState(false);
 	const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);

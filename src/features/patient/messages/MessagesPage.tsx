@@ -12,17 +12,16 @@ import { mockDoctors } from "../../../lib/api/mockData";
 import { useConversations } from "../../../hooks/useConversations";
 import { useChat } from "../../../hooks/useChat";
 import type { Conversation, Message } from "../../../lib/types/conversation";
-
-const CURRENT_PATIENT_ID = "183977c2-a4a1-408b-89fb-7d4a136738df";
+import { useUser } from "@clerk/clerk-react";
 
 export default function MessagesPage() {
+	const { user } = useUser();
 	const { conversations, unreadCount, startConversation } = useConversations({
-		role: "patient",
-		userId: CURRENT_PATIENT_ID
+		role: "patient"
 	});
 
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
-	const chat = useChat(selectedConvId ?? "", CURRENT_PATIENT_ID, "patient");
+	const chat = useChat(selectedConvId ?? "", "patient");
 
 	const [replyText, setReplyText] = useState("");
 	const [isThreadOpen, setIsThreadOpen] = useState(false);
@@ -55,7 +54,7 @@ export default function MessagesPage() {
 		e.preventDefault();
 
 		startConversation({
-			patientId: CURRENT_PATIENT_ID,
+			patientId: user?.id ?? null,
 			doctorId: newMessageDoctorId,
 			subject: newMessageSubject,
 			content: newMessageContent,
