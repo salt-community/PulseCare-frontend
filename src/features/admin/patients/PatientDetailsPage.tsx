@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert, SquareActivity } from "lucide-react";
 import { AppointmentsTab } from "./appointments/AppointmentsTab";
 import { PrescriptionsTab } from "./prescriptions/PrescriptionsTab";
+import { HealthStatsTab } from "./vitals/HealthStatsTab";
 import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
@@ -32,6 +33,8 @@ const toPatientDetailsVm = (id: string, dto: PatientOverviewDto): PatientDetails
 const tabs = [
 	{ id: "overview", label: "Overview", icon: <User /> },
 	{ id: "appointments", label: "Appointments", icon: <Calendar /> },
+	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> },
+	{ id: "vitals", label: "Vitals", icon: <SquareActivity /> }
 	{ id: "prescriptions", label: "Prescriptions", icon: <LucidePill /> },
 	{ id: "vitals", label: "Vitals", icon: <SquareActivity /> }
 ] as const;

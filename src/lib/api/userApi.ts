@@ -8,7 +8,6 @@ type UserInfo = {
 export const syncUser = async (accessToken: string, userInfo: UserInfo): Promise<void> => {
 	const url = `${baseUrl}/users/sync`;
 
-	console.log(accessToken);
 	const response = await fetch(url, {
 		method: "POST",
 		headers: {
@@ -17,7 +16,6 @@ export const syncUser = async (accessToken: string, userInfo: UserInfo): Promise
 		},
 		body: JSON.stringify(userInfo)
 	});
-	console.log("apiResponse: ", response);
 
 	if (!response.ok) {
 		throw new Error("User sync failed");
