@@ -1,5 +1,4 @@
 import { Card, CardContent } from "../../../components/ui/Card";
-import { mockAppointments } from "../../../lib/api/mockData";
 import { Calendar, Clock, User } from "lucide-react";
 import { format } from "date-fns";
 import { Pill } from "../../../components/ui/Pill";

@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import Spinner from "../../../components/shared/Spinner";
 
 export default function PatientDashboard() {
-	const { user, isSignedIn } = useUser();
+	const { isSignedIn } = useUser();
 	const { data, isLoading, error } = usePatientDashboard();
 
 	useEffect(() => {
@@ -36,13 +36,11 @@ export default function PatientDashboard() {
 	if (!data) return null;
 
 	const exampleUser = {
-		fullName: data?.patient.name ?? "Patient",
+		fullName: data?.patient.name ?? "Patient"
 	};
 
 	const healthData = data?.healthStats ?? [];
-	const orderedHealthData = [...healthData].sort(
-		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-	);
+	const orderedHealthData = [...healthData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 	const medicationData = data?.medications ?? [];
 	const notesData = data?.notes ?? [];
@@ -50,13 +48,10 @@ export default function PatientDashboard() {
 
 	return (
 		<>
-			<PageHeader
-				title={`Welcome back ${exampleUser.fullName}`}
-				description="Here's an overview of your health status"
-			/>
+			<PageHeader title={`Welcome back ${exampleUser.fullName}`} description="Here's an overview of your health status" />
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6 justify-items-stretch">
-				{orderedHealthData.map((d) => {
+				{orderedHealthData.map(d => {
 					const StatIcon = statIcons[d.type];
 					return (
 						<Card className="hover:shadow-none" key={d.id}>
@@ -88,7 +83,9 @@ export default function PatientDashboard() {
 						<PillIcon className="text-primary shrink-0" size={20} />
 						Medications
 						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/medications">View all <MoveRight /></Link>
+							<Link to="/patient/medications">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="grid gap-4 px-2 pb-2">
@@ -129,11 +126,13 @@ export default function PatientDashboard() {
 						<Calendar className="text-primary shrink-0" size={20} />
 						Upcoming Appointments
 						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/appointments">View all <MoveRight /></Link>
+							<Link to="/patient/appointments">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="flex flex-col gap-4 mt-2 px-2 pb-2">
-						{appointmentsData.map((d) => (
+						{appointmentsData.map(d => (
 							<Card key={d.id} className="bg-background-secondary hover:shadow-none">
 								<CardContent className="p-5 flex flex-col">
 									<div className="flex justify-between mr-2">
@@ -170,7 +169,9 @@ export default function PatientDashboard() {
 						<StickyNote className="text-primary shrink-0" size={20} />
 						Appointment Notes
 						<Button asChild variant="outline" size="default" className="ml-auto">
-							<Link to="/patient/notes">View all <MoveRight /></Link>
+							<Link to="/patient/notes">
+								View all <MoveRight />
+							</Link>
 						</Button>
 					</CardTitle>
 					<div className="space-y-4 px-2 pb-2">
