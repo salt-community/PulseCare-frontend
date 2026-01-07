@@ -17,6 +17,16 @@ export type PatientDto = {
 	conditions: string[];
 };
 
+// DTO for patient list
+export type UpdatePatientDto = {
+	id: string;
+	name: string;
+	email: string;
+	phone?: string;
+	dateOfBirth: string;
+	bloodType: string;
+};
+
 // DTO for patient overview/details
 export type PatientOverviewDto = {
 	name: string;
