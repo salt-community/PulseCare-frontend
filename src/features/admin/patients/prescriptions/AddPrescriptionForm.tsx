@@ -80,7 +80,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 					</div>
 				</div>
 
-				<form onSubmit={handleSubmit} className="space-y-5">
+				<form onSubmit={handleSubmit} className="space-y-5 pb-20 md:pb-0">
 					<div className="flex flex-col">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 							<DialogInput type="date" label="From" value={date} onChange={setDate} required className="w-50" />
