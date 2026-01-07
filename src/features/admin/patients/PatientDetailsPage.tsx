@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
 import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
-import { format, formatDistanceToNowStrict } from "date-fns";
+import { format } from "date-fns";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
