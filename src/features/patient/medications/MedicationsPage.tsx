@@ -7,6 +7,7 @@ import Spinner from "../../../components/shared/Spinner";
 import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import { type Medication } from "../../../lib/types";
+import { format } from "date-fns";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -92,7 +93,12 @@ export default function MedicationsPage() {
 											</div>
 											<div className="flex items-center gap-2 text-muted-foreground">
 												<Calendar className="h-4 w-4" />
-												<span>Started {medication.startDate}</span>
+												<span>
+													Started{" "}
+													{medication.startDate
+														? format(new Date(medication.startDate), "d MMM yyyy")
+														: "unknown"}
+												</span>
 											</div>
 											{medication.instructions && (
 												<div className="flex items-start gap-2 text-muted-foreground mt-3 pt-3 border-t border-border">
