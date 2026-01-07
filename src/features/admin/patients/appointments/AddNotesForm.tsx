@@ -13,7 +13,7 @@ type AddNotesProps = {
 export const AddNotesForm = ({ appointmentId, patientId }: AddNotesProps) => {
 	const [title, setTitle] = useState("");
 	const [diagnosis, setDiagnosis] = useState("");
-	const [note, setNotes] = useState("");
+	const [content, setContent] = useState("");
 	const [open, setOpen] = useState(false);
 	const addNoteMutation = useAddPatientNote(patientId);
 
@@ -24,12 +24,10 @@ export const AddNotesForm = ({ appointmentId, patientId }: AddNotesProps) => {
 			patientId,
 			title,
 			diagnosis,
-			note
+			content
 		};
-		console.log();
 		addNoteMutation.mutate(noteRequest);
-		//await noteApi.addNotes(noteRequest)
-		setNotes("");
+		setContent("");
 		setDiagnosis("");
 		setTitle("");
 		setOpen(false);
@@ -45,7 +43,7 @@ export const AddNotesForm = ({ appointmentId, patientId }: AddNotesProps) => {
 				<form onSubmit={handleSubmit}>
 					<DialogInput type="input" label="Title" value={title} onChange={setTitle} required={true} />
 					<DialogInput type="textarea" label="Diagnosis" rows={3} value={diagnosis} onChange={setDiagnosis} required={true} />
-					<DialogInput type="textarea" label="Notes" rows={3} value={note} onChange={setNotes} required={true} />
+					<DialogInput type="textarea" label="Notes" rows={3} value={content} onChange={setContent} required={true} />
 
 					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
 						Add
