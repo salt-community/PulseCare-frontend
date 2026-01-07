@@ -21,7 +21,7 @@ export const AddPrescriptionForm = ({ patient, onSubmit }: PrescriptionProps) =>
 	const [date, setDate] = useState<string>("");
 	const [expireDate, setExpireDate] = useState<string>("");
 	const [medicine, setMedicine] = useState<string>("");
-	const [doseValue, setDoseValue] = useState<number>(0);
+	const [doseValue, setDoseValue] = useState<number>(1);
 	const [doseUnit, setDoseUnit] = useState<string>("");
 	const [frequencyValue, setFrequencyValue] = useState<number>(1);
 	const [frequencyUnit, setFrequencyUnit] = useState<string>("day");
@@ -31,7 +31,7 @@ export const AddPrescriptionForm = ({ patient, onSubmit }: PrescriptionProps) =>
 		setDate("");
 		setExpireDate("");
 		setMedicine("");
-		setDoseValue(0);
+		setDoseValue(1);
 		setDoseUnit("");
 		setFrequencyUnit("Day");
 		setFrequencyValue(1);

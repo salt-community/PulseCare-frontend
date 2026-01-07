@@ -39,7 +39,7 @@ export const EditPrescriptionForm = ({ patient, prescription, onSubmit }: RenewP
 		setDate("");
 		setExpireDate("");
 		setMedicine("");
-		setDoseValue(0);
+		setDoseValue(1);
 		setDoseUnit("");
 		setFrequencyUnit("Day");
 		setFrequencyValue(1);
@@ -114,6 +114,7 @@ export const EditPrescriptionForm = ({ patient, prescription, onSubmit }: RenewP
 										<label className="block p-1 text-md font-semibold">Dose</label>
 										<input
 											type="number"
+											min={1}
 											className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
 											value={doseValue}
 											onChange={e => setDoseValue(Number(e.target.value))}
