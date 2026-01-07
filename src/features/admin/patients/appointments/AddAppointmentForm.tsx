@@ -2,7 +2,6 @@ import { CalendarClock, Plus } from "lucide-react";
 import { DialogModal } from "../../../../components/shared/DialogModal";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../../lib/api/mockData";
 import { Button } from "../../../../components/ui/PrimaryButton";
 import { useCreateAppointment } from "../../../../hooks/useAppointments";
@@ -13,7 +12,6 @@ type AppointmentProps = {
 };
 
 export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
-	const { user } = useUser();
 	const createMutation = useCreateAppointment();
 	const [open, setOpen] = useState(false);
 	const appointmentTypes = ["Checkup", "Follow-up", "Consultation", "Lab"];
