@@ -6,7 +6,7 @@ import { Button } from "../../../../components/ui/PrimaryButton";
 import { EditHealthStatsForm } from "./EditHealthStatsForm";
 import { Pill } from "../../../../components/ui/Pill";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { statIcons } from "../../../../lib/StatsIcons";
 import { useDeleteHealthStat } from "../../../../hooks/useHealthStats";
 
