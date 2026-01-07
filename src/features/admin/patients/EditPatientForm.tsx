@@ -3,22 +3,17 @@ import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { PenIcon } from "lucide-react";
-import type { PatientDetailsVm, UpdatePatientDto } from "../../../lib/types/patient";
+import type { PatientDetailsVm } from "../../../lib/types/patient";
 import { toast } from "react-toastify";
 import { useUpdatePatient } from "../../../hooks/usePatients";
-import type { Update } from "vite/types/hmrPayload.js";
-import { da } from "date-fns/locale";
 
 type EditPatientFormProps = {
 	patient: PatientDetailsVm;
-	updatedPatient: UpdatePatientDto;
-	open: boolean;
-	onOpenChange: (open: boolean) => void;
 };
 
-export const EditPatientForm = ({ patient, onOpenChange }: EditPatientFormProps) => {
+export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 	const [open, setOpen] = useState(false);
-	const [editedPatient, setEditedPatient] = useState<PatientDetailsVm | null>(null);
+	const [editedPatient, setEditedPatient] = useState<PatientDetailsVm>({ ...patient });
 	const updateMutation = useUpdatePatient();
 
 	const startEdit = () => {
@@ -26,21 +21,14 @@ export const EditPatientForm = ({ patient, onOpenChange }: EditPatientFormProps)
 		setOpen(true);
 	};
 
-	const saveEdit = () => {
-		console.log("Save patient (mock):", editedPatient);
-		setOpen(false);
+	const handleEditChange = (field: keyof PatientDetailsVm, value: string) => {
+		setEditedPatient({
+			...editedPatient,
+			[field]: value
+		});
 	};
 
-	const handleEditChange = async (field: keyof PatientDetailsVm, value: string) => {
-		if (editedPatient) {
-			setEditedPatient({
-				...editedPatient,
-				[field]: value
-			});
-		}
-
-		if (!editedPatient) return;
-
+	const saveEdit = async () => {
 		const updatedPatient = {
 			id: editedPatient.id,
 			name: editedPatient.name,
@@ -50,15 +38,12 @@ export const EditPatientForm = ({ patient, onOpenChange }: EditPatientFormProps)
 			bloodType: editedPatient.bloodType
 		};
 
-		//edited patient är av typen PatientDetailsVm
-		//Lägg till anrop av API här sen när det finns
 		try {
 			await updateMutation.mutateAsync({
-				id: patient.id,
-				data: updatedPatient
+				patient: updatedPatient
 			});
 			toast.success("Patient updated successfully!");
-			onOpenChange(false);
+			setOpen(false);
 		} catch (error) {
 			console.error("Failed to update patient:", error);
 			toast.error("Failed to update patient. Please try again.");
