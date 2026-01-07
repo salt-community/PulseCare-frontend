@@ -4,19 +4,8 @@ import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { statIcons } from "../../../lib/StatsIcons";
-import { useEffect, useState } from "react";
 import Spinner from "../../../components/shared/Spinner";
-import { useAuth } from "@clerk/clerk-react";
 import { usePatientDashboard } from "../../../hooks/usePatientDashboard";
-
-type HealthStats = {
-	id: string;
-	type: string;
-	value: string;
-	unit: string;
-	date: string;
-	status: string;
-};
 
 const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = {
 	Normal: "secondary",
@@ -27,29 +16,31 @@ const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = 
 export default function HealthStatsPage() {
 	const { data, isLoading, error } = usePatientDashboard();
 
-	const orderedData = Array.isArray(data) ? [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : [];
-	const bloodData = Array.isArray(data) ? data.filter(d => d.type === "Cholesterol" || d.type === "Glucose") : [];
-	console.log("health stats", data);
+	const healthStats = data?.healthStats ?? [];
+	const orderedData = [...healthStats].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+	const bloodData = healthStats.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
 
 	return (
 		<div>
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
-			{data?.healthStats.length === 0 && isLoading === false ? (
-				<Card className="mb-4 shadow-none hover:shadow-none">
-					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						{error ? (
-							<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
-						) : (
-							<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
-						)}
-					</CardContent>
-				</Card>
-			) : isLoading ? (
+			{isLoading ? (
 				<Card className="flex flex-col items-center">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
 						<p className="text-lg font-medium text-foreground mb-2">Loading health stats... </p>
 						<Spinner />
+					</CardContent>
+				</Card>
+			) : error ? (
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
+					</CardContent>
+				</Card>
+			) : healthStats.length === 0 ? (
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">No new results</p>
 					</CardContent>
 				</Card>
 			) : (
