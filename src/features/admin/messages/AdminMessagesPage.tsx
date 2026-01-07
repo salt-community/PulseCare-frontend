@@ -8,20 +8,22 @@ import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { SelectInput } from "../../../components/ui/SelectInput";
-import { mockPatients } from "../../../lib/api/mockData";
 import { useConversations } from "../../../hooks/useConversations";
 import { useChat } from "../../../hooks/useChat";
 import type { Conversation, Message } from "../../../lib/types/conversation";
-
-const CURRENT_DOCTOR_ID = "067fa0de-2b36-4368-a491-604a73454c23";
+import { usePatients } from "../../../hooks/usePatients";
+import { useUser } from "@clerk/clerk-react";
 
 export default function AdminMessagesPage() {
+	const { user } = useUser();
+
 	const { conversations, unreadCount, startConversation, isLoading } = useConversations({
 		role: "doctor"
 	});
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
 
 	const chat = useChat(selectedConvId ?? "", "doctor");
+	const { data: patients } = usePatients();
 
 	const [replyText, setReplyText] = useState("");
 	const [isThreadOpen, setIsThreadOpen] = useState(false);
@@ -54,7 +56,7 @@ export default function AdminMessagesPage() {
 
 		startConversation({
 			patientId: newMessagePatientId,
-			doctorId: CURRENT_DOCTOR_ID,
+			doctorId: user?.id ?? null,
 			subject: newMessageSubject,
 			content: newMessageContent,
 			fromPatient: false
@@ -82,8 +84,9 @@ export default function AdminMessagesPage() {
 		setReplyText("");
 	};
 
-	// const getPatientName = (id: string) => mockPatients.find(p => p.id === id)?.name ?? id;
-	const getPatientName = (id: string) => mockPatients.find(d => d.id === id)?.name ?? "Patient";
+	const getPatientName = (id: string) => patients?.find(p => p.id === id)?.name ?? id;
+	// const getPatientName = (id: string) => mockPatients.find(d => d.id === id)?.name ?? "Patient";
+
 	return (
 		<div className="space-y-4">
 			<PageHeader title="Messages" description={`You have ${unreadCount} unread message(s)`} />
@@ -101,10 +104,12 @@ export default function AdminMessagesPage() {
 						label="Select patient"
 						value={newMessagePatientId}
 						onChange={setNewMessagePatientId}
-						options={mockPatients.map(p => ({
-							label: p.name,
-							value: p.id
-						}))}
+						options={
+							patients?.map(d => ({
+								label: d.name,
+								value: d.id
+							})) || []
+						}
 						required
 					/>
 
