@@ -77,14 +77,6 @@ export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 						/>
 
 						<DialogInput
-							type="tel"
-							label="Phone"
-							value={editedPatient.phone}
-							onChange={value => handleEditChange("phone", value)}
-							required={true}
-						/>
-
-						<DialogInput
 							type="text"
 							label="Date of Birth"
 							value={editedPatient.dateOfBirth}
