@@ -3,41 +3,33 @@ import { DialogModal } from "../../../../components/shared/DialogModal";
 import { Button } from "../../../../components/ui/PrimaryButton";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import { useUser } from "@clerk/clerk-react";
-import type { HealthStat, Patient } from "../../../../lib/api/mockData";
+import type { HealthStat, PatientDetailsVm } from "../../../../lib/types";
+import { useUpdateHealthStat } from "../../../../hooks/useHealthStats";
 
 type EditHealthStatsProps = {
-	patient: Patient;
+	patient: PatientDetailsVm;
 	healthStat: HealthStat;
 };
 
 export const EditHealthStatsForm = ({ patient, healthStat }: EditHealthStatsProps) => {
-	const { user } = useUser();
 	const [open, setOpen] = useState(false);
+	const updateMutation = useUpdateHealthStat(patient.id);
 
 	const healthStatTypes = [
-		{ value: "blood_pressure", label: "Blood Pressure", unit: "mmHg" },
-		{ value: "glucose", label: "Glucose", unit: "mg/dL" },
-		{ value: "cholesterol", label: "Cholesterol", unit: "mg/dL" },
-		{ value: "heart_rate", label: "Heart Rate", unit: "bpm" },
-		{ value: "weight", label: "Weight", unit: "lbs" }
+		{ value: "BloodPressure" as const, label: "Blood Pressure", unit: "mmHg" },
+		{ value: "Glucose" as const, label: "Glucose", unit: "mg/dL" },
+		{ value: "Cholesterol" as const, label: "Cholesterol", unit: "mg/dL" },
+		{ value: "HeartRate" as const, label: "Heart Rate", unit: "bpm" },
+		{ value: "Weight" as const, label: "Weight", unit: "lbs" }
 	];
 
-	const statusOptions = ["normal", "warning", "critical"];
+	const statusOptions = ["Normal", "Warning", "Critical"] as const;
 
 	const [date, setDate] = useState<string>(healthStat.date);
 	const [type, setType] = useState<string>(healthStat.type);
 	const [value, setValue] = useState<string>(healthStat.value);
 	const [unit, setUnit] = useState<string>(healthStat.unit);
 	const [status, setStatus] = useState<string>(healthStat.status);
-
-	const resetForm = () => {
-		setDate(healthStat.date);
-		setType(healthStat.type);
-		setValue(healthStat.value);
-		setUnit(healthStat.unit);
-		setStatus(healthStat.status);
-	};
 
 	const handleTypeChange = (selectedType: string) => {
 		setType(selectedType);
@@ -50,21 +42,17 @@ export const EditHealthStatsForm = ({ patient, healthStat }: EditHealthStatsProp
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 
-		const updatedHealthStat = {
-			id: healthStat.id,
-			patientId: patient.id,
-			doctorId: user?.id,
-			type: type,
-			value: value,
-			unit: unit,
-			date: date,
-			status: status
-		};
-
-		console.log("Update health stat:", updatedHealthStat);
-
-		resetForm();
-		setOpen(false);
+		updateMutation.mutate(
+			{ id: healthStat.id, data: { type, value, unit, date, status } },
+			{
+				onSuccess: () => {
+					setOpen(false);
+				},
+				onError: () => {
+					alert("Failed to update health stat. Please try again.");
+				}
+			}
+		);
 	};
 
 	return (
@@ -145,14 +133,16 @@ export const EditHealthStatsForm = ({ patient, healthStat }: EditHealthStatsProp
 									</option>
 									{statusOptions.map(s => (
 										<option key={s} value={s}>
-											{s.charAt(0).toUpperCase() + s.slice(1)}
+											{s}
 										</option>
 									))}
 								</select>
 							</div>
 						</div>
 
-						<Button type="submit">Update Health Stat</Button>
+						<Button type="submit" disabled={updateMutation.isPending}>
+							{updateMutation.isPending ? "Updating..." : "Update Health Stat"}
+						</Button>
 					</div>
 				</form>
 			</DialogModal>

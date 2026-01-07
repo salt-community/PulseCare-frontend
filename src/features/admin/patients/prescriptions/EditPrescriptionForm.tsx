@@ -1,4 +1,4 @@
-import { CalendarSync, Pill } from "lucide-react";
+import { Pencil, Pill } from "lucide-react";
 import { DialogModal } from "../../../../components/shared/DialogModal";
 import { Button } from "../../../../components/ui/PrimaryButton";
 import { DialogInput } from "../../../../components/ui/DialogInput";
@@ -11,7 +11,7 @@ type RenewPrescriptionProps = {
 	prescription: Medication;
 };
 
-export const RenewPrescriptionForm = ({ patient, prescription }: RenewPrescriptionProps) => {
+export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptionProps) => {
 	const { user } = useUser();
 	const [open, setOpen] = useState(false);
 
@@ -68,10 +68,10 @@ export const RenewPrescriptionForm = ({ patient, prescription }: RenewPrescripti
 	return (
 		<>
 			<Button variant={"outline"} size={"icon"} className="[&_svg]:size-5" onClick={() => setOpen(true)}>
-				<CalendarSync className="m-0 p-0" />
+				<Pencil className="m-0 p-0" />
 			</Button>
 
-			<DialogModal title="Add prescription" onOpenChange={setOpen} open={open}>
+			<DialogModal title="Edit prescription" onOpenChange={setOpen} open={open}>
 				<div className="my-4 flex items-center gap-3 ">
 					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
 						<Pill />
