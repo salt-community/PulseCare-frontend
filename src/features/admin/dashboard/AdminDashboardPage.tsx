@@ -8,10 +8,14 @@ import { Link } from "@tanstack/react-router";
 import { useAdminDashboard } from "../../../hooks/useAdminDashboard";
 import Spinner from "../../../components/shared/Spinner";
 import { useUser } from "@clerk/clerk-react";
+import { useConversations } from "../../../hooks/useConversations";
 
 export default function AdminDashboardPage() {
 	const { user } = useUser();
 	const { data, isLoading, isError } = useAdminDashboard();
+	const { unreadCount } = useConversations({
+		role: "doctor"
+	});
 
 	if (isLoading) {
 		return (
@@ -21,7 +25,7 @@ export default function AdminDashboardPage() {
 		);
 	}
 	if (isError || !data) return <div>Failed to load dashboard...</div>;
-	const { totalPatients, unreadMessages, todayAppointments, recentPatients, upcomingAppointments } = data;
+	const { totalPatients, todayAppointments, recentPatients, upcomingAppointments } = data;
 	return (
 		<>
 			<PageHeader title={`Welcome back ${user?.fullName ?? "Doctor"}`} description="Here's an overview of today's activities" />
@@ -59,7 +63,7 @@ export default function AdminDashboardPage() {
 					<CardContent className="p-5 flex items-center justify-between gap-3">
 						<div>
 							<p className="text-xs text-card-foreground mb-0.5">Unread Messages</p>
-							<p className="text-xl font-bold text-warning">{unreadMessages}</p>
+							<p className="text-xl font-bold text-warning">{unreadCount}</p>
 						</div>
 						<div className="p-2.5 rounded-lg bg-primary-light shrink-0">
 							<MessageSquare className="h-5 w-5 text-primary" />
