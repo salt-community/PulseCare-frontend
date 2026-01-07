@@ -22,7 +22,6 @@ export const RootLayout = () => {
 
 		const sync = async () => {
 			const token = await getToken({ template: "pulsecare-jwt-template" });
-			console.log("token: ", token);
 			if (!token) return;
 			const userInfo = {
 				name: user?.fullName ?? "",
