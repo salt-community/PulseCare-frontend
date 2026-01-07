@@ -17,8 +17,8 @@ export interface Conversation {
 }
 
 export interface StartConversationRequest {
-    patientId: string;
-    doctorId: string;
+    patientId: string | null;
+    doctorId: string | null;
     subject: string;
     content: string;
     fromPatient: boolean;
