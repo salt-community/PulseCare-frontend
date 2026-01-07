@@ -32,9 +32,10 @@ export default function MessagesPage() {
 	const [newMessageContent, setNewMessageContent] = useState("");
 
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
+	const last = chat.messages[chat.messages.length - 1];
 
 	const scrollToBottom = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
 	};
 
 	useEffect(() => {
@@ -71,7 +72,6 @@ export default function MessagesPage() {
 		e.preventDefault();
 		if (!selectedConvId) return;
 
-		const last = chat.messages[chat.messages.length - 1];
 		const subject = last.subject.startsWith("Re:") ? last.subject : `Re: ${last.subject}`;
 
 		chat.sendMessage({
@@ -177,11 +177,11 @@ export default function MessagesPage() {
 					setIsThreadOpen(open);
 					if (!open) setSelectedConvId(null);
 				}}
-				title="Conversation"
+				title={last?.subject ? last?.subject : "Conversation"}
 				showTrigger={false}
 			>
 				{chat.messages.length > 0 ? (
-					<div className="space-y-4">
+					<div className="flex flex-col max-h-[75vh] pb-18 md:pb-4">
 						<div className="flex items-center gap-3">
 							<div className="p-3 rounded-full bg-primary/10">
 								<User className="h-5 w-5 text-primary" />
@@ -194,7 +194,7 @@ export default function MessagesPage() {
 							</div>
 						</div>
 
-						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
+						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1 flex-1">
 							{chat.messages.map((msg: Message) => {
 								const isPatient = msg.fromPatient;
 
