@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
 import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
-import { HealthStatsTab } from "./vitals/HealthStatsTab";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
