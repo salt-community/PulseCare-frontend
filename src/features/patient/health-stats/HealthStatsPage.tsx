@@ -7,6 +7,7 @@ import { statIcons } from "../../../lib/StatsIcons";
 import { useEffect, useState } from "react";
 import Spinner from "../../../components/shared/Spinner";
 import { useAuth } from "@clerk/clerk-react";
+import { usePatientDashboard } from "../../../hooks/usePatientDashboard";
 
 type HealthStats = {
 	id: string;
@@ -24,63 +25,20 @@ const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = 
 };
 
 export default function HealthStatsPage() {
-	const { getToken, isLoaded } = useAuth();
+	const { data, isLoading, error } = usePatientDashboard();
 
-	const [data, setData] = useState<HealthStats[]>([]);
 	const orderedData = Array.isArray(data) ? [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : [];
 	const bloodData = Array.isArray(data) ? data.filter(d => d.type === "Cholesterol" || d.type === "Glucose") : [];
 	console.log("health stats", data);
-
-	const testId = "98decd37-0a1f-4af4-a73f-02510e737c21";
-	const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
-	const [isError, setIsError] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-
-	async function getData() {
-		if (!isLoaded) return;
-
-		const token = await getToken({ template: "pulsecare-jwt-template" });
-
-		if (!token) {
-			throw new Error("No auth token available");
-		}
-
-		const response = await fetch(baseUrl + "/HealthStats/" + testId, {
-			headers: {
-				"Authorization": `Bearer ${token}`,
-				"Content-Type": "application/json"
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error("Request failed");
-		}
-
-		return await response.json();
-	}
-
-	useEffect(() => {
-		getData()
-			.then(result => {
-				if (Array.isArray(result?.value)) {
-					setData(result.value);
-				} else {
-					setData([]);
-				}
-			})
-			.catch(() => setIsError(true))
-			.finally(() => setIsLoading(false));
-	}, [isLoaded]);
 
 	return (
 		<div>
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
-			{data.length === 0 && isLoading === false ? (
+			{data?.healthStats.length === 0 && isLoading === false ? (
 				<Card className="mb-4 shadow-none hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						{isError ? (
+						{error ? (
 							<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
 						) : (
 							<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
