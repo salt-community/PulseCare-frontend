@@ -10,7 +10,9 @@ import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
+import { format } from "date-fns";
 import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
+import { useSearch } from "@tanstack/react-router";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,6 +43,8 @@ export function PatientDetailsPage() {
 	const { getToken } = useAuth();
 	const navigate = useNavigate();
 	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions" | "vitals">("overview");
+	const search = useSearch({ from: "/admin/patients/$patientId" });
+	const from = search.from ?? "patients"; // fallback
 
 	const patientQuery = useQuery({
 		queryKey: ["patient-overview", patientId],
@@ -53,6 +57,8 @@ export function PatientDetailsPage() {
 	});
 
 	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
+	const backTarget = from === "dashboard" ? "/admin/dashboard" : "/admin/patients";
+	const backText = from === "dashboard" ? "← Back to Dashboard" : "← Back to Patients";
 
 	if (patientQuery.isLoading) {
 		return (
@@ -80,16 +86,16 @@ export function PatientDetailsPage() {
 	return (
 		<div className="space-y-6">
 			<button
-				onClick={() => navigate({ to: "/admin/patients" })}
+				onClick={() => navigate({ to: backTarget })}
 				className="text-card-foreground hover:text-primary text-sm font-medium cursor-pointer"
 			>
-				← Back to Patients
+				{backText}
 			</button>
 
 			<div className="flex flex-row justify-between gap-4">
 				<div>
 					<h1 className="text-3xl font-semibold text-foreground mb-2">{patient.name}</h1>
-					<p className="text-sm text-muted-foreground">Patient since {patient.createdAt}</p>
+					<p className="text-sm text-muted-foreground">Patient since {format(new Date(patient.createdAt), "d MMMM yyyy")}</p>
 				</div>
 				<EditPatientForm patient={patient} />
 			</div>
@@ -127,7 +133,7 @@ export function PatientDetailsPage() {
 							<CardContent className="p-5 pt-0 space-y-4 text-sm">
 								<InfoRow label="Email" value={patient.email} />
 								<InfoRow label="Phone" value={patient.phone} />
-								<InfoRow label="Date of Birth" value={patient.dateOfBirth} />
+								<InfoRow label="Date of Birth" value={format(new Date(patient.dateOfBirth), "d MMMM yyyy")} />
 							</CardContent>
 						</Card>
 
@@ -161,7 +167,7 @@ export function PatientDetailsPage() {
 					</div>
 				)}
 
-				{activeTab === "appointments" && <AppointmentsTab appointments={[]} patient={patient} />}
+				{activeTab === "appointments" && <AppointmentsTab appointments={patient.appointments} patient={patient} />}
 				{activeTab === "prescriptions" && <PrescriptionsTab patient={patient} medications={patient.medications} />}
 				{activeTab === "vitals" && <HealthStatsTab healthStats={patient.healthStats} patient={patient} />}
 			</div>

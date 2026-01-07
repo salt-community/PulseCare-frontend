@@ -31,3 +31,8 @@ export interface UpdateAppointmentRequest {
 	status: number; // Enum: 0=Scheduled, 1=Completed, 2=Cancelled
 	reason?: string;
 }
+
+export type CreateNoteRequest = {
+	appointmentId: string;
+	patientId: string;
+};

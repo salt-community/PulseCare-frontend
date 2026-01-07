@@ -1,17 +1,18 @@
 import { CalendarOff, Clock4, FileText, Stethoscope } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/Card";
-import type { Appointment } from "../../../../lib/api/mockData";
 import { format } from "date-fns";
 import { Pill } from "../../../../components/ui/Pill";
 import { DateBlock } from "../../../../components/ui/DateBlock";
 import { AddNotesForm } from "./AddNotesForm";
+import type { Appointment } from "../../../../lib/types";
 
 type AppointmentsCardProps = {
 	appointments: Appointment[];
+	patientId: string;
 	isUpcoming: boolean;
 };
 
-export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardProps) => {
+export const AppointmentsCard = ({ appointments, isUpcoming, patientId }: AppointmentsCardProps) => {
 	const cardHeader = isUpcoming ? "Upcoming Appointments" : "Previous Appointments";
 
 	return (
@@ -71,12 +72,12 @@ export const AppointmentsCard = ({ appointments, isUpcoming }: AppointmentsCardP
 													<FileText className="size-4 shrink-0" />
 													Notes
 												</span>
-												<AddNotesForm appointmentId={apt.id} />
+												<AddNotesForm appointmentId={apt.id} patientId={patientId} />
 											</div>
 											{apt.notes!.length > 0 ? (
-												apt.notes!.map(n => (
-													<p key={n.id} className="text-sm text-muted-foreground wrap-break-word">
-														{n.content}
+												apt.notes!.map((n, i) => (
+													<p key={i} className="text-sm text-muted-foreground wrap-break-word">
+														{n}
 													</p>
 												))
 											) : (

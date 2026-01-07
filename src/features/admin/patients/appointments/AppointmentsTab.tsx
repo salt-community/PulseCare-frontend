@@ -1,18 +1,20 @@
-import type { Appointment, Patient } from "../../../../lib/api/mockData";
-import { parse, startOfDay } from "date-fns";
 import { AppointmentsCard } from "./AppointmentsCard";
 import { AddAppointmentForm } from "./AddAppointmentForm";
+import type { Appointment, PatientDetailsVm } from "../../../../lib/types";
 
 type AppointmentProps = {
 	appointments: Appointment[];
-	patient: Patient;
+	patient: PatientDetailsVm;
 };
 
 export const AppointmentsTab = ({ appointments, patient }: AppointmentProps) => {
 	//TODO: komma överrens hur ett datum ska se ut
-	const today = startOfDay(new Date());
-	const upcomingApts = appointments.filter(a => parse(a.date, "yyyy-MM-dd", today) >= today);
-	const prevApts = appointments.filter(a => parse(a.date, "yyyy-MM-dd", today) < today);
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+
+	const upcomingApts = appointments.filter(a => new Date(a.date) >= today).sort((a, b) => +new Date(a.date) - +new Date(b.date));
+
+	const prevApts = appointments.filter(a => new Date(a.date) < today).sort((a, b) => +new Date(b.date) - +new Date(a.date));
 
 	return (
 		<>
@@ -20,8 +22,8 @@ export const AppointmentsTab = ({ appointments, patient }: AppointmentProps) => 
 				<AddAppointmentForm patient={patient} />
 			</div>
 			<div className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
-				<AppointmentsCard appointments={upcomingApts} isUpcoming={true} />
-				<AppointmentsCard appointments={prevApts} isUpcoming={false} />
+				<AppointmentsCard appointments={upcomingApts} isUpcoming={true} patientId={patient.id} />
+				<AppointmentsCard appointments={prevApts} isUpcoming={false} patientId={patient.id} />
 			</div>
 		</>
 	);
