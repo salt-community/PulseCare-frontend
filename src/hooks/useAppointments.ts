@@ -21,7 +21,7 @@ export const useAllAppointments = () => {
 	return useQuery({
 		queryKey: appointmentKeys.lists(),
 		queryFn: async () => {
-			const token = await getToken();
+			const token = await getToken({ template: "pulsecare-jwt-template" });
 			if (!token) throw new Error("Not authenticated");
 			return appointmentApi.getAllAppointments(token);
 		}
@@ -29,17 +29,16 @@ export const useAllAppointments = () => {
 };
 
 // GET patient appointments
-export const usePatientAppointments = (patientId: string) => {
+export const usePatientAppointments = () => {
 	const { getToken } = useAuth();
 
 	return useQuery({
-		queryKey: appointmentKeys.patient(patientId),
+		queryKey: appointmentKeys.lists(),
 		queryFn: async () => {
-			const token = await getToken();
+			const token = await getToken({ template: "pulsecare-jwt-template" });
 			if (!token) throw new Error("Not authenticated");
-			return appointmentApi.getPatientAppointments(patientId, token);
-		},
-		enabled: !!patientId // Only run if patientId exists
+			return appointmentApi.getPatientAppointments(token);
+		}
 	});
 };
 
