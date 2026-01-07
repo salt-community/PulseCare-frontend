@@ -27,7 +27,7 @@ export interface CreateAppointmentRequest {
 export interface UpdateAppointmentRequest {
 	date: string; // ISO date
 	time: string; // TimeSpan format "14:30:00"
-	type: AppointmentType;
-	status: AppointmentStatus;
+	type: number; // Enum: 0=Checkup, 1=FollowUp, 2=Consultation, 3=Lab
+	status: number; // Enum: 0=Scheduled, 1=Completed, 2=Cancelled
 	reason?: string;
 }

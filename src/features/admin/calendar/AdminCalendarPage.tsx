@@ -5,15 +5,18 @@ import { enGB } from "date-fns/locale";
 import { format } from "date-fns";
 import { Calendar, Clock, User } from "lucide-react";
 import { ScheduleAppointment } from "./ScheduleAppointment";
+import { EditAppointment } from "./EditAppointment";
 import PageHeader from "../../../components/shared/PageHeader";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { Pill } from "../../../components/ui/Pill";
 import { Button } from "../../../components/ui/PrimaryButton";
 import { useAllAppointments, useDeleteAppointment } from "../../../hooks/useAppointments";
 import type { Appointment } from "../../../lib/types/appointment";
+import { toast } from "react-toastify";
 
 export const AdminCalendarPage = () => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+	const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 	const [selected, setSelected] = useState<Date | undefined>(new Date());
 	const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 	const appointmentsRef = useRef<HTMLDivElement>(null);
@@ -32,16 +35,22 @@ export const AdminCalendarPage = () => {
 		setDialogOpen(true);
 	}
 
+	function handleEdit() {
+		setDialogOpen(false);
+		setEditDialogOpen(true);
+	}
+
 	async function handleDelete() {
 		if (!selectedAppointment) return;
 
 		if (confirm(`Delete appointment with ${selectedAppointment.patientName}?`)) {
 			try {
 				await deleteMutation.mutateAsync(selectedAppointment.id);
+				toast.success("Appointment deleted successfully!");
 				setDialogOpen(false);
 				setSelectedAppointment(null);
 			} catch (error) {
-				alert("Failed to delete appointment");
+				toast.error("Failed to delete appointment. Please try again.");
 			}
 		}
 	}
@@ -82,7 +91,7 @@ export const AdminCalendarPage = () => {
 							</div>
 						</div>
 						<div className="flex gap-2 justify-end">
-							<Button onClick={() => ""}>Edit</Button>
+							<Button onClick={handleEdit}>Edit</Button>
 							<Button onClick={handleDelete} variant={"destructive"} disabled={deleteMutation.isPending}>
 								{deleteMutation.isPending ? "Deleting..." : "Remove"}
 							</Button>
@@ -91,12 +100,13 @@ export const AdminCalendarPage = () => {
 				)}
 			</DialogModal>
 
+			<EditAppointment appointment={selectedAppointment} open={editDialogOpen} onOpenChange={setEditDialogOpen} />
+
 			<div className="flex flex-col gap-10 lg:flex-row">
 				<DatePicker selected={selected} onSelect={setSelected} appointments={appointments} />
 				<div ref={appointmentsRef} className="flex-1 flex flex-col gap-4">
 					<h2 className="flex items-center gap-2 text-2xl font-semibold">
 						<Calendar className="h-6 text-primary" />
-
 						{selected ? format(selected, "EEEE dd MMMM yyyy", { locale: enGB }) : "Select a date"}
 					</h2>
 					{!selected ||

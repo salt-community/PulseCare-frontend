@@ -16,3 +16,22 @@ export async function fetchPatientDashboard(token: string): Promise<PatientDashb
 
 	return res.json();
 }
+
+export interface PatientDto {
+	id: string;
+	name: string;
+	email: string;
+	phone: string;
+	conditions: string[];
+}
+
+export const patientApi = {
+	// GET /api/patients
+	getAllPatients: async (token: string): Promise<PatientDto[]> => {
+		const response = await fetch(`${API_BASE_URL}/patients`, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		if (!response.ok) throw new Error("Failed to fetch patients");
+		return response.json();
+	}
+};

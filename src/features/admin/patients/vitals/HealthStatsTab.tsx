@@ -6,7 +6,7 @@ import { Button } from "../../../../components/ui/PrimaryButton";
 import { EditHealthStatsForm } from "./EditHealthStatsForm";
 import { Pill } from "../../../../components/ui/Pill";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { statIcons } from "../../../../lib/StatsIcons";
 
 type HealthStatsProps = {
@@ -17,7 +17,11 @@ type HealthStatsProps = {
 export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 	const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 	const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
-	const [localHealthStats, setLocalHealthStats] = useState<HealthStat[]>(healthStats);
+	const [localHealthStats, setLocalHealthStats] = useState<HealthStat[]>([]);
+
+	useEffect(() => {
+		setLocalHealthStats(healthStats);
+	}, [healthStats]);
 
 	const getStatusVariant = (status: string) => {
 		switch (status) {
@@ -37,14 +41,6 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 			.split("_")
 			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 			.join(" ");
-	};
-
-	const handleDelete = (statId: string) => {
-		// TODO: Replace with API call when backend is ready
-		// Example: await deleteHealthStat(statId);
-
-		setLocalHealthStats(prev => prev.filter(stat => stat.id !== statId));
-		console.log("Delete health stat:", statId);
 	};
 
 	// Group health stats by type
