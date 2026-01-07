@@ -10,10 +10,7 @@ export const RootLayout = () => {
 	const { location } = useRouterState();
 	const { user } = useUser();
 
-	const isAdmin = user?.publicMetadata.role === "admin";
-	const role = isAdmin ? "doctor" : "patient";
-
-	const hardcodedId = isAdmin ? "067fa0de-2b36-4368-a491-604a73454c23" : "183977c2-a4a1-408b-89fb-7d4a136738df";
+	const role = (user?.publicMetadata.role as "admin" | "patient") || "patient";
 
 	useEffect(() => {
 		if (!isLoaded) return;
@@ -57,7 +54,7 @@ export const RootLayout = () => {
 
 	if (!isLoaded) return null;
 	return (
-		<ChatProvider token={async () => (await getToken()) ?? ""} role={role} userId={hardcodedId}>
+		<ChatProvider token={async () => (await getToken()) ?? ""} role={role} userId={user?.id ?? ""}>
 			<Outlet />
 		</ChatProvider>
 	);
