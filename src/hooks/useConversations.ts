@@ -1,12 +1,14 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getConversations, startConversation, } from "../lib/api/conversationApi";
-import type { Conversation, StartConversationRequest, StartConversationResponse } from "../lib/types/conversation";
+import type { Conversation, StartConversationRequest, StartConversationResponse, Message } from "../lib/types/conversation";
 import { useAuth } from "@clerk/clerk-react";
+import { useChatContext } from "../context/ChatContext";
 
 export function useConversations(options: { role: "patient" | "doctor" }) {
     const queryClient = useQueryClient();
     const { getToken } = useAuth();
+    const { connection } = useChatContext();
 
     const safeGetToken = async () => {
         const jwt = await getToken();
@@ -19,6 +21,33 @@ export function useConversations(options: { role: "patient" | "doctor" }) {
         queryFn: () => getConversations(safeGetToken),
         staleTime: 1000 * 60,
     });
+
+    useEffect(() => {
+        if (!connection) return;
+
+        const handleNotification = (newMessage: Message) => {
+            queryClient.setQueryData(["conversations", options.role], (oldData: Conversation[] | undefined) => {
+                if (!oldData) return [];
+
+                return oldData.map(conv => {
+                    if (conv.id === newMessage.conversationId) {
+                        return {
+                            ...conv,
+                            latestMessage: newMessage,
+                            unreadCount: (conv.unreadCount || 0) + 1
+                        };
+                    }
+                    return conv;
+                });
+            });
+        };
+
+        connection.on("NewMessageNotification", handleNotification);
+
+        return () => {
+            connection.off("NewMessageNotification", handleNotification);
+        };
+    }, [connection, queryClient, options.role]);
 
     const conversations = useMemo(() => {
         const data = conversationsQuery.data ?? [];
