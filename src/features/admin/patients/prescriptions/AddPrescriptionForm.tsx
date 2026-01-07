@@ -2,16 +2,16 @@ import { Pill, Plus } from "lucide-react";
 import { DialogModal } from "../../../../components/shared/DialogModal";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../../lib/api/mockData";
 import { Button } from "../../../../components/ui/PrimaryButton";
+import type { CreateMedicationDto } from "../../../../lib/types/medication";
 
 type PrescriptionProps = {
 	patient: Patient;
+	onSubmit: (dto: CreateMedicationDto) => void;
 };
 
-export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
-	const { user } = useUser();
+export const AddPrescriptionForm = ({ patient, onSubmit }: PrescriptionProps) => {
 	const [open, setOpen] = useState(false);
 
 	const dosageUnits = ["mg", "mcg", "g", "Tablet", "Capsule", "mL", "L", "IU", "U"];
@@ -21,7 +21,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 	const [date, setDate] = useState<string>("");
 	const [expireDate, setExpireDate] = useState<string>("");
 	const [medicine, setMedicine] = useState<string>("");
-	const [doseValue, setDoseValue] = useState<number>(0);
+	const [doseValue, setDoseValue] = useState<number>(1);
 	const [doseUnit, setDoseUnit] = useState<string>("");
 	const [frequencyValue, setFrequencyValue] = useState<number>(1);
 	const [frequencyUnit, setFrequencyUnit] = useState<string>("day");
@@ -31,7 +31,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 		setDate("");
 		setExpireDate("");
 		setMedicine("");
-		setDoseValue(0);
+		setDoseValue(1);
 		setDoseUnit("");
 		setFrequencyUnit("Day");
 		setFrequencyValue(1);
@@ -41,23 +41,17 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 
-		const dosage = {
-			value: doseValue,
-			unit: doseUnit,
-			frequencyValue: frequencyValue,
-			frequencyUnit: frequencyUnit
-		};
-		const newPrescription = {
-			patientId: patient.id,
-			doctorId: user?.id,
-			date: date,
-			expireDate: expireDate,
-			medicine: medicine,
-			dosage: dosage,
-			instructions: instructions
+		const dto: CreateMedicationDto = {
+			name: medicine,
+			dosage: `${doseValue} ${doseUnit}`,
+			frequency: `${frequencyValue} per ${frequencyUnit}`,
+			instructions,
+			timesPerDay: frequencyValue,
+			startDate: date,
+			endDate: expireDate || null
 		};
 
-		console.log("Create appointment:", newPrescription);
+		onSubmit(dto);
 
 		resetForm();
 		setOpen(false);
@@ -112,6 +106,7 @@ export const AddPrescriptionForm = ({ patient }: PrescriptionProps) => {
 										<label className="block p-1 text-md font-semibold">Dose</label>
 										<input
 											type="number"
+											min={1}
 											className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
 											value={doseValue}
 											onChange={e => setDoseValue(Number(e.target.value))}

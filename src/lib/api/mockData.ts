@@ -192,6 +192,7 @@ export const mockMedications: Medication[] = [
 		frequency: "daily",
 		timesPerDay: 2,
 		startDate: "2024-01-15",
+		endDate: "2025-12-30",
 		instructions: "Take with meals"
 	},
 	{
@@ -201,6 +202,7 @@ export const mockMedications: Medication[] = [
 		frequency: "daily",
 		timesPerDay: 1,
 		startDate: "2024-01-15",
+		endDate: "2025-12-30",
 		instructions: "Take in the morning"
 	},
 	{
@@ -210,6 +212,7 @@ export const mockMedications: Medication[] = [
 		frequency: "daily",
 		timesPerDay: 1,
 		startDate: "2024-02-01",
+		endDate: "2025-12-30",
 		instructions: "Take at bedtime"
 	},
 	{
@@ -219,6 +222,7 @@ export const mockMedications: Medication[] = [
 		frequency: "daily",
 		timesPerDay: 1,
 		startDate: "2024-01-01",
+		endDate: "2025-12-30",
 		instructions: "Take with food"
 	}
 ];

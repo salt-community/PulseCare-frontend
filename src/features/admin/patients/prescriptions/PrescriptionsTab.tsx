@@ -1,9 +1,9 @@
-import { LucidePill, Trash } from "lucide-react";
+import { LucidePill } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/Card";
 import { AddPrescriptionForm } from "./AddPrescriptionForm";
-import { Button } from "../../../../components/ui/PrimaryButton";
-import { EditPrescriptionForm } from "./EditPrescriptionForm";
-import type { Medication, PatientDetailsVm } from "../../../../lib/types";
+import type { Medication, PatientDetailsVm, UpdateMedicationDto } from "../../../../lib/types";
+import { useCreateMedication, useDeleteMedication, useUpdateMedication } from "../../../../hooks/useMedication";
+import { PrescriptionItem } from "./PrescriptionItem";
 
 type PrescriptionsTabProps = {
 	patient: PatientDetailsVm;
@@ -11,10 +11,14 @@ type PrescriptionsTabProps = {
 };
 
 export const PrescriptionsTab = ({ patient, medications }: PrescriptionsTabProps) => {
+	const createMedication = useCreateMedication(patient.id);
+	const updateMedication = useUpdateMedication(patient.id);
+	const deleteMedication = useDeleteMedication(patient.id);
+
 	return (
 		<>
 			<div className="w-fit">
-				<AddPrescriptionForm patient={patient} />
+				<AddPrescriptionForm patient={patient} onSubmit={dto => createMedication.mutate(dto)} />
 			</div>
 
 			<Card className="hover:shadow-none h-max">
@@ -31,32 +35,18 @@ export const PrescriptionsTab = ({ patient, medications }: PrescriptionsTabProps
 					) : (
 						<div className="space-y-4">
 							{medications.map((med: Medication) => (
-								<div key={med.id} className="border-t border-foreground/10 pt-4 first:border-t-0 first:pt-0">
-									<div className="flex items-start justify-between gap-4 mb-3">
-										<div className="flex-1">
-											<p className="font-semibold text-foreground text-base">
-												{med.name} – {med.dosage}
-											</p>
-											<p className="text-sm text-muted-foreground mt-1">{med.timesPerDay} times per day</p>
-										</div>
-										<div className="flex gap-2 shrink-0">
-											<EditPrescriptionForm patient={patient} prescription={med} />
-											<Button
-												variant="outline"
-												size="icon"
-												className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-4"
-											>
-												<Trash />
-											</Button>
-										</div>
-									</div>
-
-									{med.instructions && (
-										<p className="text-sm text-card-foreground mt-2">
-											<span className="font-semibold text-foreground">Instructions:</span> {med.instructions}
-										</p>
-									)}
-								</div>
+								<PrescriptionItem
+									key={med.id}
+									patient={patient}
+									med={med}
+									onUpdate={(dto: UpdateMedicationDto) =>
+										updateMedication.mutate({
+											medicationId: med.id,
+											dto
+										})
+									}
+									onDelete={() => deleteMedication.mutate(med.id)}
+								/>
 							))}
 						</div>
 					)}

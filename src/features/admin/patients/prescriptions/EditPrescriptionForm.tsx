@@ -3,16 +3,20 @@ import { DialogModal } from "../../../../components/shared/DialogModal";
 import { Button } from "../../../../components/ui/PrimaryButton";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import { useUser } from "@clerk/clerk-react";
-import type { Medication, Patient } from "../../../../lib/api/mockData";
+import type { Medication, UpdateMedicationDto } from "../../../../lib/types";
+import type { Patient } from "../../../../lib/types/patients";
 
 type RenewPrescriptionProps = {
 	patient: Patient;
 	prescription: Medication;
+	onSubmit: (dto: UpdateMedicationDto) => void;
 };
 
-export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptionProps) => {
-	const { user } = useUser();
+export const EditPrescriptionForm = ({ patient, prescription, onSubmit }: RenewPrescriptionProps) => {
+	const toDateInputValue = (isoString: string | null | undefined) => {
+		if (!isoString) return "";
+		return isoString.split("T")[0];
+	};
 	const [open, setOpen] = useState(false);
 
 	const dosageUnits = ["mg", "mcg", "g", "Tablet", "Capsule", "mL", "L", "IU", "U"];
@@ -20,20 +24,22 @@ export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptio
 	const frequencyUnits = ["Day", "Week", "Month"];
 
 	//TODO: Skapa en ny dto för admin recept överblick
-	const [date, setDate] = useState<string>("");
-	const [expireDate, setExpireDate] = useState<string>("");
+	const [date, setDate] = useState(toDateInputValue(prescription.startDate));
+	const [expireDate, setExpireDate] = useState(toDateInputValue(prescription.endDate));
 	const [medicine, setMedicine] = useState<string>(prescription.name);
-	const [doseValue, setDoseValue] = useState<number>();
-	const [doseUnit, setDoseUnit] = useState<string>("");
-	const [frequencyValue, setFrequencyValue] = useState<number>(1);
-	const [frequencyUnit, setFrequencyUnit] = useState<string>("day");
+	const dosageParts = prescription.dosage.split(" ");
+	const [doseValue, setDoseValue] = useState(Number(dosageParts[0]));
+	const [doseUnit, setDoseUnit] = useState(dosageParts[1] || "");
+	const frequencyParts = prescription.frequency.split(" ");
+	const [frequencyValue, setFrequencyValue] = useState(Number(frequencyParts[0]));
+	const [frequencyUnit, setFrequencyUnit] = useState(frequencyParts[2] || "Day");
 	const [instructions, setInstructions] = useState<string>(prescription.instructions ?? "");
 
 	const resetForm = () => {
 		setDate("");
 		setExpireDate("");
 		setMedicine("");
-		setDoseValue(0);
+		setDoseValue(1);
 		setDoseUnit("");
 		setFrequencyUnit("Day");
 		setFrequencyValue(1);
@@ -43,23 +49,17 @@ export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptio
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 
-		const dosage = {
-			value: doseValue,
-			unit: doseUnit,
-			frequencyValue: frequencyValue,
-			frequencyUnit: frequencyUnit
-		};
-		const newPrescription = {
-			patientId: patient.id,
-			doctorId: user?.id,
-			date: date,
-			expireDate: expireDate,
-			medicine: medicine,
-			dosage: dosage,
-			instructions: instructions
+		const dto: UpdateMedicationDto = {
+			name: medicine,
+			dosage: `${doseValue} ${doseUnit}`,
+			frequency: `${frequencyValue} per ${frequencyUnit}`,
+			instructions,
+			timesPerDay: frequencyValue,
+			startDate: date,
+			endDate: expireDate || null
 		};
 
-		console.log("Create appointment:", newPrescription);
+		onSubmit(dto);
 
 		resetForm();
 		setOpen(false);
@@ -77,7 +77,7 @@ export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptio
 						<Pill />
 					</div>
 					<div>
-						<p className="text-sm  text-muted-foreground">Create prescription for</p>
+						<p className="text-sm  text-muted-foreground">Edit prescription for</p>
 						<p className="text-lg font-semibold text-foreground">{patient.name}</p>
 					</div>
 				</div>
@@ -114,6 +114,7 @@ export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptio
 										<label className="block p-1 text-md font-semibold">Dose</label>
 										<input
 											type="number"
+											min={1}
 											className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
 											value={doseValue}
 											onChange={e => setDoseValue(Number(e.target.value))}
@@ -182,7 +183,7 @@ export const EditPrescriptionForm = ({ patient, prescription }: RenewPrescriptio
 							required={false}
 						/>
 
-						<Button type="submit">Add prescription</Button>
+						<Button type="submit">Save prescription</Button>
 					</div>
 				</form>
 			</DialogModal>
