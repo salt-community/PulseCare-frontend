@@ -19,8 +19,8 @@ export function ChatProvider({
 	children
 }: {
 	token: () => Promise<string>;
-	role: "patient" | "doctor";
-	userId: string;
+	role: "patient" | "doctor" | "admin";
+	userId: string | null;
 	children: React.ReactNode;
 }) {
 	const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
@@ -49,7 +49,7 @@ export function ChatProvider({
 			}
 		};
 		start();
-	}, [role, userId]);
+	}, [role]);
 
 	useEffect(() => {
 		if (!connection) return;
