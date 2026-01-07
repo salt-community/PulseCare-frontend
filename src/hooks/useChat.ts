@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useChatContext } from "../context/ChatContext";
 import { getMessages, sendMessage, markAllAsRead } from "../lib/api/messageApi";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import type { Conversation, Message } from "../lib/types/conversation";
 
-export function useChat(conversationId: string, currentUserId: string, role: "patient" | "doctor") {
+export function useChat(conversationId: string, role: "patient" | "doctor") {
     const { connection, setActiveConversation } = useChatContext();
     const queryClient = useQueryClient();
     const { getToken } = useAuth();
+    const { user } = useUser();
 
     const [isTyping, setIsTyping] = useState(false);
     const lastSentTypingRef = useRef(0);
@@ -57,7 +58,7 @@ export function useChat(conversationId: string, currentUserId: string, role: "pa
                 return [...old, newMessage];
             });
 
-            queryClient.setQueryData(["conversations", role, currentUserId], (old: Conversation[] | undefined) => {
+            queryClient.setQueryData(["conversations", role], (old: Conversation[] | undefined) => {
                 if (!old) return [];
 
                 return old.map(c => {
@@ -74,7 +75,7 @@ export function useChat(conversationId: string, currentUserId: string, role: "pa
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["conversations", role, currentUserId],
+                queryKey: ["conversations", role],
                 refetchType: "none"
             });
         }
@@ -83,7 +84,7 @@ export function useChat(conversationId: string, currentUserId: string, role: "pa
     const markAsReadMutation = useMutation({
         mutationFn: () => markAllAsRead(conversationId, safeGetToken),
         onSuccess: () => {
-            queryClient.setQueryData(["conversations", role, currentUserId], (old: Conversation[] = []) => {
+            queryClient.setQueryData(["conversations", role], (old: Conversation[] = []) => {
                 return old.map(c => c.id === conversationId ? { ...c, unreadCount: 0 } : c);
             });
         }
@@ -105,7 +106,7 @@ export function useChat(conversationId: string, currentUserId: string, role: "pa
     const sendTyping = () => {
         const now = Date.now();
         if (now - lastSentTypingRef.current > 1000) {
-            connection?.invoke("Typing", conversationId, currentUserId);
+            connection?.invoke("Typing", conversationId, user?.id);
             lastSentTypingRef.current = now;
         }
     };
@@ -114,7 +115,7 @@ export function useChat(conversationId: string, currentUserId: string, role: "pa
         if (!connection) return;
 
         const handleTyping = (userId: string) => {
-            if (userId === currentUserId) return;
+            if (userId === user?.id) return;
 
             setIsTyping(true);
             if (typingRef.current) clearTimeout(typingRef.current);
@@ -125,7 +126,7 @@ export function useChat(conversationId: string, currentUserId: string, role: "pa
         return () => {
             connection.off("Typing", handleTyping);
         };
-    }, [connection, currentUserId]);
+    }, [connection, user?.id]);
 
     return {
         messages: messagesQuery.data ?? [],
