@@ -1,27 +1,24 @@
 import { Activity, Trash, ChevronDown, ChevronUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/Card";
-import type { HealthStat, Patient } from "../../../../lib/api/mockData";
+import type { HealthStat, PatientDetailsVm } from "../../../../lib/types";
 import { AddHealthStat } from "./AddHealthStat";
 import { Button } from "../../../../components/ui/PrimaryButton";
 import { EditHealthStatsForm } from "./EditHealthStatsForm";
 import { Pill } from "../../../../components/ui/Pill";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { statIcons } from "../../../../lib/StatsIcons";
+import { useDeleteHealthStat } from "../../../../hooks/useHealthStats";
 
 type HealthStatsProps = {
-	patient: Patient;
+	patient: PatientDetailsVm;
 	healthStats: HealthStat[];
 };
 
 export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 	const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 	const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
-	const [localHealthStats, setLocalHealthStats] = useState<HealthStat[]>([]);
-
-	useEffect(() => {
-		setLocalHealthStats(healthStats);
-	}, [healthStats]);
+	const deleteMutation = useDeleteHealthStat(patient.id);
 
 	const getStatusVariant = (status: string) => {
 		switch (status) {
@@ -43,8 +40,18 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 			.join(" ");
 	};
 
+	const handleDelete = (statId: string) => {
+		if (confirm("Are you sure you want to delete this health stat?")) {
+			deleteMutation.mutate(statId, {
+				onError: () => {
+					alert("Failed to delete health stat. Please try again.");
+				}
+			});
+		}
+	};
+
 	// Group health stats by type
-	const groupedStats = localHealthStats.reduce(
+	const groupedStats = healthStats.reduce(
 		(acc, stat) => {
 			if (!acc[stat.type]) {
 				acc[stat.type] = [];
@@ -177,6 +184,8 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 															variant="outline"
 															size="icon"
 															className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-4"
+															onClick={() => handleDelete(stat.id)}
+															disabled={deleteMutation.isPending}
 														>
 															<Trash />
 														</Button>

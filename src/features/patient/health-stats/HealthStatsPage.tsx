@@ -2,24 +2,45 @@ import { format } from "date-fns";
 import { Icon } from "../../../components/shared/Icon";
 import PageHeader from "../../../components/shared/PageHeader";
 import { Card, CardContent, CardTitle } from "../../../components/ui/Card";
-import { mockHealthStats } from "../../../lib/api/mockData";
 import { Pill } from "../../../components/ui/Pill";
 import { statIcons } from "../../../lib/StatsIcons";
+import Spinner from "../../../components/shared/Spinner";
+import { usePatientDashboard } from "../../../hooks/usePatientDashboard";
+
+const statusVariants: Record<string, "secondary" | "destructive" | "warning"> = {
+	Normal: "secondary",
+	Warning: "warning",
+	Critical: "destructive"
+};
 
 export default function HealthStatsPage() {
-	console.log("health stats", mockHealthStats);
-	const data = mockHealthStats;
-	const orderedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	const bloodData = orderedData.filter(d => d.type === "cholesterol" || d.type === "glucose");
+	const { data, isLoading, error } = usePatientDashboard();
+
+	const healthStats = data?.healthStats ?? [];
+	const orderedData = [...healthStats].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+	const bloodData = healthStats.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
 
 	return (
 		<div>
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
-			{data.length === 0 ? (
-				<Card className="mb-4 shadow-none hover:shadow-none">
+			{isLoading ? (
+				<Card className="flex flex-col items-center">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						<p className="text-lg font-medium text-foreground mb-2"> No new results</p>
+						<p className="text-lg font-medium text-foreground mb-2">Loading health stats... </p>
+						<Spinner />
+					</CardContent>
+				</Card>
+			) : error ? (
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
+					</CardContent>
+				</Card>
+			) : healthStats.length === 0 ? (
+				<Card className="transition-shadow animate-slide-up hover:shadow-none">
+					<CardContent className="flex flex-col items-center justify-center py-12 ">
+						<p className="text-lg font-medium text-foreground mb-2">No new results</p>
 					</CardContent>
 				</Card>
 			) : (
@@ -35,7 +56,7 @@ export default function HealthStatsPage() {
 												<Icon variant="red">{StatIcon && <StatIcon />} </Icon>
 											</span>
 											<span>
-												<Pill variant="warning">{d.status}</Pill>
+												<Pill variant={statusVariants[d.status]}>{d.status}</Pill>
 											</span>
 										</div>
 										<div className="flex flex-col">
@@ -79,7 +100,7 @@ export default function HealthStatsPage() {
 													<span className="text-xl font-semibold text-foreground mr-2">{d.value}</span>
 													<span className="text-sm">{d.unit}</span>
 												</div>
-												<Pill variant="secondary">{d.status}</Pill>
+												<Pill variant={statusVariants[d.status]}>{d.status}</Pill>
 											</div>
 										</CardContent>
 									</Card>
