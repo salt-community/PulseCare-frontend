@@ -1,9 +1,11 @@
-const BASE_URL = "/api/conversations";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const URL = `${BASE_URL}/conversations`;
 
 export async function getConversations(role: "patient" | "doctor", userId: string, token: () => Promise<string>) {
     const jwt = await token();
 
-    const res = await fetch(`${BASE_URL}?role=${role}&userId=${userId}`, {
+    const res = await fetch(`${URL}?role=${role}&userId=${userId}`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${jwt}`
@@ -24,7 +26,7 @@ export async function startConversation(input: {
 ) {
     const jwt = await token();
 
-    const res = await fetch(`${BASE_URL}/start`, {
+    const res = await fetch(`${URL}/start`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
