@@ -27,6 +27,14 @@ const fetchMedications = async (token: string): Promise<Medication[]> => {
 
 export default function MedicationsPage() {
 	const { getToken } = useAuth();
+	const formatDate = (iso: string | null | undefined) => {
+		if (!iso) return "—";
+		return new Date(iso).toLocaleDateString("en-GB", {
+			year: "numeric",
+			month: "short",
+			day: "numeric"
+		});
+	};
 
 	const medicationsQuery = useQuery({
 		queryKey: ["medications"],
@@ -92,8 +100,12 @@ export default function MedicationsPage() {
 											</div>
 											<div className="flex items-center gap-2 text-muted-foreground">
 												<Calendar className="h-4 w-4" />
-												<span>Started {medication.startDate}</span>
+												<span>
+													Start date: {formatDate(medication.startDate)}
+													{medication.endDate && <> - End date: {formatDate(medication.endDate)}</>}
+												</span>
 											</div>
+
 											{medication.instructions && (
 												<div className="flex items-start gap-2 text-muted-foreground mt-3 pt-3 border-t border-border">
 													<InfoIcon className="h-4 w-4 mt-0.5 shrink-0" />

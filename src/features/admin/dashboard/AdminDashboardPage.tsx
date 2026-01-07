@@ -97,8 +97,8 @@ export default function AdminDashboardPage() {
 
 											<div className="flex-1 min-w-0">
 												<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-													<div className="min-w-0">
-														<span className="font-medium text-foreground block truncate">{patient.name}</span>
+													<div className="min-w-0 truncate">
+														<span className="font-medium text-foreground block">{patient.name}</span>
 														<span className="text-sm text-secondary-foreground">{patient.email}</span>
 													</div>
 
