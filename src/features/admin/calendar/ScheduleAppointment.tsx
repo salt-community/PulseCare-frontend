@@ -3,7 +3,7 @@ import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useCreateAppointment } from "../../../hooks/useAppointments";
+import { useCreateAppointment, useAllAppointments } from "../../../hooks/useAppointments"; // add use all
 import { usePatients } from "../../../hooks/usePatients";
 import type { AppointmentType } from "../../../lib/types/appointment";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 
 	const createMutation = useCreateAppointment();
 	const { data: patients, isLoading: isPatientsLoading } = usePatients();
+	const { data: appointments = [] } = useAllAppointments(); //added
 
 	const appointmentTypes: AppointmentType[] = ["Checkup", "FollowUp", "Consultation", "Lab"];
 
@@ -25,6 +26,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 	const [time, setTime] = useState<string>("");
 	const [type, setType] = useState<AppointmentType>("Checkup");
 	const [reason, setReason] = useState<string>("");
+	const [conflictError, setConflictError] = useState<string>("");
 
 	const resetForm = () => {
 		setSelectedPatientId("");
@@ -32,6 +34,7 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 		setTime("");
 		setType("Checkup");
 		setReason("");
+		setConflictError("");
 	};
 
 	const handleSubmit = async (e: FormEvent) => {
@@ -49,6 +52,12 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 			type: type,
 			reason: reason || undefined
 		};
+
+		const conflict = appointments.find(a => a.date.startsWith(date) && (a.time ?? "") === time);
+		if (conflict) {
+			setConflictError("There is already an appointment at this time.");
+			return;
+		}
 
 		try {
 			await createMutation.mutateAsync(newAppointment);
@@ -90,9 +99,34 @@ export const ScheduleAppointment = ({ currentDate }: AppointmentProps) => {
 					</div>
 
 					<div className="flex gap-2">
-						<DialogInput type="date" label="Date" value={date} onChange={setDate} required />
-						<DialogInput type="time" label="Time" value={time} onChange={setTime} required />
+						<DialogInput
+							type="date"
+							label="Date"
+							value={date}
+							onChange={v => {
+								setDate(v);
+								setConflictError("");
+							}}
+							required
+						/>
+						<DialogInput
+							type="time"
+							label="Time"
+							value={time}
+							onChange={v => {
+								setTime(v);
+								setConflictError("");
+							}}
+							required
+						/>
 					</div>
+
+					{conflictError && (
+						<div className="flex">
+							<div className="flex-1" />
+							<p className="text-red-500 text-sm mt-2">{conflictError}</p>
+						</div>
+					)}
 
 					<div className="p-1 m-1">
 						<label className="block p-1 text-md font-semibold">Type</label>
