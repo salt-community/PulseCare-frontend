@@ -4,7 +4,7 @@ import { getConversations, startConversation, } from "../lib/api/conversationApi
 import type { Conversation, StartConversationRequest, StartConversationResponse } from "../lib/types/conversation";
 import { useAuth } from "@clerk/clerk-react";
 
-export function useConversations(options: { role: "patient" | "doctor"; userId: string }) {
+export function useConversations(options: { role: "patient" | "doctor" }) {
     const queryClient = useQueryClient();
     const { getToken } = useAuth();
 
@@ -15,8 +15,8 @@ export function useConversations(options: { role: "patient" | "doctor"; userId: 
     };
 
     const conversationsQuery = useQuery({
-        queryKey: ["conversations", options.role, options.userId],
-        queryFn: () => getConversations(options.role, options.userId, safeGetToken),
+        queryKey: ["conversations", options.role],
+        queryFn: () => getConversations(safeGetToken),
         staleTime: 1000 * 60,
     });
 
@@ -40,7 +40,7 @@ export function useConversations(options: { role: "patient" | "doctor"; userId: 
             queryClient.setQueryData(["messages", data.conversationId], [data.message]);
 
             queryClient.invalidateQueries({
-                queryKey: ["conversations", options.role, options.userId]
+                queryKey: ["conversations", options.role]
             });
         }
     });
