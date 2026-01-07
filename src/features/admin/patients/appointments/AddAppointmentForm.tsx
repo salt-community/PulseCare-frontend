@@ -2,16 +2,17 @@ import { CalendarClock, Plus } from "lucide-react";
 import { DialogModal } from "../../../../components/shared/DialogModal";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import { useUser } from "@clerk/clerk-react";
 import type { Patient } from "../../../../lib/api/mockData";
 import { Button } from "../../../../components/ui/PrimaryButton";
+import { useCreateAppointment } from "../../../../hooks/useAppointments";
+import { toast } from "react-toastify";
 
 type AppointmentProps = {
 	patient: Patient;
 };
 
 export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
-	const { user } = useUser();
+	const createMutation = useCreateAppointment();
 	const [open, setOpen] = useState(false);
 	const appointmentTypes = ["Checkup", "Follow-up", "Consultation", "Lab"];
 
@@ -27,22 +28,27 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 		setReason("");
 	};
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 
-		const start = `${date}T${time}:00`;
+		const appointmentDate = new Date(date);
 		const newAppointment = {
 			patientId: patient.id,
-			doctorId: user?.id,
-			start,
+			date: appointmentDate.toISOString(),
+			time: time,
 			type,
-			reason
+			reason: reason || undefined
 		};
 
-		console.log("Create appointment:", newAppointment);
-
-		resetForm();
-		setOpen(false);
+		try {
+			await createMutation.mutateAsync(newAppointment);
+			toast.success("Appointment created successfully!");
+			resetForm();
+			setOpen(false);
+		} catch (error) {
+			console.error("Failed to create appointment:", error);
+			toast.error("Failed to create appointment. Please try again.");
+		}
 	};
 
 	return (
@@ -94,8 +100,12 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 						placeholder="Short reason for the visit"
 					/>
 
-					<button type="submit" className="mt-4 w-full bg-primary text-white rounded-md py-2">
-						Add
+					<button
+						type="submit"
+						className="mt-4 w-full bg-primary text-white rounded-md py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+						disabled={createMutation.isPending}
+					>
+						{createMutation.isPending ? "Creating..." : "Add"}
 					</button>
 				</form>
 			</DialogModal>
