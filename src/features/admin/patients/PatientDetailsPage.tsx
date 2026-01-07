@@ -10,7 +10,7 @@ import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
-import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
+import type { PatientOverviewDto, PatientDetailsVm, Appointment } from "../../../lib/types";
 import { useSearch } from "@tanstack/react-router";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -55,6 +55,8 @@ export function PatientDetailsPage() {
 		enabled: Boolean(patientId)
 	});
 
+	const appointments: Appointment[] = patientQuery.data?.appointments ?? [];
+	console.log("appointmens detailpage: ", appointments);
 	const patient = patientQuery.data ? toPatientDetailsVm(patientId, patientQuery.data) : undefined;
 	const backTarget = from === "dashboard" ? "/admin/dashboard" : "/admin/patients";
 	const backText = from === "dashboard" ? "← Back to Dashboard" : "← Back to Patients";
@@ -166,7 +168,7 @@ export function PatientDetailsPage() {
 					</div>
 				)}
 
-				{activeTab === "appointments" && <AppointmentsTab appointments={[]} patient={patient} />}
+				{activeTab === "appointments" && <AppointmentsTab appointments={patient.appointments} patient={patient} />}
 				{activeTab === "prescriptions" && <PrescriptionsTab patient={patient} medications={patient.medications} />}
 				{activeTab === "vitals" && <HealthStatsTab healthStats={patient.healthStats} patient={patient} />}
 			</div>
