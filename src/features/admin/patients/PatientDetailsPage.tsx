@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/Card";
 import { Pill } from "../../../components/ui/Pill";
 import { User, Calendar, Pill as LucidePill, HeartPulse, AlertTriangle, CircleAlert, SquareActivity } from "lucide-react";
@@ -10,8 +10,7 @@ import { EditPatientForm } from "./EditPatientForm";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import Spinner from "../../../components/shared/Spinner";
-import type { PatientOverviewDto, PatientDetailsVm, Appointment } from "../../../lib/types";
-import { mockHealthStats } from "../../../lib/api/mockData";
+import type { PatientOverviewDto, PatientDetailsVm } from "../../../lib/types";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -42,8 +41,6 @@ export function PatientDetailsPage() {
 	const { getToken } = useAuth();
 	const navigate = useNavigate();
 	const [activeTab, setActiveTab] = useState<"overview" | "appointments" | "prescriptions" | "vitals">("overview");
-
-	const healthStats = useMemo(() => mockHealthStats, []);
 
 	const patientQuery = useQuery({
 		queryKey: ["patient-overview", patientId],
@@ -166,11 +163,9 @@ export function PatientDetailsPage() {
 					</div>
 				)}
 
-				{activeTab === "appointments" && <AppointmentsTab appointments={appointments} patient={patient} />}
-
-				{activeTab === "prescriptions" && <PrescriptionsTab medications={patient.medications} patient={patient} />}
-
-				{activeTab === "vitals" && <HealthStatsTab healthStats={healthStats} patient={patient} />}
+				{activeTab === "appointments" && <AppointmentsTab appointments={[]} patient={patient} />}
+				{activeTab === "prescriptions" && <PrescriptionsTab patient={patient} medications={patient.medications} />}
+				{activeTab === "vitals" && <HealthStatsTab healthStats={patient.healthStats} patient={patient} />}
 			</div>
 		</div>
 	);

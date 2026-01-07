@@ -1,4 +1,4 @@
-export type HealthStatType = "BloodPressure" | "HeartRate" | "BloodSugar" | "Weight" | "Temperature";
+export type HealthStatType = "BloodPressure" | "Glucose" | "Cholesterol" | "HeartRate" | "Weight";
 export type HealthStatusType = "Normal" | "Warning" | "Critical";
 
 export type HealthStat = {

@@ -2,27 +2,27 @@ import { Plus, Activity } from "lucide-react";
 import { DialogModal } from "../../../../components/shared/DialogModal";
 import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
-import { useUser } from "@clerk/clerk-react";
-import type { Patient } from "../../../../lib/api/mockData";
+import type { PatientDetailsVm } from "../../../../lib/types";
 import { Button } from "../../../../components/ui/PrimaryButton";
+import { useCreateHealthStat } from "../../../../hooks/useHealthStats";
 
 type AddHealthStatProps = {
-	patient: Patient;
+	patient: PatientDetailsVm;
 };
 
 export const AddHealthStat = ({ patient }: AddHealthStatProps) => {
-	const { user } = useUser();
 	const [open, setOpen] = useState(false);
+	const createMutation = useCreateHealthStat(patient.id);
 
 	const healthStatTypes = [
-		{ value: "blood_pressure", label: "Blood Pressure", unit: "mmHg" },
-		{ value: "glucose", label: "Glucose", unit: "mg/dL" },
-		{ value: "cholesterol", label: "Cholesterol", unit: "mg/dL" },
-		{ value: "heart_rate", label: "Heart Rate", unit: "bpm" },
-		{ value: "weight", label: "Weight", unit: "lbs" }
+		{ value: "BloodPressure" as const, label: "Blood Pressure", unit: "mmHg" },
+		{ value: "Glucose" as const, label: "Glucose", unit: "mg/dL" },
+		{ value: "Cholesterol" as const, label: "Cholesterol", unit: "mg/dL" },
+		{ value: "HeartRate" as const, label: "Heart Rate", unit: "bpm" },
+		{ value: "Weight" as const, label: "Weight", unit: "lbs" }
 	];
 
-	const statusOptions = ["normal", "warning", "critical"];
+	const statusOptions = ["Normal", "Warning", "Critical"] as const;
 
 	const [date, setDate] = useState<string>("");
 	const [type, setType] = useState<string>("");
@@ -49,20 +49,18 @@ export const AddHealthStat = ({ patient }: AddHealthStatProps) => {
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 
-		const newHealthStat = {
-			patientId: patient.id,
-			doctorId: user?.id,
-			type: type,
-			value: value,
-			unit: unit,
-			date: date,
-			status: status
-		};
-
-		console.log("Create health stat:", newHealthStat);
-
-		resetForm();
-		setOpen(false);
+		createMutation.mutate(
+			{ type, value, unit, status },
+			{
+				onSuccess: () => {
+					resetForm();
+					setOpen(false);
+				},
+				onError: () => {
+					alert("Failed to create health stat. Please try again.");
+				}
+			}
+		);
 	};
 
 	return (
@@ -143,14 +141,16 @@ export const AddHealthStat = ({ patient }: AddHealthStatProps) => {
 									</option>
 									{statusOptions.map(s => (
 										<option key={s} value={s}>
-											{s.charAt(0).toUpperCase() + s.slice(1)}
+											{s}
 										</option>
 									))}
 								</select>
 							</div>
 						</div>
 
-						<Button type="submit">Add Health Stat</Button>
+						<Button type="submit" disabled={createMutation.isPending}>
+							{createMutation.isPending ? "Adding..." : "Add Health Stat"}
+						</Button>
 					</div>
 				</form>
 			</DialogModal>
