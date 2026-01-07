@@ -1,7 +1,10 @@
 import * as signalR from "@microsoft/signalr";
 
+const BASE_URL = import.meta.env.VITE_SIGNALR_BASE_URL;
+
+
 let connection: signalR.HubConnection | null = null;
-const messageBaseUrl = "http://localhost:5002/pulsecarehub";
+const messageBaseUrl = `${BASE_URL}`;
 
 export function getSignalRConnection(tokenFactory: () => Promise<string>) {
     if (connection) return connection;
