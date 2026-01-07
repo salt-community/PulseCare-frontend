@@ -26,10 +26,10 @@ export const useUpdatePatient = () => {
 	const { getToken } = useAuth();
 
 	return useMutation({
-		mutationFn: async ({ id, data }: { id: string; data: UpdatePatientDto }) => {
+		mutationFn: async ({ patient }: { patient: UpdatePatientDto }) => {
 			const token = await getToken();
 			if (!token) throw new Error("Not authenticated");
-			return patientApi.updatePatient(id, data, token);
+			return patientApi.updatePatient(patient, token);
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: patientKeys.all });

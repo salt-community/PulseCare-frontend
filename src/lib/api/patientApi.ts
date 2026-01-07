@@ -36,9 +36,9 @@ export const patientApi = {
 		return response.json();
 	},
 
-	// PUT /api/patient/{id}
-	updatePatient: async (id: string, patient: UpdatePatientDto, token: string): Promise<void> => {
-		const response = await fetch(`${API_BASE_URL}/patients/${id}`, {
+	// PUT /api/patients/{id}
+	updatePatient: async (patient: UpdatePatientDto, token: string): Promise<void> => {
+		const response = await fetch(`${API_BASE_URL}/patients/${patient.id}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

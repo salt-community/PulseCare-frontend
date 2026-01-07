@@ -17,12 +17,12 @@ export type PatientDto = {
 	conditions: string[];
 };
 
-// DTO for patient list
+// DTO for update patient request
 export type UpdatePatientDto = {
 	id: string;
 	name: string;
+	phone: string;
 	email: string;
-	phone?: string;
 	dateOfBirth: string;
 	bloodType: string;
 };
