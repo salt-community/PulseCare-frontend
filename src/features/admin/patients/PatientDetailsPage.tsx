@@ -101,7 +101,7 @@ export function PatientDetailsPage() {
 			</div>
 
 			<div className="border-b border-foreground/10">
-				<ul className="flex max-[500px]:justify-evenly gap-2 -mb-px">
+				<ul className="flex justify-evenly sm:justify-start gap-2 -mb-px">
 					{tabs.map(tab => (
 						<li key={tab.id}>
 							<button
@@ -113,7 +113,7 @@ export function PatientDetailsPage() {
 								}`}
 							>
 								{tab.icon}
-								<span className="hidden min-[500px]:inline">{tab.label}</span>
+								<span className="hidden sm:inline">{tab.label}</span>
 							</button>
 						</li>
 					))}
