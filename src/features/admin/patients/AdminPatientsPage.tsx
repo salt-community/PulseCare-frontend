@@ -4,7 +4,6 @@ import { PatientInfoCard } from "../../../components/ui/PatientInfoCard";
 import { SearchBar } from "../../../components/ui/SearchBar";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
-import { Card, CardContent } from "../../../components/ui/Card";
 import Spinner from "../../../components/shared/Spinner";
 import type { PatientDto, PatientCardVm } from "../../../lib/types";
 
@@ -44,26 +43,22 @@ export const AdminPatientsPage = () => {
 			phone: p.phone ?? "",
 			conditions: p.conditions ?? []
 		}));
-
+	if (patientsQuery.isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
+	if (patientsQuery.isError) {
+		return <div>Failed to load patients...</div>;
+	}
 	return (
 		<>
 			<PageHeader title="Patients" description="View and manage all patient records" />
 			<SearchBar value={search} onChange={setSearch} />
 
-			{patientsQuery.isLoading ? (
-				<Card className="mt-6">
-					<CardContent className="flex flex-col items-center justify-center py-12">
-						<p className="text-lg font-medium text-foreground mb-2">Loading patients...</p>
-						<Spinner />
-					</CardContent>
-				</Card>
-			) : patientsQuery.isError ? (
-				<Card className="mt-6">
-					<CardContent className="flex flex-col items-center justify-center py-12">
-						<p className="text-lg font-medium text-foreground mb-2">Error loading patients</p>
-					</CardContent>
-				</Card>
-			) : filteredPatients.length === 0 ? (
+			{filteredPatients.length === 0 ? (
 				<p className="mt-10 text-center text-muted-foreground">No patients found</p>
 			) : (
 				<div className="mt-6 space-y-4">

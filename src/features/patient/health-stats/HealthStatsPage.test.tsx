@@ -39,7 +39,7 @@ describe("HealthStatsPage", () => {
 		vi.clearAllMocks();
 	});
 
-	it("shows Loading first and then 'No new results' when API returns empty array", async () => {
+	it("shows spinner while loading and then 'No new results' when API returns empty array", async () => {
 		vi.stubGlobal(
 			"fetch",
 			vi.fn().mockResolvedValue({
@@ -48,15 +48,15 @@ describe("HealthStatsPage", () => {
 			} as any)
 		);
 
-		render(<HealthStatsPage />, { wrapper: createWrapper() });
+		const { container } = render(<HealthStatsPage />, { wrapper: createWrapper() });
 
-		expect(screen.getByText(/Loading health stats/i)).toBeInTheDocument();
+		expect(container.querySelector(".animate-spin")).toBeInTheDocument();
 
 		await waitFor(() => {
 			expect(screen.getByText(/No new results/i)).toBeInTheDocument();
 		});
 
-		expect(screen.queryByText(/Loading health stats/i)).not.toBeInTheDocument();
+		expect(container.querySelector(".animate-spin")).not.toBeInTheDocument();
 	});
 
 	it("shows 'No data could be loaded' when fetch rejects", async () => {
@@ -69,7 +69,8 @@ describe("HealthStatsPage", () => {
 		});
 
 		await waitFor(() => {
-			expect(screen.queryByText(/Loading health stats/i)).not.toBeInTheDocument();
+			const container = document.querySelector(".animate-spin");
+			expect(container).not.toBeInTheDocument();
 		});
 
 		expect(screen.queryByText(/No new results/i)).not.toBeInTheDocument();

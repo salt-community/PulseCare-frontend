@@ -48,18 +48,17 @@ export default function MedicationsPage() {
 	});
 
 	const medications = medicationsQuery.data ?? [];
-
+	if (medicationsQuery.isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
 	return (
 		<>
 			<PageHeader title={"Medications"} description="Your current prescriptions and medication schedule" />
-			{medicationsQuery.isLoading ? (
-				<Card className="flex flex-col items-center">
-					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						<p className="text-lg font-medium text-foreground mb-2">Loading medications... </p>
-						<Spinner />
-					</CardContent>
-				</Card>
-			) : medicationsQuery.isError ? (
+			{medicationsQuery.isError ? (
 				<Card className="transition-shadow animate-slide-up hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
 						<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>
