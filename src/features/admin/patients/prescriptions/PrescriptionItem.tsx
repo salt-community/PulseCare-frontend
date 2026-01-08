@@ -41,7 +41,12 @@ export const PrescriptionItem = ({ patient, med, onUpdate, onDelete }: Props) =>
 				<div className="flex gap-2 shrink-0">
 					<EditPrescriptionForm patient={patient} prescription={med} onSubmit={onUpdate} />
 
-					<Button variant="destructive" size="icon" onClick={() => setDeleteOpen(true)} className="[&_svg]:size-4">
+					<Button
+						variant="outline"
+						size="icon"
+						onClick={() => setDeleteOpen(true)}
+						className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-5"
+					>
 						<Trash />
 					</Button>
 				</div>

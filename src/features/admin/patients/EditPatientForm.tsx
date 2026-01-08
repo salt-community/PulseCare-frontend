@@ -14,7 +14,8 @@ type EditPatientFormProps = {
 export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 	const [open, setOpen] = useState(false);
 	const [editedPatient, setEditedPatient] = useState<PatientDetailsVm>({ ...patient });
-	const updateMutation = useUpdatePatient();
+	const updateMutation = useUpdatePatient(patient.id);
+	const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 	const startEdit = () => {
 		setEditedPatient({ ...patient });
@@ -26,6 +27,11 @@ export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 			...editedPatient,
 			[field]: value
 		});
+	};
+
+	const toDateInputValue = (iso: string) => {
+		if (!iso) return "";
+		return new Date(iso).toISOString().split("T")[0];
 	};
 
 	const saveEdit = async () => {
@@ -75,22 +81,37 @@ export const EditPatientForm = ({ patient }: EditPatientFormProps) => {
 							onChange={value => handleEditChange("email", value)}
 							required={true}
 						/>
+						<DialogInput
+							type="number"
+							label="Phone"
+							value={editedPatient.phone}
+							onChange={value => handleEditChange("phone", value)}
+							required={false}
+						/>
 
 						<DialogInput
-							type="text"
+							type="date"
 							label="Date of Birth"
-							value={editedPatient.dateOfBirth}
+							value={toDateInputValue(editedPatient.dateOfBirth)}
 							onChange={value => handleEditChange("dateOfBirth", value)}
 							required={true}
 						/>
 
-						<DialogInput
-							type="text"
-							label="Blood Type"
-							value={editedPatient.bloodType}
-							onChange={value => handleEditChange("bloodType", value)}
-							required={true}
-						/>
+						<div className="p-1 m-1">
+							<label className="block p-1 text-md font-semibold">Blood Type</label>
+							<select
+								className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
+								value={editedPatient.bloodType}
+								onChange={e => handleEditChange("bloodType", e.target.value)}
+								required
+							>
+								{bloodTypes.map((t, i) => (
+									<option key={i} value={t}>
+										{t}
+									</option>
+								))}
+							</select>
+						</div>
 
 						<div className="flex gap-2 justify-end pt-4 m-1">
 							<Button onClick={() => setOpen(false)} variant="outline">
