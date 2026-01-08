@@ -44,16 +44,14 @@ export const AdminCalendarPage = () => {
 	async function handleDelete() {
 		if (!selectedAppointment) return;
 
-		if (confirm(`Delete appointment with ${selectedAppointment.patientName}?`)) {
-			try {
-				await deleteMutation.mutateAsync(selectedAppointment.id);
-				toast.success("Appointment deleted successfully!");
-				setDialogOpen(false);
-				setSelectedAppointment(null);
-			} catch (error) {
-				toast.error("Failed to delete appointment. Please try again.");
-				console.log(error);
-			}
+		try {
+			await deleteMutation.mutateAsync(selectedAppointment.id);
+			toast.success("Appointment deleted successfully!");
+			setDialogOpen(false);
+			setSelectedAppointment(null);
+		} catch (error) {
+			toast.error("Failed to delete appointment. Please try again.");
+			console.log(error);
 		}
 	}
 
