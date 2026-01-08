@@ -20,7 +20,7 @@ export const EditPrescriptionForm = ({ patient, prescription, onSubmit }: RenewP
 	const [open, setOpen] = useState(false);
 
 	const dosageUnits = ["mg", "mcg", "g", "Tablet", "Capsule", "mL", "L", "IU", "U"];
-	const medicineTypes = ["Metformin", "Lisinopril", "Atorvastatin", "Vitamin D3"];
+	const medicineTypes = ["Metformin", "Lisinopril", "Atorvastatin", "Vitamin D3", "Microlax"];
 	const frequencyUnits = ["Day", "Week", "Month"];
 
 	//TODO: Skapa en ny dto för admin recept överblick
