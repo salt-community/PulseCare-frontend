@@ -15,7 +15,7 @@ export const AddPrescriptionForm = ({ patient, onSubmit }: PrescriptionProps) =>
 	const [open, setOpen] = useState(false);
 
 	const dosageUnits = ["mg", "mcg", "g", "Tablet", "Capsule", "mL", "L", "IU", "U"];
-	const medicineTypes = ["Metformin", "Lisinopril", "Atorvastatin", "Vitamin D3"];
+	const medicineTypes = ["Metformin", "Lisinopril", "Atorvastatin", "Vitamin D3", "Microlax"];
 	const frequencyUnits = ["Day", "Week", "Month"];
 
 	const [date, setDate] = useState<string>("");
