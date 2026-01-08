@@ -7,36 +7,59 @@ import { Pill } from "../../../components/ui/Pill";
 import { DialogModal } from "../../../components/shared/DialogModal";
 import { DialogInput } from "../../../components/ui/DialogInput";
 import { Button } from "../../../components/ui/PrimaryButton";
-import { useMessages } from "../../../hooks/useMessages";
-import { mockPatients } from "../../../lib/api/mockData";
 import { SelectInput } from "../../../components/ui/SelectInput";
-
-const CURRENT_DOCTOR_ID = "doctor-1";
+import { useConversations } from "../../../hooks/useConversations";
+import { useChat } from "../../../hooks/useChat";
+import type { Conversation, Message } from "../../../lib/types/conversation";
+import { usePatients } from "../../../hooks/usePatients";
+import { useUser } from "@clerk/clerk-react";
 
 export default function AdminMessagesPage() {
-	const { conversations, unreadCount, markConversationAsRead, sendMessage } = useMessages({
-		role: "doctor",
-		doctorId: CURRENT_DOCTOR_ID
-	});
+	const { user } = useUser();
 
+	const { conversations, unreadCount, startConversation, isLoading } = useConversations({
+		role: "doctor"
+	});
 	const [selectedConvId, setSelectedConvId] = useState<string | null>(null);
+
+	const chat = useChat(selectedConvId ?? "", "doctor");
+	const { data: patients } = usePatients();
+
 	const [replyText, setReplyText] = useState("");
 	const [isThreadOpen, setIsThreadOpen] = useState(false);
 	const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
 	const [newMessagePatientId, setNewMessagePatientId] = useState("");
 	const [newMessageSubject, setNewMessageSubject] = useState("");
 	const [newMessageContent, setNewMessageContent] = useState("");
+
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+	};
+
+	useEffect(() => {
+		if (isThreadOpen) {
+			const timer = setTimeout(scrollToBottom, 100);
+			return () => clearTimeout(timer);
+		}
+	}, [chat.messages, isThreadOpen]);
+
+	const openThread = (id: string) => {
+		setSelectedConvId(id);
+		setIsThreadOpen(true);
+		chat.markAsRead();
+	};
 
 	const handleNewMessage = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		sendMessage({
+		startConversation({
+			patientId: newMessagePatientId,
+			doctorId: user?.id ?? null,
 			subject: newMessageSubject,
 			content: newMessageContent,
-			patientId: newMessagePatientId,
-			doctorId: CURRENT_DOCTOR_ID,
-			sender: "doctor"
+			fromPatient: false
 		});
 
 		setIsNewMessageOpen(false);
@@ -45,46 +68,29 @@ export default function AdminMessagesPage() {
 		setNewMessageContent("");
 	};
 
-	const openThread = (id: string) => {
-		setSelectedConvId(id);
-		setIsThreadOpen(true);
-		markConversationAsRead(id);
-	};
-
-	const conversation = conversations.find(c => c.id === selectedConvId);
-	const latest = conversation?.messages[conversation.messages.length - 1];
-
-	const getPatientName = (id: string) => mockPatients.find(p => p.id === id)?.name ?? id;
-
 	const handleReply = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!conversation || !latest) return;
+		if (!selectedConvId || chat.messages.length === 0) return;
 
-		sendMessage({
-			conversationId: conversation.id,
-			subject: latest.subject.startsWith("Re:") ? latest.subject : `Re: ${latest.subject}`,
+		const last = chat.messages[chat.messages.length - 1];
+		const subject = last.subject.startsWith("Re:") ? last.subject : `Re: ${last.subject}`;
+
+		chat.sendMessage({
+			subject,
 			content: replyText,
-			patientId: conversation.patientId,
-			doctorId: conversation.doctorId,
-			sender: "doctor"
+			fromPatient: false
 		});
 
 		setReplyText("");
-		setIsThreadOpen(false);
-	};
-	const scrollToBottom = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
 	};
 
-	useEffect(() => {
-		if (isThreadOpen) {
-			setTimeout(scrollToBottom, 50);
-		}
-	}, [isThreadOpen, conversation?.messages.length]);
+	const getPatientName = (id: string) => patients?.find(p => p.id === id)?.name ?? id;
+	// const getPatientName = (id: string) => mockPatients.find(d => d.id === id)?.name ?? "Patient";
 
 	return (
 		<div className="space-y-4">
 			<PageHeader title="Messages" description={`You have ${unreadCount} unread message(s)`} />
+
 			<div className="flex justify-end">
 				<Button variant="default" className="flex items-center gap-1 px-3 py-1.5 text-sm" onClick={() => setIsNewMessageOpen(true)}>
 					<Plus className="h-4 w-4" />
@@ -98,7 +104,12 @@ export default function AdminMessagesPage() {
 						label="Select patient"
 						value={newMessagePatientId}
 						onChange={setNewMessagePatientId}
-						options={mockPatients.map(p => ({ label: p.name, value: p.id }))}
+						options={
+							patients?.map(d => ({
+								label: d.name,
+								value: d.id
+							})) || []
+						}
 						required
 					/>
 
@@ -112,16 +123,19 @@ export default function AdminMessagesPage() {
 				</form>
 			</DialogModal>
 
-			{conversations.length === 0 ? (
+			{isLoading ? (
+				<Card>
+					<CardContent>Loading...</CardContent>
+				</Card>
+			) : conversations.length === 0 ? (
 				<Card>
 					<CardContent className="py-12 text-center text-muted-foreground">No messages yet</CardContent>
 				</Card>
 			) : (
 				<div className="space-y-4">
-					{conversations.map(conv => {
-						const last = conv.messages[conv.messages.length - 1];
-
-						const hasUnread = conv.messages.some(m => m.fromPatient && !m.read);
+					{conversations.map((conv: Conversation) => {
+						const last = conv.latestMessage;
+						const hasUnread = conv.unreadCount > 0;
 
 						return (
 							<Card key={conv.id} className="cursor-pointer" onClick={() => openThread(conv.id)}>
@@ -144,13 +158,15 @@ export default function AdminMessagesPage() {
 											</div>
 
 											<p
-												className={`text-sm truncate ${hasUnread ? "text-black font-semibold" : "text-muted-foreground"}`}
+												className={`text-sm truncate ${
+													hasUnread ? "text-black font-semibold" : "text-muted-foreground"
+												}`}
 											>
-												{last.subject}
+												{last?.subject}
 											</p>
 
 											<p className={`text-xs ${hasUnread ? "text-black" : "text-muted-foreground"}`}>
-												{format(new Date(last.date), "MMM d, HH:mm")}
+												{last ? format(new Date(last.date), "MMM d, HH:mm") : ""}
 											</p>
 										</div>
 									</div>
@@ -163,24 +179,29 @@ export default function AdminMessagesPage() {
 
 			<DialogModal
 				open={isThreadOpen}
-				onOpenChange={setIsThreadOpen}
-				title={latest ? latest.subject : "Conversation"}
+				onOpenChange={open => {
+					setIsThreadOpen(open);
+					if (!open) setSelectedConvId(null);
+				}}
+				title="Conversation"
 				showTrigger={false}
 			>
-				{conversation && latest ? (
-					<div className="flex flex-col max-h-[75vh]">
+				{chat.messages.length > 0 ? (
+					<div className="flex flex-col max-h-[75vh] pb-18 md:pb-4">
 						<div className="flex items-center gap-3">
 							<div className="p-3 rounded-full bg-primary/10">
 								<User className="h-5 w-5 text-primary" />
 							</div>
 							<div>
-								<p className="font-semibold">{getPatientName(conversation.patientId)}</p>
+								<p className="font-semibold">
+									{getPatientName(conversations.find((c: Conversation) => c.id === selectedConvId)?.patientId ?? "")}
+								</p>
 								<p className="text-sm text-muted-foreground">Conversation</p>
 							</div>
 						</div>
 
-						<div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1 flex-1">
-							{conversation.messages.map(msg => {
+						<div className="space-y-3 mt-1 max-h-[50vh] overflow-y-auto pr-1 flex-1">
+							{chat.messages.map((msg: Message) => {
 								const isPatient = msg.fromPatient;
 								return (
 									<div key={msg.id} className={`flex ${isPatient ? "justify-start" : "justify-end"}`}>
@@ -199,14 +220,17 @@ export default function AdminMessagesPage() {
 							})}
 							<div ref={messagesEndRef} />
 						</div>
-
+						{chat.isTyping && <p className="text-xs text-muted-foreground italic px-1">Typing...</p>}
 						<form onSubmit={handleReply} className="space-y-2">
 							<DialogInput
 								type="textarea"
 								label="Reply"
 								placeholder="Type your reply..."
 								value={replyText}
-								onChange={setReplyText}
+								onChange={val => {
+									setReplyText(val);
+									chat.sendTyping();
+								}}
 								required
 							/>
 							<Button variant="submit" className="w-full">
