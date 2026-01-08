@@ -19,19 +19,18 @@ export default function HealthStatsPage() {
 	const healthStats = data?.healthStats ?? [];
 	const orderedData = [...healthStats].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 	const bloodData = healthStats.filter(d => d.type === "Cholesterol" || d.type === "Glucose");
-
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
 	return (
 		<div>
 			<PageHeader title="Health Statistics" description="Track your vital signs and health metrics" />
 
-			{isLoading ? (
-				<Card className="flex flex-col items-center">
-					<CardContent className="flex flex-col items-center justify-center py-12 ">
-						<p className="text-lg font-medium text-foreground mb-2">Loading health stats... </p>
-						<Spinner />
-					</CardContent>
-				</Card>
-			) : error ? (
+			{error ? (
 				<Card className="transition-shadow animate-slide-up hover:shadow-none">
 					<CardContent className="flex flex-col items-center justify-center py-12 ">
 						<p className="text-lg font-medium text-foreground mb-2">No data could be loaded</p>

@@ -32,8 +32,7 @@ export default function PatientDashboard() {
 			</div>
 		);
 	}
-
-	if (!data) return null;
+	if (error || !data) return <div>No data...</div>;
 
 	const exampleUser = {
 		fullName: data?.patient.name ?? "Patient"

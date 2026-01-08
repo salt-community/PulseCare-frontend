@@ -62,25 +62,13 @@ export function PatientDetailsPage() {
 
 	if (patientQuery.isLoading) {
 		return (
-			<Card className="max-w-md mx-auto mt-8 rounded-xl hover:shadow-none">
-				<CardContent className="p-5 text-center flex flex-col items-center justify-center">
-					<p className="text-foreground text-base font-medium">Loading patient...</p>
-					<Spinner />
-				</CardContent>
-			</Card>
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
 		);
 	}
-
 	if (patientQuery.isError || !patient) {
-		return (
-			<Card className="max-w-md mx-auto mt-8 rounded-xl hover:shadow-none">
-				<CardContent className="p-5 text-center">
-					<p className="text-destructive text-base font-medium">
-						{patientQuery.isError ? "Failed to load patient" : "Patient not found"}
-					</p>
-				</CardContent>
-			</Card>
-		);
+		return <div>{patientQuery.isError ? "Failed to load patient" : "Patient not found"}</div>;
 	}
 
 	return (
