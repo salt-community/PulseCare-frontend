@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { statIcons } from "../../../../lib/StatsIcons";
 import { useDeleteHealthStat } from "../../../../hooks/useHealthStats";
+import { DeleteConfirmationModal } from "../../../../components/shared/DeleteConfirmationModal";
 
 type HealthStatsProps = {
 	patient: PatientDetailsVm;
@@ -19,6 +20,8 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 	const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 	const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
 	const deleteMutation = useDeleteHealthStat(patient.id);
+	const [deleteOpen, setDeleteOpen] = useState(false);
+	const [selectedStatId, setSelectedStatId] = useState<string | null>(null);
 
 	const getStatusVariant = (status: string) => {
 		switch (status) {
@@ -40,17 +43,6 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 			.join(" ");
 	};
 
-	const handleDelete = (statId: string) => {
-		if (confirm("Are you sure you want to delete this health stat?")) {
-			deleteMutation.mutate(statId, {
-				onError: () => {
-					alert("Failed to delete health stat. Please try again.");
-				}
-			});
-		}
-	};
-
-	// Group health stats by type
 	const groupedStats = healthStats.reduce(
 		(acc, stat) => {
 			if (!acc[stat.type]) {
@@ -62,7 +54,6 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 		{} as Record<string, HealthStat[]>
 	);
 
-	// Sort each group by date (newest first) and sort groups alphabetically
 	const sortedGroups = Object.entries(groupedStats)
 		.sort(([typeA], [typeB]) => getTypeLabel(typeA).localeCompare(getTypeLabel(typeB)))
 		.map(([type, stats]) => ({
@@ -70,10 +61,8 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 			stats: stats.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 		}));
 
-	// Get all unique types for the filter
 	const allTypes = sortedGroups.map(({ type }) => type);
 
-	// Filter groups based on selected types (show all if none selected)
 	const filteredGroups = selectedTypes.size === 0 ? sortedGroups : sortedGroups.filter(({ type }) => selectedTypes.has(type));
 
 	const toggleType = (type: string) => {
@@ -183,8 +172,11 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 														<Button
 															variant="outline"
 															size="icon"
-															className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-4"
-															onClick={() => handleDelete(stat.id)}
+															className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-5"
+															onClick={() => {
+																setSelectedStatId(stat.id);
+																setDeleteOpen(true);
+															}}
 															disabled={deleteMutation.isPending}
 														>
 															<Trash />
@@ -216,6 +208,18 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 					)}
 				</CardContent>
 			</Card>
+			<DeleteConfirmationModal
+				open={deleteOpen}
+				onOpenChange={setDeleteOpen}
+				medicationName={healthStats.find(s => s.id === selectedStatId)?.type ?? "this health stat"}
+				onConfirm={() => {
+					if (!selectedStatId) return;
+					deleteMutation.mutate(selectedStatId, {
+						onError: () => alert("Failed to delete health stat. Please try again.")
+					});
+					setDeleteOpen(false);
+				}}
+			/>
 		</>
 	);
 };
