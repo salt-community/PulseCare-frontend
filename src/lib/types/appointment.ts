@@ -17,7 +17,6 @@ export interface Appointment {
 
 export interface CreateAppointmentRequest {
 	patientId: string; // UUID
-	doctorId: string; // UUID
 	date: string; // ISO date "2026-01-05T00:00:00"
 	time: string; // "14:30"
 	type: AppointmentType;

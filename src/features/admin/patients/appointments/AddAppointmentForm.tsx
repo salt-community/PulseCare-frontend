@@ -4,27 +4,28 @@ import { DialogInput } from "../../../../components/ui/DialogInput";
 import { useState, type FormEvent } from "react";
 import type { Patient } from "../../../../lib/api/mockData";
 import { Button } from "../../../../components/ui/PrimaryButton";
-import { useCreateAppointment } from "../../../../hooks/useAppointments";
 import { toast } from "react-toastify";
+import { useCreateAppointment } from "../../../../hooks/useCreateAppointment";
+import type { AppointmentType, CreateAppointmentRequest } from "../../../../lib/types";
 
 type AppointmentProps = {
 	patient: Patient;
 };
 
 export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
-	const createMutation = useCreateAppointment();
+	const createMutation = useCreateAppointment(patient.id);
 	const [open, setOpen] = useState(false);
-	const appointmentTypes = ["Checkup", "Follow-up", "Consultation", "Lab"];
+	const appointmentTypes: AppointmentType[] = ["Checkup", "FollowUp", "Consultation", "Lab"];
 
 	const [date, setDate] = useState<string>("");
 	const [time, setTime] = useState<string>("");
-	const [type, setType] = useState<string>("Checkup");
+	const [type, setType] = useState<AppointmentType>("Checkup");
 	const [reason, setReason] = useState<string>("");
 
 	const resetForm = () => {
 		setDate("");
 		setTime("");
-		setType("checkup");
+		setType("Checkup");
 		setReason("");
 	};
 
@@ -32,7 +33,7 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 		e.preventDefault();
 
 		const appointmentDate = new Date(date);
-		const newAppointment = {
+		const newAppointment: CreateAppointmentRequest = {
 			patientId: patient.id,
 			date: appointmentDate.toISOString(),
 			time: time,
@@ -79,7 +80,7 @@ export const AddAppointmentForm = ({ patient }: AppointmentProps) => {
 						<select
 							className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-1 border border-foreground/20 rounded-md p-1 w-full"
 							value={type}
-							onChange={e => setType(e.target.value)}
+							onChange={e => setType(e.target.value as AppointmentType)}
 							required
 						>
 							{appointmentTypes.map((t, i) => (
