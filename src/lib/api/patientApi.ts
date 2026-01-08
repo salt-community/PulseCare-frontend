@@ -1,3 +1,4 @@
+import type { UpdatePatientDto } from "../types/patient";
 import type { PatientDashboard } from "../types/patients";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,5 +34,18 @@ export const patientApi = {
 		});
 		if (!response.ok) throw new Error("Failed to fetch patients");
 		return response.json();
+	},
+
+	// PUT /api/patients/{id}
+	updatePatient: async (patient: UpdatePatientDto, token: string): Promise<void> => {
+		const response = await fetch(`${API_BASE_URL}/patients/${patient.id}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${token}`
+			},
+			body: JSON.stringify(patient)
+		});
+		if (!response.ok) throw new Error("Failed to update patient");
 	}
 };

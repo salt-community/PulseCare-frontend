@@ -51,6 +51,7 @@ export const AdminCalendarPage = () => {
 				setSelectedAppointment(null);
 			} catch (error) {
 				toast.error("Failed to delete appointment. Please try again.");
+				console.log(error);
 			}
 		}
 	}
