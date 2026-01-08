@@ -40,7 +40,6 @@ export const EditAppointment = ({ appointment, open, onOpenChange }: EditAppoint
 
 		if (!appointment) return;
 
-		// Map string enums to numbers for backend
 		const typeMap: Record<AppointmentType, number> = {
 			Checkup: 0,
 			FollowUp: 1,

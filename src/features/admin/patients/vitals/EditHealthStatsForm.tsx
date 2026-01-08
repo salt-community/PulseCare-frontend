@@ -12,6 +12,11 @@ type EditHealthStatsProps = {
 };
 
 export const EditHealthStatsForm = ({ patient, healthStat }: EditHealthStatsProps) => {
+	const toDateInputValue = (iso: string) => {
+		if (!iso) return "";
+		return new Date(iso).toISOString().split("T")[0];
+	};
+
 	const [open, setOpen] = useState(false);
 	const updateMutation = useUpdateHealthStat(patient.id);
 
@@ -25,7 +30,7 @@ export const EditHealthStatsForm = ({ patient, healthStat }: EditHealthStatsProp
 
 	const statusOptions = ["Normal", "Warning", "Critical"] as const;
 
-	const [date, setDate] = useState<string>(healthStat.date);
+	const [date, setDate] = useState<string>(toDateInputValue(healthStat.date));
 	const [type, setType] = useState<string>(healthStat.type);
 	const [value, setValue] = useState<string>(healthStat.value);
 	const [unit, setUnit] = useState<string>(healthStat.unit);

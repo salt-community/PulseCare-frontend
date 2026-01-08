@@ -13,6 +13,7 @@ import { Button } from "../../../components/ui/PrimaryButton";
 import { useAllAppointments, useDeleteAppointment } from "../../../hooks/useAppointments";
 import type { Appointment } from "../../../lib/types/appointment";
 import { toast } from "react-toastify";
+import Spinner from "../../../components/shared/Spinner";
 
 export const AdminCalendarPage = () => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -57,11 +58,15 @@ export const AdminCalendarPage = () => {
 	}
 
 	if (isLoading) {
-		return <div className="text-center p-10">Loading appointments...</div>;
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
 	}
 
 	if (error) {
-		return <div className="text-red-500">Error loading appointments. Please check if backend is running on port 5002.</div>;
+		return <div className="text-red-500">Error loading appointments.</div>;
 	}
 
 	return (
