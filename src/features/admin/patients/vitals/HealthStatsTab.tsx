@@ -183,7 +183,7 @@ export const HealthStatsTab = ({ healthStats, patient }: HealthStatsProps) => {
 														<Button
 															variant="outline"
 															size="icon"
-															className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-4"
+															className="hover:text-destructive-dark hover:bg-destructive-light [&_svg]:size-5"
 															onClick={() => handleDelete(stat.id)}
 															disabled={deleteMutation.isPending}
 														>

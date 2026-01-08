@@ -57,7 +57,7 @@ export const EditHealthStatsForm = ({ patient, healthStat }: EditHealthStatsProp
 
 	return (
 		<>
-			<Button variant={"outline"} size={"icon"} className="[&_svg]:size-4" onClick={() => setOpen(true)}>
+			<Button variant={"outline"} size={"icon"} className="[&_svg]:size-5" onClick={() => setOpen(true)}>
 				<Pencil />
 			</Button>
 
