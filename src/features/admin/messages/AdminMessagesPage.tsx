@@ -13,6 +13,7 @@ import { useChat } from "../../../hooks/useChat";
 import type { Conversation, Message } from "../../../lib/types/conversation";
 import { usePatients } from "../../../hooks/usePatients";
 import { useUser } from "@clerk/clerk-react";
+import Spinner from "../../../components/shared/Spinner";
 
 export default function AdminMessagesPage() {
 	const { user } = useUser();
@@ -85,8 +86,14 @@ export default function AdminMessagesPage() {
 	};
 
 	const getPatientName = (id: string) => patients?.find(p => p.id === id)?.name ?? id;
-	// const getPatientName = (id: string) => mockPatients.find(d => d.id === id)?.name ?? "Patient";
 
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
 	return (
 		<div className="space-y-4">
 			<PageHeader title="Messages" description={`You have ${unreadCount} unread message(s)`} />
@@ -123,11 +130,7 @@ export default function AdminMessagesPage() {
 				</form>
 			</DialogModal>
 
-			{isLoading ? (
-				<Card>
-					<CardContent>Loading...</CardContent>
-				</Card>
-			) : conversations.length === 0 ? (
+			{conversations.length === 0 ? (
 				<Card>
 					<CardContent className="py-12 text-center text-muted-foreground">No messages yet</CardContent>
 				</Card>

@@ -13,10 +13,11 @@ import { useChat } from "../../../hooks/useChat";
 import type { Conversation, Message } from "../../../lib/types/conversation";
 import { useUser } from "@clerk/clerk-react";
 import { useDoctors } from "../../../hooks/useDoctor";
+import Spinner from "../../../components/shared/Spinner";
 
 export default function MessagesPage() {
 	const { user } = useUser();
-	const { conversations, unreadCount, startConversation } = useConversations({
+	const { conversations, unreadCount, startConversation, isLoading } = useConversations({
 		role: "patient"
 	});
 	const { data: doctors } = useDoctors();
@@ -85,7 +86,14 @@ export default function MessagesPage() {
 
 	const getDoctorName = (id: string) => doctors?.find(d => d.id === id)?.name ?? id;
 	console.log();
-	// const getDoctorName = (id: string) => mockDoctors.find(d => d.id === id)?.name ?? "Doctor";
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
+	}
 
 	return (
 		<div className="space-y-4">
