@@ -21,7 +21,7 @@ export const usePatients = () => {
 };
 
 // PUT update patient
-export const useUpdatePatient = () => {
+export const useUpdatePatient = (patientId: string) => {
 	const queryClient = useQueryClient();
 	const { getToken } = useAuth();
 
@@ -32,7 +32,9 @@ export const useUpdatePatient = () => {
 			return patientApi.updatePatient(patient, token);
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: patientKeys.all });
+			queryClient.invalidateQueries({
+				queryKey: ["patient-overview", patientId]
+			});
 		}
 	});
 };
