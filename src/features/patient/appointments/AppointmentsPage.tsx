@@ -5,16 +5,21 @@ import { Pill } from "../../../components/ui/Pill";
 import PageHeader from "../../../components/shared/PageHeader";
 import { DateBlock } from "../../../components/ui/DateBlock";
 import { usePatientAppointments } from "../../../hooks/useAppointments";
+import Spinner from "../../../components/shared/Spinner";
 
 export default function AppointmentsPage() {
 	const { data: appointments = [], isLoading, error } = usePatientAppointments();
 
 	if (isLoading) {
-		return <div className="text-center p-10">Loading appointments...</div>;
+		return (
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<Spinner size="lg" />
+			</div>
+		);
 	}
 
 	if (error) {
-		return <div className="text-red-500">Error loading appointments. Please check if backend is running.</div>;
+		return <div>Failed to load appointments...</div>;
 	}
 
 	return (
@@ -39,7 +44,6 @@ export default function AppointmentsPage() {
 						>
 							<CardContent className="p-5">
 								<div className="flex flex-col min-[850px]:flex-row min-[850px]:items-center gap-4">
-									{/* Date Block */}
 									<div className="flex items-center gap-4 md:w-48">
 										<DateBlock date={d.date} />
 										<div>
@@ -51,7 +55,6 @@ export default function AppointmentsPage() {
 										</div>
 									</div>
 
-									{/* Details */}
 									<div className="flex-1 flex flex-col min-[850px]:flex-row min-[850px]:items-center justify-between gap-4">
 										<div>
 											<div className="flex items-center gap-2 mb-2">
