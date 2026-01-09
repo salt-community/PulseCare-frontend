@@ -2,6 +2,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/c
 import { useRef } from "react";
 import { NavLink } from "../shared/NavLink";
 import { HouseHeart, Activity, Pill, Calendar, MessageCircleMore, NotepadText } from "lucide-react";
+import { useConversations } from "../../hooks/useConversations";
 
 interface PatientSidebarProps {
 	className?: string;
@@ -12,6 +13,9 @@ export const PatientSidebar = ({ className = "", onClose }: PatientSidebarProps)
 	const { user } = useUser();
 	const isAdmin = user?.publicMetadata.role === "admin";
 	const role = isAdmin ? "Admin" : "Patient";
+	const { unreadCount } = useConversations({
+		role: "doctor"
+	});
 
 	const handleAuthClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -36,7 +40,10 @@ export const PatientSidebar = ({ className = "", onClose }: PatientSidebarProps)
 				<Calendar strokeWidth={1.5} />
 			</NavLink>
 			<NavLink label="Messages" to="/patient/messages" onClick={onClose}>
-				<MessageCircleMore strokeWidth={1.5} />
+				<div className="relative">
+					<MessageCircleMore strokeWidth={1.5} />
+					{unreadCount > 0 && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-primary" />}
+				</div>
 			</NavLink>
 			<NavLink label="Notes" to="/patient/notes" onClick={onClose}>
 				<NotepadText strokeWidth={1.5} />
